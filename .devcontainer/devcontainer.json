@@ -16,7 +16,7 @@
         5432
     ],
     // Use 'postCreateCommand' to run commands after the container is created.
-    "postCreateCommand": "bundle install", // && rake db:setup
+    // "postCreateCommand": "bundle config set cache_all true && bundle install",
     // Configure tool-specific properties.
     "customizations": {
         "vscode": {
@@ -31,9 +31,9 @@
     },
     // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
     // "remoteUser": "root"
-    // ...existing code...
     "mounts": [
-        "source=${localEnv:HOME}/.ssh,target=/home/${localEnv:USER}/.ssh,type=bind,consistency=cached"
+        "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached",
+        // "source=${localEnv:HOME}/.gitconfig,target=~/.gitconfig,type=bind,consistency=cached",
+        "source=${localWorkspaceFolder}/vendor/bundle,target=/workspaces/${localWorkspaceFolderBasename}/vendor/bundle,type=bind,consistency=cached"
     ]
-    // ...existing code...
 }

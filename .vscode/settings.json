@@ -7,5 +7,6 @@
     "rubyLsp.rubyVersionManager": {
         "identifier": "custom"
     },
-    "rubyLsp.customRubyCommand": "/usr/local/bin/ruby"
+    "rubyLsp.customRubyCommand": "/usr/local/bin/ruby",
+    // "rubyLsp.bundleGemfile": "/workspaces/UNDO/Gemfile"
 }
