@@ -21,11 +21,6 @@
     "customizations": {
         "vscode": {
             "extensions": [
-                "kaiwood.endwise",
-                // "castwide.solargraph",
-                "Shopify.ruby-extensions-pack",
-                "KoichiSasada.vscode-rdbg",
-                "hridoy.rails-snippets"
             ]
         }
     },
