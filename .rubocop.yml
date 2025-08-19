@@ -1,0 +1,70 @@
+# Omakase Ruby styling for Rails
+inherit_gem: { rubocop-rails-omakase: rubocop.yml }
+
+# Overwrite or add rules to create your own house style
+#
+# # Use `[a, [b, c]]` not `[ a, [ b, c ] ]`
+# Layout/SpaceInsideArrayLiteralBrackets:
+#   Enabled: false
+
+# .rubocop.yml
+AllCops:
+  # Rubyバージョンの指定
+  TargetRubyVersion: 3.4
+
+  # 除外するファイルやディレクトリ
+  Exclude:
+    - 'db/**/*'
+    - 'bin/**/*'
+    - 'vendor/**/*'
+    - 'node_modules/**/*'
+
+# 行の長さに関する設定
+Layout/LineLength:
+  Max: 120
+
+# メソッドの行数制限
+Metrics/MethodLength:
+  Max: 15
+
+# クラスの行数制限
+Metrics/ClassLength:
+  Max: 200
+
+# ドキュメントコメントの要求を無効化
+Style/Documentation:
+  Enabled: false
+
+# 日本語コメントを許可
+Style/AsciiComments:
+  Enabled: false
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Style/SymbolArray:
+  EnforcedStyle: percent
+  MinSize: 2
+
+# Style/TrailingComma:
+#   EnforcedStyleForMultiline: consistent_comma
+
+Layout/IndentationWidth:
+  Width: 2
+
+Layout/EmptyLineAfterGuardClause:
+  Enabled: true
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Metrics/AbcSize:
+  Max: 20
+
+Metrics/CyclomaticComplexity:
+  Max: 10
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+    - 'config/routes.rb'
