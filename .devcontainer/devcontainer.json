@@ -21,11 +21,10 @@
     "customizations": {
         "vscode": {
             "extensions": [
-                "kaiwood.endwise",
-                // "castwide.solargraph",
                 "Shopify.ruby-extensions-pack",
+                "castwide.solargraph",
                 "KoichiSasada.vscode-rdbg",
-                "hridoy.rails-snippets"
+                "kaiwood.endwise"
             ]
         }
     },
@@ -33,7 +32,6 @@
     // "remoteUser": "root"
     "mounts": [
         "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached",
-        // "source=${localEnv:HOME}/.gitconfig,target=~/.gitconfig,type=bind,consistency=cached",
-        "source=${localWorkspaceFolder}/vendor/bundle,target=/workspaces/${localWorkspaceFolderBasename}/vendor/bundle,type=bind,consistency=cached"
+        "source=${localWorkspaceFolder}/vendor/bundle,target=/workspaces/${localWorkspaceFolderBasename}/vendor/bundle,type=cache,consistency=cached"
     ]
 }
