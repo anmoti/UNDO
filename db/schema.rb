@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_20_074823) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_21_043532) do
   create_table "reviews", force: :cascade do |t|
     t.integer "reviewer_id", null: false
     t.integer "reviewee_id", null: false
@@ -19,6 +19,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_20_074823) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["reviewee_id"], name: "index_reviews_on_reviewee_id"
+    t.index ["reviewer_id", "reviewee_id"], name: "index_reviews_on_reviewer_and_reviewee", unique: true
     t.index ["reviewer_id"], name: "index_reviews_on_reviewer_id"
   end
 
@@ -31,6 +32,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_20_074823) do
     t.datetime "updated_at", null: false
   end
 
-  add_foreign_key "reviews", "reviewees"
-  add_foreign_key "reviews", "reviewers"
+  add_foreign_key "reviews", "users", column: "reviewee_id"
+  add_foreign_key "reviews", "users", column: "reviewer_id"
 end
