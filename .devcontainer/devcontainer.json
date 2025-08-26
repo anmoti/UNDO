@@ -25,7 +25,15 @@
                 "castwide.solargraph",
                 "KoichiSasada.vscode-rdbg",
                 "kaiwood.endwise"
-            ]
+            ],
+            "settings": {
+                "rubyLsp.rubyVersionManager": {
+                    "identifier": "custom"
+                },
+                "rubyLsp.customRubyCommand": "/usr/local/bin/ruby",
+                "solargraph.commandPath": "/usr/local/bin/ruby",
+                "solargraph.useBundler": true
+            }
         }
     },
     // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.

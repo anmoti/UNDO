@@ -54,6 +54,8 @@ end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
+
+  gem "solargraph", "~> 0.56.2", require: false
 end
 
 group :test do
@@ -61,3 +63,10 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+<<<<<<< Updated upstream
+=======
+
+group :development do
+  gem "sorbet"
+end
+>>>>>>> Stashed changes
