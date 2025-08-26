@@ -5,10 +5,12 @@
     "dockerComposeFile": "compose.yml",
     "service": "app",
     "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-    // "features": {
-    // },
     // Features to add to the dev container. More info: https://containers.dev/features.
-    // "features": {},
+    "features": {
+        "ghcr.io/devcontainers/features/common-utils:2": {
+            "installCaCerts": true // CA certificates will be installed/updated
+        }
+    },
     // Use 'forwardPorts' to make a list of ports inside the container available locally.
     // This can be used to network with other containers or the host.
     "forwardPorts": [
@@ -17,6 +19,7 @@
     ],
     // Use 'postCreateCommand' to run commands after the container is created.
     // "postCreateCommand": "bundle config set cache_all true && bundle install",
+    "postCreateCommand": "sudo chmod +x ./script/init.sh && ./script/init.sh",
     // Configure tool-specific properties.
     "customizations": {
         "vscode": {
@@ -28,7 +31,6 @@
             ]
         }
     },
-    "postCreateCommand": "sudo chmod +x ./script/init.sh && ./script/init.sh",
     // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
     // "remoteUser": "root"
     "mounts": [
