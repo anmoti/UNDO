@@ -5,10 +5,12 @@
     "dockerComposeFile": "compose.yml",
     "service": "app",
     "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-    // "features": {
-    // },
     // Features to add to the dev container. More info: https://containers.dev/features.
-    // "features": {},
+    "features": {
+        "ghcr.io/devcontainers/features/common-utils:2": {
+            "installCaCerts": true // CA certificates will be installed/updated
+        }
+    },
     // Use 'forwardPorts' to make a list of ports inside the container available locally.
     // This can be used to network with other containers or the host.
     "forwardPorts": [
@@ -17,6 +19,7 @@
     ],
     // Use 'postCreateCommand' to run commands after the container is created.
     // "postCreateCommand": "bundle config set cache_all true && bundle install",
+    "postCreateCommand": "sudo chmod +x ./script/init.sh && ./script/init.sh",
     // Configure tool-specific properties.
     "customizations": {
         "vscode": {
@@ -40,6 +43,6 @@
     // "remoteUser": "root"
     "mounts": [
         "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached",
-        "source=${localWorkspaceFolder}/vendor/bundle,target=/workspaces/${localWorkspaceFolderBasename}/vendor/bundle,type=cache,consistency=cached"
+        "source=ruby-bundle-cache,target=${containerWorkspaceFolder}/vendor/bundle,type=volume"
     ]
 }

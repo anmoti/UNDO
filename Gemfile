@@ -63,10 +63,7 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
-<<<<<<< Updated upstream
-=======
 
 group :development do
   gem "sorbet"
 end
->>>>>>> Stashed changes

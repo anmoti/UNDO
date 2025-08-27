@@ -44,3 +44,4 @@ services:
 
 volumes:
     postgres-data:
+    ruby-bundle-cache:
