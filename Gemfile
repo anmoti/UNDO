@@ -65,5 +65,9 @@ group :test do
 end
 
 group :development do
-  gem "sorbet"
+  gem "ruby-lsp", require: false
+  gem "rubocop", require: false
+  gem "sorbet", require: false
 end
+
+gem 'dartsass-rails'
