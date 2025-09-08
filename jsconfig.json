@@ -26,6 +26,7 @@
         }
     },
     "include": [
-        "./app/javascript/**/*.js"
+        "./app/javascript/**/*.js",
+        "./app/javascript/types/**/*.d.ts"
     ]
 }
