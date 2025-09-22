@@ -70,4 +70,4 @@ group :development do
   gem "sorbet", require: false
 end
 
-gem 'dartsass-rails'
+gem "dartsass-rails"
