@@ -9,7 +9,8 @@
     "features": {
         "ghcr.io/devcontainers/features/common-utils:2": {
             "installCaCerts": true // CA certificates will be installed/updated
-        }
+        },
+        "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
     },
     // Use 'forwardPorts' to make a list of ports inside the container available locally.
     // This can be used to network with other containers or the host.

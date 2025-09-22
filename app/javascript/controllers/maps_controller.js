@@ -5,10 +5,9 @@ import { Loader } from "@googlemaps/js-api-loader";
 const loader = new Loader({
     apiKey: "",
     version: "weekly",
-    libraries: ["places"],
 });
 
-//34.2128846,134.065572,10.75z
+// 香川県範囲 34.2128846,134.065572,10.75z
 
 const mapOptions = {
     mapId: "DEMO_MAP_ID",
@@ -20,6 +19,7 @@ const mapOptions = {
 };
 
 // Connects to data-controller="maps"
+/** @extends {Controller<HTMLDivElement>} */
 export default class extends Controller {
     connect() {
         console.log("Maps controller connected");

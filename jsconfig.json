@@ -11,6 +11,9 @@
         "checkJs": true,
         "baseUrl": ".",
         "paths": {
+            "@types/*": [
+                "./vendor/javascript/@types/*"
+            ],
             "@hotwired/stimulus": [
                 "./vendor/javascript/@hotwired/stimulus"
             ],
@@ -27,6 +30,6 @@
     },
     "include": [
         "./app/javascript/**/*.js",
-        "./app/javascript/types/**/*.d.ts"
+        "./app/javascript/types/**/*.ts"
     ]
 }
