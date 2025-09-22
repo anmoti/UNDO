@@ -60,3 +60,25 @@ body {
     display: flex;
     flex-direction: column;
 }
+
+.map__marker {
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.2s ease;
+    border-radius: 50%;
+    background-color: var(--color-5);
+    border: 2px solid var(--color-6);
+}
+
+.map__marker::before {
+    content: "";
+    position: absolute;
+    inset: 50%;
+    width: 50%;
+    height: 50%;
+    background-color: var(--color-6);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
