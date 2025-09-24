@@ -236,14 +236,16 @@ export default class extends Controller {
         }
     }
 
-    showShopInfo(shop, marker) {
+    async showShopInfo(shop, marker) {
+        const { InfoWindow } = await loader.importLibrary("maps");
+
         // 既存の情報ウィンドウがあれば閉じる
         if (this.infoWindow) {
             this.infoWindow.close();
         }
 
         // 新しい情報ウィンドウを作成
-        this.infoWindow = new google.maps.InfoWindow();
+        this.infoWindow = new InfoWindow();
 
         // 情報ウィンドウのコンテンツを作成
         const content = `
