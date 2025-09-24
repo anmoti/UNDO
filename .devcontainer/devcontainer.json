@@ -18,6 +18,9 @@
         3000,
         5432
     ],
+    "remoteEnv": {
+        "EDITOR": "code --wait --reuse-window"
+    },
     // Use 'postCreateCommand' to run commands after the container is created.
     // "postCreateCommand": "bundle config set cache_all true && bundle install",
     "postCreateCommand": "sudo chmod +x ./script/init.sh && ./script/init.sh",
