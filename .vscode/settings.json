@@ -1,6 +1,6 @@
 {
     "editor.formatOnSave": true,
-    "files.autoSave": "afterDelay",
+    // "files.autoSave": "afterDelay",
     "editor.wordWrap": "on",
     "editor.autoIndentOnPaste": true,
     "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
@@ -8,5 +8,15 @@
         "identifier": "custom"
     },
     "rubyLsp.customRubyCommand": "/usr/local/bin/ruby",
+    "cSpell.words": [
+        "googlemaps",
+        "hotwired",
+        "importmap",
+        "javascripts"
+    ],
+    "[ruby]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "rubocop.vscode-rubocop"
+    }
     // "rubyLsp.bundleGemfile": "/workspaces/UNDO/Gemfile"
 }
