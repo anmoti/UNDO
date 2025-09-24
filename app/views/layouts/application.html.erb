@@ -19,6 +19,7 @@
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <meta name="google-maps-api-key" content="<%= Rails.application.credentials.dig(:google_cloud, :maps_api_key) %>">
     <%= javascript_importmap_tags %>
   </head>
 
