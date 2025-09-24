@@ -1,9 +1,15 @@
 import { Controller } from "@hotwired/stimulus";
 import { Loader } from "@googlemaps/js-api-loader";
 
-// cSpell:ignore AIzaSyDPhWyiZRwXXlWX79iijYqNHUipdapFuNk
+// Helper to read Google Maps API key from meta tag
+function getGoogleMapsApiKey() {
+    /** @type {HTMLMetaElement} */
+    const meta = document.querySelector('meta[name="google-maps-api-key"]');
+    return meta ? meta.content : "";
+}
+
 const loader = new Loader({
-    apiKey: "AIzaSyDPhWyiZRwXXlWX79iijYqNHUipdapFuNk",
+    apiKey: getGoogleMapsApiKey(),
     version: "weekly",
 });
 
