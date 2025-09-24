@@ -5,7 +5,11 @@ import { Loader } from "@googlemaps/js-api-loader";
 function getGoogleMapsApiKey() {
     /** @type {HTMLMetaElement} */
     const meta = document.querySelector('meta[name="google-maps-api-key"]');
-    return meta ? meta.content : "";
+    if (!meta) {
+        console.warn("Google Maps API key meta tag not found.");
+        return "";
+    }
+    return meta.content;
 }
 
 const loader = new Loader({
