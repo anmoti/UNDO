@@ -176,7 +176,7 @@ export default class extends Controller {
 
             // カスタムマーカーアイコンを作成
             const markerIcon = document.createElement("div");
-            markerIcon.className = "map__marker";
+            markerIcon.className = "maps__marker";
 
             // マーカーを作成
             const marker = new AdvancedMarkerElement({

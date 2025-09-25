@@ -18,7 +18,8 @@
     "vscode-erb-beautify.useBundler": true,
     "[ruby]": {
         "editor.formatOnSave": true,
-        "editor.defaultFormatter": "rubocop.vscode-rubocop"
-    }
+        "editor.defaultFormatter": "castwide.solargraph"
+    },
+    "solargraph.formatting": true
     // "rubyLsp.bundleGemfile": "/workspaces/UNDO/Gemfile"
 }
