@@ -131,6 +131,7 @@ GEM
     google-protobuf (4.32.1-x86_64-linux-musl)
       bigdecimal
       rake (>= 13)
+    htmlbeautifier (1.4.3)
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
     importmap-rails (2.2.2)
@@ -428,6 +429,7 @@ DEPENDENCIES
   capybara
   dartsass-rails
   debug
+  htmlbeautifier
   importmap-rails
   jbuilder
   kamal

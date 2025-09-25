@@ -68,6 +68,7 @@ group :development do
   gem "ruby-lsp", require: false
   gem "rubocop", require: false
   gem "sorbet", require: false
+  gem 'htmlbeautifier', require: false
 end
 
 gem "dartsass-rails"
