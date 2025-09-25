@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  resource :session
+  resources :passwords, param: :token
+
   if Rails.env.development?
       resources :reviews
       resources :users
