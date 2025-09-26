@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   resources :passwords, param: :token
 
-  if Rails.env.development?
+  if Rails.env.development? || Rails.env.test?
       resources :reviews
       resources :users
   end
