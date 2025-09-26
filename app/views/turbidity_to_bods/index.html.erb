@@ -1,0 +1,16 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Turbidity to bods" %>
+
+<h1>Turbidity to bods</h1>
+
+<div id="turbidity_to_bods">
+  <% @turbidity_to_bods.each do |turbidity_to_bod| %>
+    <%= render turbidity_to_bod %>
+    <p>
+      <%= link_to "Show this turbidity to bod", turbidity_to_bod %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New turbidity to bod", new_turbidity_to_bod_path %>
