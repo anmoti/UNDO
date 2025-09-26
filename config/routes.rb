@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  resource :session
   resources :passwords, param: :token
 
   if Rails.env.development?
@@ -16,6 +15,8 @@ Rails.application.routes.draw do
   # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
+
+  get "signin", to: "sessions#new", as: :new_session
 
   # Defines the root path route ("/")
   root "home#index"

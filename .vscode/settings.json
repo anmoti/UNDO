@@ -4,22 +4,15 @@
     "editor.wordWrap": "on",
     "editor.autoIndentOnPaste": true,
     "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
-    "rubyLsp.rubyVersionManager": {
-        "identifier": "custom"
-    },
-    "rubyLsp.customRubyCommand": "/usr/local/bin/ruby",
     "cSpell.words": [
         "googlemaps",
         "hotwired",
         "importmap",
         "javascripts"
     ],
-    "solargraph.useBundler": true,
-    "vscode-erb-beautify.useBundler": true,
     "[ruby]": {
         "editor.formatOnSave": true,
-        "editor.defaultFormatter": "castwide.solargraph"
+        "editor.defaultFormatter": "rubocop.vscode-rubocop"
     },
-    "solargraph.formatting": true
-    // "rubyLsp.bundleGemfile": "/workspaces/UNDO/Gemfile"
+    "solargraph.formatting": true,
 }

@@ -1,8 +1,0 @@
-{
-    "recommendations": [
-        "shopify.ruby-lsp",
-        "rubocop.vscode-rubocop",
-        "castwide.solargraph",
-        "aliariff.vscode-erb-beautify"
-    ]
-}

@@ -54,8 +54,6 @@ end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
-
-  gem "solargraph", "~> 0.57.0", require: false
 end
 
 group :test do
@@ -66,6 +64,7 @@ end
 
 group :development do
   gem "ruby-lsp", require: false
+  gem "ruby-lsp-rails", require: false
   gem "rubocop", require: false
   gem "sorbet", require: false
   gem "htmlbeautifier", require: false
