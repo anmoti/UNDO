@@ -4,10 +4,6 @@
     "editor.wordWrap": "on",
     "editor.autoIndentOnPaste": true,
     "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
-    "rubyLsp.rubyVersionManager": {
-        "identifier": "custom"
-    },
-    "rubyLsp.customRubyCommand": "/usr/local/bin/ruby",
     "cSpell.words": [
         "googlemaps",
         "hotwired",
@@ -17,6 +13,6 @@
     "[ruby]": {
         "editor.formatOnSave": true,
         "editor.defaultFormatter": "rubocop.vscode-rubocop"
-    }
-    // "rubyLsp.bundleGemfile": "/workspaces/UNDO/Gemfile"
+    },
+    "solargraph.formatting": true,
 }

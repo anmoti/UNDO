@@ -131,6 +131,7 @@ GEM
     google-protobuf (4.32.1-x86_64-linux-musl)
       bigdecimal
       rake (>= 13)
+    htmlbeautifier (1.4.3)
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
     importmap-rails (2.2.2)
@@ -306,6 +307,8 @@ GEM
       language_server-protocol (~> 3.17.0)
       prism (>= 1.2, < 2.0)
       rbs (>= 3, < 5)
+    ruby-lsp-rails (0.4.8)
+      ruby-lsp (>= 0.26.0, < 0.27.0)
     ruby-progressbar (1.13.0)
     rubyzip (3.1.0)
     sass-embedded (1.93.2-aarch64-linux-gnu)
@@ -428,6 +431,7 @@ DEPENDENCIES
   capybara
   dartsass-rails
   debug
+  htmlbeautifier
   importmap-rails
   jbuilder
   kamal
@@ -437,8 +441,9 @@ DEPENDENCIES
   rubocop
   rubocop-rails-omakase
   ruby-lsp
+  ruby-lsp-rails
   selenium-webdriver
-  solargraph (~> 0.57.0)
+  solargraph
   solid_cable
   solid_cache
   solid_queue
