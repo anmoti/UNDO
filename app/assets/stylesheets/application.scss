@@ -1,0 +1,99 @@
+// Sassy
+
+@font-face {
+    font-family: "Caprasimo";
+    font-style: normal;
+    font-display: swap;
+    font-weight: 400;
+    src: url(https://cdn.jsdelivr.net/fontsource/fonts/caprasimo@latest/latin-400-normal.woff2) format("woff2");
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+        U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191,
+        U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+    --font-title: "Caprasimo", cursive;
+
+    --color-1: #267365;
+    --color-2: #f2cb05;
+    --color-3: #f29f05;
+    --color-4: #f28705;
+    --color-5: #f23030;
+    --color-6: #ffffff;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0 solid;
+}
+
+html,
+body {
+    height: 100%;
+    color: var(--color-6);
+}
+
+.main__container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.header__container {
+    height: 60px;
+    background-color: var(--color-4);
+    border-bottom: 1px solid var(--color-3);
+}
+
+.header__title {
+    font-family: var(--font-title);
+    font-size: 32px;
+    line-height: 60px;
+    margin-left: 20px;
+}
+
+.maps__container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.map__marker {
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.2s ease;
+    border-radius: 50%;
+    background-color: var(--color-5);
+    border: 2px solid var(--color-6);
+}
+
+.main_bar {
+    display: flex;
+    justify-content: space-between; // この値を変更
+    align-items: center;
+    padding: 0 20px;
+    background-color: #f28705;
+}
+
+.main_bar button {
+    width: 60px;
+    height: 60px;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bar_button {
+    width: 60%;
+    height: 60%;
+    object-fit: cover;
+    display: block;
+}
