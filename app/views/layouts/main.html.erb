@@ -18,6 +18,12 @@
   <body>
     <header class="header__container">
       <%= image_tag "logo.png", class: "header__logo", alt: "UNDO Logo" %>
+      <div>
+        <% if authenticated? %>
+          <div>ログイン中: <%= Current.session.user.email %></div>
+          <%= button_to "ログアウト", signout_path, method: :delete, class: "header__button" %>
+        <% end %>
+      </div>
     </header>
     <main>
       <%= yield %>

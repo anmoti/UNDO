@@ -16,8 +16,9 @@ Rails.application.routes.draw do
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
-  get "signin", to: "sessions#new", as: :new_session
-  post "signin", to: "sessions#create", as: :session
+  get "signin", to: "sessions#new"
+  post "signin", to: "sessions#create"
+  get "signout", to: "sessions#destroy"
 
   # Defines the root path route ("/")
   root "home#index"
