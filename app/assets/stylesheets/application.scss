@@ -72,16 +72,21 @@ body {
 }
 
 .main_bar {
+    height: 60px;
+    background-color: var(--color-4);
+    border-bottom: 1px solid var(--color-3);
     display: flex;
-    justify-content: space-between; // この値を変更
-    align-items: center;
+    justify-content: space-evenly;
+    /* または space-around, space-between */
+    align-items: stretch;
+    /* ← ここを center から stretch に変更 */
     padding: 0 20px;
-    background-color: #f28705;
+    box-sizing: border-box;
 }
 
 .main_bar button {
     width: 60px;
-    height: 60px;
+    /* height: 60px; ← この行を削除またはコメントアウト */
     padding: 0;
     border: none;
     background: none;
@@ -91,9 +96,11 @@ body {
     justify-content: center;
 }
 
+// .bar_button のスタイルは変更なし
 .bar_button {
-    width: 60%;
-    height: 60%;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     display: block;
+    border-radius: 10px;
 }
