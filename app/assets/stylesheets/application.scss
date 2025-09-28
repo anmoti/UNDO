@@ -104,3 +104,44 @@ body {
     display: block;
     border-radius: 10px;
 }
+
+#logout-background {
+    position: absolute;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.7));
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+#logout-box {
+    background-color: var(--color-6);
+    border: 2px solid var(--color-3);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    width: 300px;
+}
+
+#logout-surundana {
+    color: var(--color-1);
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.logout-buttons {
+    display: flex;
+    justify-content: space-around;
+}
+
+.logout-button {
+    background-color: var(--color-4);
+    color: var(--color-6);
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}

@@ -27,12 +27,18 @@
 
     </div>
 
-    <script>
-        function logout() {
-            document.createElement('div');
-
-        }
-    </script>
 </main>
-<div class="logout-modal">
+<div id="logout-background">
+  <div id="logout-box">
+    <p id = "logout-surundana">ログアウトしますか？</p>
+    <div class="logout-buttons">
+      <button onclick="document.getElementById('logout-background').style.display='none';" class = logout-button>ログアウト</button>
+      <button onclick="document.getElementById('logout-background').style.display='none';" class = logout-button>キャンセル</button>
+    </div>
 </div>
+
+<script>
+    function logout() {
+        document.getElementById('logout-background').style.display = 'flex';
+    }
+</script>

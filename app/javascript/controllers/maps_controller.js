@@ -143,6 +143,13 @@ const shops = [
         openTime: "9:00～15:00（土日祝は16:00まで）",
         address: "香川県綾歌郡宇多津町浜三番丁36-1",
     },
+    {
+        name: "ふたばうどん",
+        lat: 35.468838,
+        lon: 133.066622,
+        openTime: "24時間営業(例)",
+        address: "島根県松江市学園南１丁目２−１",
+    },
 ];
 
 // Connects to data-controller="maps"
@@ -164,7 +171,7 @@ export default class extends Controller {
     }
 
     /** @param {google.maps.MapMouseEvent} event */
-    async onMapClick(event) {}
+    async onMapClick(event) { }
 
     async createShopMarkers() {
         // 各店舗にマーカーを作成
