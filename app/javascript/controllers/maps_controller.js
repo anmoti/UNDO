@@ -184,13 +184,6 @@ const shops = [
         yasashi: true,
         foodshare: false,
     },
-    {
-        name: "ふたばうどん",
-        lat: 35.468838,
-        lon: 133.066622,
-        openTime: "24時間営業(例)",
-        address: "島根県松江市学園南１丁目２−１",
-    },
 ];
 
 // Connects to data-controller="maps"
