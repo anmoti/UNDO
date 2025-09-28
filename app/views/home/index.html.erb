@@ -21,7 +21,7 @@
             <%= image_tag("bar_icons/yeah.png", size: "60x60") %>
         <% end %>
 
-        <button type="button" class="bar_button" onclick="logout();">
+        <button type="button" class="bar_button" onclick="logout_show();">
             <%= image_tag("bar_icons/yeah.png", size: "60x60", alt: "ログアウト") %>
         </button>
 
@@ -32,13 +32,17 @@
   <div id="logout-box">
     <p id = "logout-surundana">ログアウトしますか？</p>
     <div class="logout-buttons">
-      <button onclick="document.getElementById('logout-background').style.display='none';" class = logout-button>ログアウト</button>
-      <button onclick="document.getElementById('logout-background').style.display='none';" class = logout-button>キャンセル</button>
+      <button onclick="document.getElementById('logout-background').style.display='none'; logout();" class = undo-button>ログアウト</button>
+      <button onclick="document.getElementById('logout-background').style.display='none';" class = undo-button>キャンセル</button>
     </div>
 </div>
 
 <script>
-    function logout() {
+    function logout_show() {
         document.getElementById('logout-background').style.display = 'flex';
+    }
+
+    function logout() {
+        alrat("ログアウトしました");
     }
 </script>

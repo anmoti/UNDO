@@ -77,16 +77,13 @@ body {
     border-bottom: 1px solid var(--color-3);
     display: flex;
     justify-content: space-evenly;
-    /* または space-around, space-between */
     align-items: stretch;
-    /* ← ここを center から stretch に変更 */
     padding: 0 20px;
     box-sizing: border-box;
 }
 
 .main_bar button {
     width: 60px;
-    /* height: 60px; ← この行を削除またはコメントアウト */
     padding: 0;
     border: none;
     background: none;
@@ -98,11 +95,13 @@ body {
 
 // .bar_button のスタイルは変更なし
 .bar_button {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+
     display: block;
     border-radius: 10px;
+
 }
 
 #logout-background {
@@ -137,7 +136,7 @@ body {
     justify-content: space-around;
 }
 
-.logout-button {
+.undo-button {
     background-color: var(--color-4);
     color: var(--color-6);
     padding: 10px 20px;

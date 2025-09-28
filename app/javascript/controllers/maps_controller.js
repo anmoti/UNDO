@@ -261,9 +261,10 @@ export default class extends Controller {
                 <div style="margin-bottom: 6px; color: #666; font-size: 13px;">
                     <strong>住所:</strong> ${shop.address}
                 </div>
-                <div style="color: #666; font-size: 13px;">
+                <div style="margin: 0 0 8px 0; color: #666; font-size: 13px;">
                     <strong>営業時間:</strong> ${shop.openTime}
                 </div>
+                <button class = "undo-button">レビューする</button>
             </div>
         `;
 
