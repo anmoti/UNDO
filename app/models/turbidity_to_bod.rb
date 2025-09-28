@@ -1,0 +1,2 @@
+class TurbidityToBod < ApplicationRecord
+end
