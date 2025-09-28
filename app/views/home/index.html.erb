@@ -9,20 +9,13 @@
     <header class="header__container">
         <div class="header__title">UNDO</div>
     </header>
+    <script src = "bar_icons.rb"></script>
     <div class="maps__container" data-controller="maps"></div>
     <div class = "main_bar">
-        <button onclick="">
-            <img src = "/yeah.png" class = "bar_button">
-        </button>
-        <button onclick="">
-            <img src = "/yeah.png" class = "bar_button">
-        </button>
-        <button onclick="">
-            <img src = "/yeah.png" class = "bar_button">
-        </button>
-        <button onclick="">
-            <img src = "/yeah.png" class = "bar_button">
-        </button>
+        <%# BOD %>
+        <%= link_to "src/bar_icons.rb", class: "bar_button" do %>
+            <%= image_tag("bar_icons/yeah.png", size: "60x60") %>
+        <% end %>
     </div>
 </main>
 >>>>>>> c933cfd (add mainbar)
