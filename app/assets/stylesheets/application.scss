@@ -26,13 +26,29 @@
     background-color: var(--color-6);
     border: 2px solid var(--color-3);
     border-radius: 10px;
-    padding: 20px;
+    <<<<<<< HEAD padding: 20px;
     text-align: center;
     width: 500px;
 }
 
 #check-box {
-    background-color: var(--color-6);
+    =======
+}
+
+#logout-background {
+    position: absolute;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.7));
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+#logout-box {
+    >>>>>>>fc26fde (add example udon shop, and logout ui) background-color: var(--color-6);
     border: 2px solid var(--color-3);
     border-radius: 10px;
     padding: 20px;
@@ -59,7 +75,8 @@
     justify-content: space-around;
 }
 
-.undo-button {
+.undo-button,
+.logout-button {
     background-color: var(--color-4);
     color: var(--color-6);
     padding: 10px 20px;
