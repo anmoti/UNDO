@@ -6,12 +6,33 @@
     <header class="header__container">
         <div class="header__title">UNDO</div>
     </header>
-    <script src = "bar_icons.rb"></script>
     <div class="maps__container" data-controller="maps"></div>
     <div class = "main_bar">
         <%# BOD %>
         <%= link_to turbidity_to_bods_path, class: "bar_button" do %>
             <%= image_tag("bar_icons/yeah.png", size: "60x60") %>
         <% end %>
+
+        <%= link_to reviews_path, class: "bar_button" do %>
+            <%= image_tag("bar_icons/yeah.png", size: "60x60") %>
+        <% end %>
+
+        <%= link_to users_path, class: "bar_button" do %>
+            <%= image_tag("bar_icons/yeah.png", size: "60x60") %>
+        <% end %>
+
+        <button type="button" class="bar_button" onclick="logout();">
+            <%= image_tag("bar_icons/yeah.png", size: "60x60", alt: "ログアウト") %>
+        </button>
+
     </div>
+
+    <script>
+        function logout() {
+            document.createElement('div');
+
+        }
+    </script>
 </main>
+<div class="logout-modal">
+</div>
