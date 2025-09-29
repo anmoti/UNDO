@@ -9,33 +9,33 @@
   if (!starsContainer) return;
 
   for (let i = 0; i < 5; i++) {
-    const lButton = document.createElement('button');
-    lButton.className = "left-buttons";
+    const Button = document.createElement('button');
+    Button.className = "left-buttons";
 
-    const lImg = document.createElement('img');
-    lImg.className = "star-image";
-    lImg.src = "star.png";
-    lImg.style.width = "20px";
-    lImg.style.height = "auto";
-    lButton.appendChild(lImg);
-    lButton.style.backgroundColor = "transparent";
+    const Img = document.createElement('img');
+    Img.className = "star-image";
+    Img.src = "star-yellow.png";
+    Img.style.width = "40px";
+    Img.style.height = "auto";
+    Img.id = `star_img_${i}`;
+    Button.appendChild(Img);
+    Button.style.backgroundColor = "transparent";
+    Button.style.paddingRight = "8px";
 
-    const rButton = document.createElement('button');
-    rButton.className = "right-buttons";
+    Button.type = "button";
 
-    const rImg = document.createElement('img');
-    rImg.className = "star-image";
-    rImg.src = "star.png";
-    rImg.style.width = "20px";
-    rImg.style.height = "auto";
-    rImg.style.transform = "scaleX(-1)";
-    rButton.style.backgroundColor = "transparent";
-    rButton.appendChild(rImg);
+    Button.onclick = () => click_star(i + 1);
 
-    starsContainer.appendChild(lButton);
-    starsContainer.appendChild(rButton);
+    starsContainer.appendChild(Button);
   }
 });
+
+function click_star(score) {
+  for(let i = 1; i < 5; i ++){
+    const shine_star = document.getElementById(`star_img_${i}`);
+    shine_star.src = score>i?"star-yellow.png":"star-black.png";
+  }
+}
 </script>
 
 <header class="header__container">
@@ -43,11 +43,12 @@
 </header>
 
 <div id="reviews" style="color: black">
-  <form>
-      <table>
+  <form id = "review_form" action = "/reviews" method = "post">
+      <table style="text-align: left;">
+        <tr><th>店舗名</th><td>ふたばうどん</td></tr>
         <tr><th>ユーザー名</th><td>ほげほげ(仮)</td></tr> 
         <tr><th>評価</th><td><div id = "stars"></div></td></tr>
-        <tr><th>コメント</th><td><input type = "text" id = "comment" class="textlines"></td></tr>
+        <tr><th>コメント</th><td><textarea style = "font-size: 100%" id = "comment" class="textlines"></textarea></td></tr>
       </table>
       <input type = "submit" value = "送信" class="undo-button" id = "submit_review">
     </form>
