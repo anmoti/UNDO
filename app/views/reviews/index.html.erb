@@ -2,6 +2,42 @@
 
 <% content_for :title, "Reviews" %>
 
+<script>
+  //fuckin code
+  document.addEventListener('DOMContentLoaded', () => {
+  const starsContainer = document.getElementById('stars');
+  if (!starsContainer) return;
+
+  for (let i = 0; i < 5; i++) {
+    const lButton = document.createElement('button');
+    lButton.className = "left-buttons";
+
+    const lImg = document.createElement('img');
+    lImg.className = "star-image";
+    lImg.src = "star.png";
+    lImg.style.width = "20px";
+    lImg.style.height = "auto";
+    lButton.appendChild(lImg);
+    lButton.style.backgroundColor = "transparent";
+
+    const rButton = document.createElement('button');
+    rButton.className = "right-buttons";
+
+    const rImg = document.createElement('img');
+    rImg.className = "star-image";
+    rImg.src = "star.png";
+    rImg.style.width = "20px";
+    rImg.style.height = "auto";
+    rImg.style.transform = "scaleX(-1)";
+    rButton.style.backgroundColor = "transparent";
+    rButton.appendChild(rImg);
+
+    starsContainer.appendChild(lButton);
+    starsContainer.appendChild(rButton);
+  }
+});
+</script>
+
 <header class="header__container">
   <div class="header__title">UNDO</div>
 </header>
@@ -10,7 +46,7 @@
   <form>
       <table>
         <tr><th>ユーザー名</th><td>ほげほげ(仮)</td></tr> 
-        <tr><th>評価</th><td><div id = "stars">★★★★★</div></td></tr>
+        <tr><th>評価</th><td><div id = "stars"></div></td></tr>
         <tr><th>コメント</th><td><input type = "text" id = "comment" class="textlines"></td></tr>
       </table>
       <input type = "submit" value = "送信" class="undo-button" id = "submit_review">
