@@ -3,6 +3,8 @@
 <% content_for :title, "Reviews" %>
 
 <script>
+  let udon_score = 5;
+
   //fuckin code
   document.addEventListener('DOMContentLoaded', () => {
   const starsContainer = document.getElementById('stars');
@@ -28,14 +30,37 @@
 
     starsContainer.appendChild(Button);
   }
-});
+  });
 
-function click_star(score) {
-  for(let i = 1; i < 5; i ++){
-    const shine_star = document.getElementById(`star_img_${i}`);
-    shine_star.src = score>i?"star-yellow.png":"star-black.png";
+  function click_star(score) {
+    for(let i = 1; i < 5; i ++){
+      const shine_star = document.getElementById(`star_img_${i}`);
+      shine_star.src = score>i?"star-yellow.png":"star-black.png";
+    }
+    udon_score = score;
   }
-}
+
+  function check_show() {
+      document.getElementById('check-ground').style.display = 'flex';
+    const starsContainer = document.getElementById('check-star');
+    if (!starsContainer) return;
+
+    for(let i = 0; i < udon_score; i++){
+      const star_img = document.createElement('img');
+      star_img.src = "star-yellow.png";
+      star_img.style.width = "20px";
+      star_img.style.height = "auto";
+      starsContainer.appendChild(star_img);
+    }
+    for(let i = udon_score; i < 5; i++){
+      const star_img = document.createElement('img');
+      star_img.src = "star-black.png";
+      star_img.style.width = "20px";
+      star_img.style.height = "auto";
+      starsContainer.appendChild(star_img);
+    }
+    document.getElementById('comment-check').innerText = "コメント: " + document.getElementById('comment').value;
+  }
 </script>
 
 <header class="header__container">
@@ -50,7 +75,7 @@ function click_star(score) {
         <tr><th>評価</th><td><div id = "stars"></div></td></tr>
         <tr><th>コメント</th><td><textarea style = "font-size: 100%" id = "comment" class="textlines"></textarea></td></tr>
       </table>
-      <input type = "submit" value = "送信" class="undo-button" id = "submit_review">
+      <button type = "button" class="undo-button" id = "submit_review" onclick = "check_show();">送信</button>
     </form>
   <% @reviews.each do |review| %>
     <%= render review %>
@@ -58,6 +83,17 @@ function click_star(score) {
       <%= link_to "Show this review", review %>
     </p>
   <% end %>
+</div>
+
+<div id = "check-ground">
+  <div id = "check-box">
+    <p id = "check-text">レビュー内容を確認してください。</p>
+    <p class = "check-text-main">店舗名: ふたばうどん</p>
+    <p class = "check-text-main">ユーザー名: ほげほげ(仮)</p>
+    <p class = "check-text-main">評価:<span id = "check-star"></span></p>
+    <p class = "check-text-main" id = "comment-check"></p>
+    <button onclick="document.getElementById('check-review').style.display='none';" class = undo-button class = undo-button>OK</button>
+  </div>
 </div>
 
 

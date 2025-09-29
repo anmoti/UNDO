@@ -104,6 +104,7 @@ body {
 
 }
 
+#check-ground,
 #logout-background {
     position: absolute;
     top: 0;
@@ -116,19 +117,27 @@ body {
     z-index: 9999;
 }
 
+#check-box,
 #logout-box {
     background-color: var(--color-6);
     border: 2px solid var(--color-3);
     border-radius: 10px;
     padding: 20px;
     text-align: center;
-    width: 300px;
+    width: 340px;
 }
 
+#check-text,
 #logout-surundana {
     color: var(--color-1);
     font-size: 18px;
     margin-bottom: 20px;
+}
+
+.check-text-main {
+    color: var(--color-1);
+    font-size: 14px;
+    margin-bottom: 6px;
 }
 
 .logout-buttons {
@@ -165,7 +174,8 @@ body {
     line-height: 1.2;
 }
 
-#stars {
+#stars,
+#check-score {
     font-size: 36px;
     color: gold;
     cursor: pointer;
