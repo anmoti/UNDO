@@ -2,9 +2,19 @@
 
 <% content_for :title, "Reviews" %>
 
-<h1>Reviews</h1>
+<header class="header__container">
+  <div class="header__title">UNDO</div>
+</header>
 
-<div id="reviews">
+<div id="reviews" style="color: black">
+  <form>
+      <table>
+        <tr><th>ユーザー名</th><td>ほげほげ(仮)</td></tr> 
+        <tr><th>評価</th><td><div id = "stars">★★★★★</div></td></tr>
+        <tr><th>コメント</th><td><input type = "text" id = "comment" class="textlines"></td></tr>
+      </table>
+      <input type = "submit" value = "送信" class="undo-button" id = "submit_review">
+    </form>
   <% @reviews.each do |review| %>
     <%= render review %>
     <p>
@@ -13,4 +23,5 @@
   <% end %>
 </div>
 
-<%= link_to "New review", new_review_path %>
+
+<%# <%= link_to "New review", new_review_path %>  
