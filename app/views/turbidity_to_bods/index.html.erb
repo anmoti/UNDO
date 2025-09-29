@@ -2,9 +2,21 @@
 
 <% content_for :title, "Turbidity to bods" %>
 
-<h1>Turbidity to bods</h1>
+<header class="header__container">
+  <div class="header__title">UNDO</div>
+</header>
 
-<div id="turbidity_to_bods">
+<div id="turbidity_to_bods" style="color: black">
+  <form id = "bod_form" action = "/reviews" method = "post">
+      <table style="text-align: left;">
+        <tr><th>店舗名</th><td>ふたばうどん</td></tr> 
+        <tr><th>濁度</th><td>500</td></tr> 
+        <tr><th>BOD</th><td>100[mg/L]</td></tr>
+        <tr><th>COD</th><td>100[mg/L]</td></tr>
+      </table>
+      <input type = "submit" value = "送信" class="undo-button" id = "submit_review">
+    </form>
+
   <% @turbidity_to_bods.each do |turbidity_to_bod| %>
     <%= render turbidity_to_bod %>
     <p>
@@ -13,4 +25,4 @@
   <% end %>
 </div>
 
-<%= link_to "New turbidity to bod", new_turbidity_to_bod_path %>
+<%# <%= link_to "New turbidity to bod", new_turbidity_to_bod_path %>
