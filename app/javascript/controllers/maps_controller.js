@@ -275,7 +275,7 @@ export default class extends Controller {
         const content = `
             <div style="min-width: 200px; padding: 4px; font-family: Arial, sans-serif;">
                 <h3 style="margin: 0 0 2px 0; color: #333; font-size: 16px;">${shop.name}</h3>
-                <img src = "yeah.png" width = "16px" height = "16px"></img>
+                <img src="yasasii.png" width="16px" height="16px" />
                 <span style="font-size: 12px; margin: 0 0 6px 0; background-color: #0c0; font-size: 14px; display: ${shop.yasashi ? 'inline' : 'none'};">環境に優しいうどん店</span>
                 <div style="margin-bottom: 6px; color: #666; font-size: 13px;">
                     <strong>住所:</strong> ${shop.address}
