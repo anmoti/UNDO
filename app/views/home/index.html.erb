@@ -7,8 +7,17 @@
         <div class="header__title">UNDO</div>
     </header>
     <div class="maps__container" data-controller="maps"></div>
-    <div class = "main_bar">
-        <%# BOD %>
+    <div id="comment-box"> <!-- コメント表示用のボックス -->
+        <p id = "comment-text">コメント</p>
+        <div id = "scroll-box">
+            <div class="scroll-content">
+            <p style = "color:black">こ<br>こ<br>に<br>1<br>つ<br>目<br>の<br>コ<br>メ<br>ン<br>ト<br>が<br>入<br>り<br>ます。長いテキストでもスクロールできます。</p>
+            <p style = "color:black">2つ目のコメントです。</p>
+            <p style = "color:black">3つ目のコメントです。たくさんのコメントをここに追加できます。</p>
+            </div>
+        </div>
+    </div>
+    <div class = "main_bar"> <!-- 画面下部のナビゲーションバー -->
         <%= link_to turbidity_to_bods_path, class: "bar_button" do %>
             <%= image_tag("bar_icons/yeah.png", size: "60x60") %>
         <% end %>
@@ -35,6 +44,7 @@
       <button onclick="document.getElementById('logout-background').style.display='none'; logout();" class = undo-button>ログアウト</button>
       <button onclick="document.getElementById('logout-background').style.display='none';" class = undo-button>キャンセル</button>
     </div>
+  </div>
 </div>
 
 <script>
@@ -44,5 +54,9 @@
 
     function logout() {
         alrat("ログアウトしたとする");
+    }
+
+    function comment_view() {
+        document.getElementById('comment-box').style.display = 'block';
     }
 </script>
