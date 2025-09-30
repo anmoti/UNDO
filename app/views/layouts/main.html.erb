@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "UNDO" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= yield :head %>
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+    <%= stylesheet_link_tag "main", "data-turbo-track": "reload" %>
+    <meta name="google-maps-api-key" content="<%= Rails.application.credentials.dig(:google_cloud, :maps_api_key) %>">
+    <%= javascript_importmap_tags %>
+  </head>
+  <body>
+    <header class="header__container">
+      <%= image_tag "logo.png", class: "header__logo", alt: "UNDO Logo" %>
+      <div class="header__right">
+        <% if authenticated? %>
+          <div class="header__user">ログイン中: <%= Current.session.user.email %></div>
+          <%= link_to "ログアウト", signout_path, class: "header__button" %>
+        <% else %>
+          <%= link_to "ログイン", signin_path, class: "header__button" %>
+        <% end %>
+      </div>
+    </div>
+  </header>
+  <main>
+    <%= yield %>
+  </main>
+</body>
+</html>

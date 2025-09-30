@@ -1,0 +1,20 @@
+<div class="login">
+  <div class="login__container">
+    <h1 class="login__title">ログイン</h1>
+    <%= form_with(url: signin_path, class: "form") do |form| %>
+      <%= tag.div(flash[:alert], style: "color:red") if flash[:alert] %>
+      <div class="form__field">
+        <%= form.label :email, "メールアドレス", class: "form__label" %>
+        <%= form.email_field :email, class: "form__input", required: true, placeholder: "undo@example.com" %>
+      </div>
+      <div class="form__field">
+        <%= form.label :password, "パスワード", class: "form__label" %>
+        <%= form.password_field :password, class: "form__input", required: true %>
+      </div>
+      <%= form.submit "ログイン", class: "form__submit-btn" %>
+    <% end %>
+    <div class="login__links">
+      <%= link_to "パスワードをお忘れですか？", new_password_path, class: "login__link" %>
+      <%# link_to "新規登録はこちら", new_user_path, class: "login__link" %>
+    </div>
+  </div>

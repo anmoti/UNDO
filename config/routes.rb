@@ -1,6 +1,11 @@
 Rails.application.routes.draw do
-  resources :reviews
-  resources :users
+  resources :passwords, param: :token
+
+  if Rails.env.development? || Rails.env.test?
+      resources :reviews
+      resources :users
+  end
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -10,6 +15,10 @@ Rails.application.routes.draw do
   # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
+
+  get "signin", to: "sessions#new"
+  post "signin", to: "sessions#create"
+  get "signout", to: "sessions#destroy"
 
   # Defines the root path route ("/")
   root "home#index"
