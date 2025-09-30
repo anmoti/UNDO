@@ -71,7 +71,6 @@
   <form id = "review_form" action = "/reviews" method = "post">
       <table style="text-align: left;">
         <tr><th>店舗名</th><td>ふたばうどん</td></tr>
-        <tr><th>ユーザー名</th><td>ほげほげ(仮)</td></tr> 
         <tr><th>評価</th><td><div id = "stars"></div></td></tr>
         <tr><th>コメント</th><td><textarea style = "font-size: 100%" id = "comment" class="textlines"></textarea></td></tr>
       </table>
@@ -92,7 +91,10 @@
     <p class = "check-text-main">ユーザー名: ほげほげ(仮)</p>
     <p class = "check-text-main">評価:<span id = "check-star"></span></p>
     <p class = "check-text-main" id = "comment-check"></p>
-    <button onclick="document.getElementById('check-review').style.display='none';" class = undo-button class = undo-button>OK</button>
+    <div class="logout-buttons">
+      <button onclick="document.getElementById('logout-background').style.display='none'; logout();" class = undo-button>投稿</button>
+      <button onclick="document.getElementById('logout-background').style.display='none';" class = undo-button>キャンセル</button>
+    </div>
   </div>
 </div>
 
