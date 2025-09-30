@@ -159,7 +159,13 @@ body {
     margin-bottom: 6px;
 }
 
-.back-root,
+#review-comment,
+.back-root {
+    display: flex;
+    justify-content: center;
+    gap: 80px;
+}
+
 .logout-buttons {
     display: flex;
     justify-content: space-around;
@@ -178,7 +184,7 @@ body {
     background-color: var(--color-4);
     color: var(--color-6);
     padding: 2px 5px;
-    border-radius: 5px;
+    border-radius: 3px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
@@ -241,7 +247,7 @@ form table {
     /* 上下に空間 */
 }
 
-#bod-cod-show {
+#bod-cod-exp {
     font-size: 36px;
     color: black;
     margin-bottom: 20px;
@@ -250,8 +256,19 @@ form table {
     display: none;
 }
 
+#bod-cod-show {
+    font-size: 20px;
+    color: black;
+    margin-bottom: 20px;
+    display: none;
+}
+
 #careful_view {
     font-size: 12px;
     color: red;
+    display: none;
+}
+
+#do_undo {
     display: none;
 }

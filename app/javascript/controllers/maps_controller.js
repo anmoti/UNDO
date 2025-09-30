@@ -283,7 +283,10 @@ export default class extends Controller {
                 <div style="margin: 0 0 8px 0; color: #666; font-size: 13px;">
                     <strong>営業時間:</strong> ${shop.openTime}
                 </div>
-                <button id = "review-button" onclick="">レビューする</button>
+                <div class = "review-comment">
+                    <button id = "review-button" onclick="">レビューする</button>
+                    <button id = "review-button" onclick="">コメントを見る</button>
+                </div>
             </div>
         `;
 
