@@ -22,12 +22,34 @@ body
 
 .header
     &__container
+        display: flex
+        justify-content: space-between
+        align-items: center
         height: 60px
         padding: 11px
         background-color: $color-3
 
     &__logo
         height: 100%
+
+    &__right
+        display: flex
+        align-items: center
+        gap: 1rem
+
+    &__user
+        color: $color-6
+
+    &__button
+        display: block
+        padding: 0.5rem 1rem
+        border-radius: 4px
+        font-size: 1rem
+        cursor: pointer
+        text-decoration: none
+        text-align: center
+        background-color: $color-6
+        color: $color-5
 
 main
     display: flex

@@ -1,11 +1,11 @@
 <div class="login">
   <div class="login__container">
     <h1 class="login__title">ログイン</h1>
-    <% puts signin_path %>
     <%= form_with(url: signin_path, class: "form") do |form| %>
+      <%= tag.div(flash[:alert], style: "color:red") if flash[:alert] %>
       <div class="form__field">
         <%= form.label :email, "メールアドレス", class: "form__label" %>
-        <%= form.email_field :email, class: "form__input", required: true, placeholder: "example@undo.invalid" %>
+        <%= form.email_field :email, class: "form__input", required: true, placeholder: "undo@example.com" %>
       </div>
       <div class="form__field">
         <%= form.label :password, "パスワード", class: "form__label" %>

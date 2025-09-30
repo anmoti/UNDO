@@ -1,5 +1,4 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-<% password_digest = BCrypt::Password.create("password") %>
+# <% password_digest = BCrypt::Password.create("password") %>
 
 one:
   name: User One (Producer)

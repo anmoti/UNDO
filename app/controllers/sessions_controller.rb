@@ -12,6 +12,9 @@ class SessionsController < ApplicationController
       redirect_to after_authentication_url
     else
       redirect_to signin_path, alert: "Try another email address or password."
+
+      # flash[:alert] = "Try another email address or password."
+      # render :new
     end
   end
 

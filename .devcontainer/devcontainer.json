@@ -32,13 +32,14 @@
                 "castwide.solargraph",
                 "KoichiSasada.vscode-rdbg",
                 "kaiwood.endwise",
-                "aliariff.vscode-erb-beautify"
+                "aliariff.vscode-erb-beautify",
+                "rubocop.vscode-rubocop"
             ],
             "settings": {
                 "rubyLsp.rubyVersionManager": {
                     "identifier": "custom"
                 },
-                // "rubyLsp.customRubyCommand": "/usr/local/bin/ruby",
+                "rubyLsp.customRubyCommand": "bundle exec ruby-lsp",
                 "solargraph.useBundler": true,
                 "vscode-erb-beautify.useBundler": true
             }
