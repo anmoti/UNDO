@@ -104,6 +104,7 @@ body {
 
 }
 
+#howto-bod-background,
 #check-ground,
 #logout-background {
     position: absolute;
@@ -117,16 +118,34 @@ body {
     z-index: 9999;
 }
 
-#check-box,
+#howto-box {
+    background-color: var(--color-6);
+    border: 2px solid var(--color-3);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    width: 500px;
+}
+
+#check-box {
+    background-color: var(--color-6);
+    border: 2px solid var(--color-3);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    width: 350px;
+}
+
 #logout-box {
     background-color: var(--color-6);
     border: 2px solid var(--color-3);
     border-radius: 10px;
     padding: 20px;
     text-align: center;
-    width: 340px;
+    width: 300px;
 }
 
+#howto-box,
 #check-text,
 #logout-surundana {
     color: var(--color-1);
@@ -184,6 +203,7 @@ body {
 table th,
 table td {
     padding-right: 20px;
+    padding-bottom: 6px;
 }
 
 #submit_review {
@@ -198,4 +218,30 @@ form {
 
 form table {
     display: inline-table;
+}
+
+.circle-number {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    background-color: var(--color-4);
+    color: white;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 24px;
+    font-size: 24px;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    margin-right: 4px;
+}
+
+.howto_exp {
+    font-size: 12px;
+}
+
+.circle-step {
+    padding-bottom: 10px;
+    text-align: left;
+    /* 上下に空間 */
 }

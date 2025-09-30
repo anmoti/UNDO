@@ -2,6 +2,12 @@
 
 <% content_for :title, "Turbidity to bods" %>
 
+<script>
+  function bod_howto(){
+      document.getElementById('howto-bod-background').style.display = 'flex';
+  }
+</script>
+
 <header class="header__container">
   <div class="header__title">UNDO</div>
 </header>
@@ -14,7 +20,7 @@
         <tr><th>BOD</th><td>100[mg/L]</td></tr>
         <tr><th>COD</th><td>100[mg/L]</td></tr>
       </table>
-      <input type = "submit" value = "送信" class="undo-button" id = "submit_review">
+      <button type = "button" class="undo-button" id = "submit_review" onclick = "bod_howto();">水質測定開始</button>
     </form>
 
   <% @turbidity_to_bods.each do |turbidity_to_bod| %>
@@ -23,6 +29,23 @@
       <%= link_to "Show this turbidity to bod", turbidity_to_bod %>
     </p>
   <% end %>
+</div>
+
+<div id="howto-bod-background">
+  <div id="howto-box">
+    <p id = "logout-surundana">水質の推定方法</p>
+    <div class="circle-step">
+      <span class = "circle-number">1</span><span class = "howto_exp">紙コップに茹で汁を溢れる手前くらいまで入れてください。</span>
+    </div>
+    <div class="circle-step">
+      <span class = "circle-number">2</span><span class = "howto_exp">キットに紙コップをセットしてください。</span>
+    </div>
+    <div class="circle-step">
+      <span class = "circle-number">3</span><span class = "howto_exp">下の測定開始のボタンを押すと測定が始まります。<span>
+    </div>
+    <button onclick="document.getElementById('logout-background').style.display='none'; logout();" 
+    class =undo-button>推定開始</button>
+  </div>
 </div>
 
 <%# <%= link_to "New turbidity to bod", new_turbidity_to_bod_path %>
