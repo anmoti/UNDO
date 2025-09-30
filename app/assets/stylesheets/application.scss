@@ -292,7 +292,6 @@ form table {
 }
 
 #comment-text {
-    background-color: var(--color-4);
     font-size: 32px;
     bottom: 0;
     text-align: center;
@@ -300,13 +299,24 @@ form table {
 }
 
 #scroll-box {
-    /* スクロールを有効にするプロパティ */
     overflow-y: auto;
-
-    /* ボックスの高さを設定して、はみ出した場合にスクロールが発生するようにする */
     height: 80%;
-    /* 例: 親要素の高さの80% */
-
-    /* オプション: ボックス内に余白を追加 */
     padding: 10px;
+}
+
+#comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    background-color: var(--color-4);
+}
+
+#comment-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0 10px;
+    color: var(--color-1);
 }
