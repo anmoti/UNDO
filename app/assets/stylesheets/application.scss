@@ -159,6 +159,7 @@ body {
     margin-bottom: 6px;
 }
 
+.back-root,
 .logout-buttons {
     display: flex;
     justify-content: space-around;
@@ -206,12 +207,6 @@ table td {
     padding-bottom: 6px;
 }
 
-#submit_review {
-    display: block;
-    margin: 20px auto;
-    /* 上下20px、左右自動で中央寄せ */
-}
-
 form {
     text-align: center;
 }
@@ -244,4 +239,19 @@ form table {
     padding-bottom: 10px;
     text-align: left;
     /* 上下に空間 */
+}
+
+#bod-cod-show {
+    font-size: 36px;
+    color: black;
+    margin-bottom: 20px;
+    font-weight: bold;
+    text-align: center;
+    display: none;
+}
+
+#careful_view {
+    font-size: 12px;
+    color: red;
+    display: none;
 }

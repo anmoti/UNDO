@@ -74,7 +74,10 @@
         <tr><th>評価</th><td><div id = "stars"></div></td></tr>
         <tr><th>コメント</th><td><textarea style = "font-size: 100%" id = "comment" class="textlines"></textarea></td></tr>
       </table>
-      <button type = "button" class="undo-button" id = "submit_review" onclick = "check_show();">送信</button>
+      <div class = "back-root">
+        <button type = "button" class="undo-button" id = "submit_review" onclick = "check_show();">送信</button>
+        <%= link_to "戻る" ,root_path%>
+      </div>
     </form>
   <% @reviews.each do |review| %>
     <%= render review %>
