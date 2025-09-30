@@ -2,7 +2,12 @@
 
 <% content_for :title, "Reviews" %>
 
-<script>
+
+<header class="header__container">
+  <div class="header__title">UNDO</div>
+</header>
+
+<script defer>
   let udon_score = 5;
 
   //fuckin code
@@ -16,7 +21,7 @@
 
     const Img = document.createElement('img');
     Img.className = "star-image";
-    Img.src = "star-yellow.png";
+    Img.src = "<%= asset_path('star-yellow.png')%>";
     Img.style.width = "40px";
     Img.style.height = "auto";
     Img.id = `star_img_${i}`;
@@ -35,7 +40,7 @@
   function click_star(score) {
     for(let i = 1; i < 5; i ++){
       const shine_star = document.getElementById(`star_img_${i}`);
-      shine_star.src = score>i?"star-yellow.png":"star-black.png";
+      shine_star.src = score>i?"<%= asset_path('star-yellow.png')%>":"<%= asset_path('star-black.png')%>";
     }
     udon_score = score;
   }
@@ -63,10 +68,6 @@
   }
 </script>
 
-<header class="header__container">
-  <div class="header__title">UNDO</div>
-</header>
-
 <div id="reviews" style="color: black">
   <form id = "review_form" action = "/reviews" method = "post">
       <table style="text-align: left;">
@@ -76,7 +77,7 @@
       </table>
       <div class = "back-root">
         <button type = "button" class="undo-button" id = "submit_review" onclick = "check_show();">送信</button>
-        <%= link_to "戻る" ,root_path%>
+        <%= link_to "戻る" ,root_path, class: "undo-button"%>
       </div>
     </form>
   <% @reviews.each do |review| %>

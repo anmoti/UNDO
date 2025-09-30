@@ -8,8 +8,16 @@
       document.getElementById('howto-bod-background').style.display = 'flex';
   }
 
-  function bod_show(){
+  function careful_show(){
+    document.getElementById('back-root').style.display = 'none';
+    document.getElementById('careful_view').style.display = 'block';
+    setTimeout(bod_show, 5000);
+  }
 
+  function bod_show(){
+      document.getElementById('bod-cod-show').style.display = 'block';
+      document.getElementById('careful_view').style.display = 'none';
+      document.getElementById('do_undo').style.display = 'block';
   }
 </script>
 
@@ -27,7 +35,7 @@
       </table>
       <div class = "back-root">
         <button type = "button" class="undo-button" id = "submit_review" onclick = "bod_howto();">水質測定開始</button>
-        <%= link_to "戻る" , root_path%>
+        <%= link_to "戻る" , root_path, class: "undo-button"%>
       </div>
     </form>
 
@@ -49,14 +57,17 @@
       <span class = "circle-number">2</span><span class = "howto_exp">キットに紙コップをセットしてください。</span>
     </div>
     <div class="circle-step">
-      <span class = "circle-number">3</span><span class = "howto_exp">下の測定開始のボタンを押すと測定が始まります。<span>
+      <span class = "circle-number">3</span><span class = "howto_exp">下の測定開始のボタンを押すと測定が始まります。</span>
     </div>
     <div id = "careful_view">推定が完了するまでキットに触れないでください。</div>
+    <div id = "bod-cod-exp">茹で汁の水質は綺麗です。</div>
     <div id = "bod-cod-show">BOD値:50[mg/L]<br>COD値:50[mg/L]</div>
-    <div class = "back-root">
-      <button onclick="document.getElementById('logout-background').style.display='none'; logout();" 
+    <div class = "back-root" id = "back-root">
+      <button onclick="careful_show();" 
       class =undo-button>推定開始</button>
-      <%= link_to "戻る" , reviews_path%>
+      <button onclick="document.getElementById('howto-bod-background').style.display='none';" class = undo-button>キャンセル</button>
+    </div>
+    <%= link_to "UNDOする", root_path, {class:"undo-button", id:"do_undo"}%>
   </div>
 </div>
 
