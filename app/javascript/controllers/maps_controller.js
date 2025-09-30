@@ -285,7 +285,7 @@ export default class extends Controller {
                 </div>
                 <div class = "review-comment">
                     <button id = "review-button" onclick="">レビューする</button>
-                    <button id = "review-button" onclick="">コメントを見る</button>
+                    <button id = "review-button" onclick="comment_view();">コメントを見る</button>
                 </div>
             </div>
         `;
