@@ -3,7 +3,7 @@
 <header class="header__container">
   <div class="header__title">UNDO</div>
 </header>
-<script defer>
+<!--<script defer>
   let udon_score = 5;
 
 
@@ -70,49 +70,52 @@
     document.getElementById('comment-check').innerText = "コメント: " + document.getElementById('comment').value;
   }
 </script>
+-->
 
-<div id="reviews" style="color: black">
-  <form id = "review_form" action = "/reviews" method = "post">
-    <table style="text-align: left;">
-      <tr>
-        <th>店舗名</th>
-        <td>ふたばうどん</td>
-      </tr>
-      <tr>
-        <th>評価</th>
-        <td>
-          <div id = "stars"></div>
-        </td>
-      </tr>
-      <tr>
-        <th>コメント</th>
-        <td>
-          <textarea style = "font-size: 100%" id = "comment" class="textlines"></textarea>
-        </td>
-      </tr>
-    </table>
-    <div class = "back-root">
-      <button type = "button" class="undo-button" id = "submit_review" onclick = "check_show();">送信</button>
-      <%= link_to "戻る" ,root_path, class: "undo-button"%>
-    </div>
-  </form>
-  <% @reviews.each do |review| %>
-    <%= render review %>
-    <p>
-      <%= link_to "Show this review", review %>
-    </p>
-  <% end %>
-</div>
-<div id = "check-ground">
-  <div id = "check-box">
-    <p id = "check-text">レビュー内容を確認してください。</p>
-    <p class = "check-text-main">店舗名: ふたばうどん</p>
-    <p class = "check-text-main">ユーザー名: ほげほげ(仮)</p>
-    <p class = "check-text-main">評価:<span id = "check-star"></span></p>
-    <p class = "check-text-main" id = "comment-check"></p>
-    <div class="logout-buttons">
-      <button onclick="document.getElementById('logout-background').style.display='none'; logout();" class = undo-button>投稿</button>
-      <button onclick="document.getElementById('logout-background').style.display='none';" class = undo-button>キャンセル</button>
+<div data-controller="review">
+  <div id="reviews" style="color: black">
+    <form id = "review_form" action = "/reviews" method = "post">
+      <table style="text-align: left;">
+        <tr>
+          <th>店舗名</th>
+          <td>ふたばうどん</td>
+        </tr>
+        <tr>
+          <th>評価</th>
+          <td>
+            <div id = "stars"></div>
+          </td>
+        </tr>
+        <tr>
+          <th>コメント</th>
+          <td>
+            <textarea style = "font-size: 100%" id = "comment" class="textlines"></textarea>
+          </td>
+        </tr>
+      </table>
+      <div class = "back-root">
+        <button type = "button" class="undo-button" id = "submit_review" data-action="click->review#check_show">送信</button>
+        <%= link_to "戻る" ,root_path, class: "undo-button"%>
+      </div>
+    </form>
+    <% @reviews.each do |review| %>
+      <%= render review %>
+      <p>
+        <%= link_to "Show this review", review %>
+      </p>
+    <% end %>
+  </div>
+  <div id = "check-ground">
+    <div id = "check-box">
+      <p id = "check-text">レビュー内容を確認してください。</p>
+      <p class = "check-text-main">店舗名: ふたばうどん</p>
+      <p class = "check-text-main">ユーザー名: ほげほげ(仮)</p>
+      <p class = "check-text-main">評価:<span id = "check-star"></span></p>
+      <p class = "check-text-main" id = "comment-check"></p>
+      <div class="logout-buttons">
+        <button data-action="click->review#submit" class =  undo-button>投稿</button>
+        <button onclick="" class = undo-button>キャンセル</button>
+      </div>
     </div>
   </div>
 </div>

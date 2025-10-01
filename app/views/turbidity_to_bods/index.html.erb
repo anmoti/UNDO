@@ -2,59 +2,31 @@
 
 <% content_for :title, "Turbidity to bods" %>
 
-<script>
-
-  /**
-   * BOD/COD測定の手順表示
-  */
-  function bod_howto(){
-      document.getElementById('howto-bod-background').style.display = 'flex';
-  }
-
-  /**
-   * 注意事項表示
-  */
-  function careful_show(){
-    document.getElementById('back-root').style.display = 'none';
-    document.getElementById('careful_view').style.display = 'block';
-    setTimeout(bod_show, 5000);
-  }
-
-  /**
-   * BOD/COD値表示
-  */
-  function bod_show(){
-      document.getElementById('bod-cod-show').style.display = 'block';
-      document.getElementById('bod-cod-exp').style.display = 'block';
-      document.getElementById('careful_view').style.display = 'none';
-      document.getElementById('do_undo').style.display = 'block';
-  }
-</script>
-
 <header class="header__container">
   <div class="header__title">UNDO</div>
 </header>
 
-<div id="turbidity_to_bods" style="color: black">
-  <form id = "bod_form" action = "/reviews" method = "post">
-      <table style="text-align: left;">
-        <tr><th>店舗名</th><td>ふたばうどん</td></tr> 
-        <tr><th>濁度</th><td>500</td></tr> 
-        <tr><th>BOD</th><td>未測定</td></tr>
-        <tr><th>COD</th><td>未測定</td></tr>
-      </table>
-      <div class = "back-root">
-        <button type = "button" class="undo-button" id = "submit_review" onclick = "bod_howto();">水質測定開始</button>
-        <%= link_to "戻る" , root_path, class: "undo-button"%>
-      </div>
+<div data-controller = "sokutei">
+  <div id="turbidity_to_bods" style="color: black">
+    <form id = "bod_form" action = "/reviews" method = "post">
+        <table style="text-align: left;">
+          <tr><th>店舗名</th><td>ふたばうどん</td></tr> 
+          <tr><th>濁度</th><td>500</td></tr> 
+          <tr><th>BOD</th><td>未測定</td></tr>
+          <tr><th>COD</th><td>未測定</td></tr>
+        </table>
+        <div class = "back-root">
+          <button type = "button" class="undo-button" id = "submit_review" data-action="click->sokutei#bod_howto">水質測定開始</button>
+          <%= link_to "戻る" , root_path, class: "undo-button"%>
+        </div>
     </form>
-
-  <% @turbidity_to_bods.each do |turbidity_to_bod| %>
-    <%= render turbidity_to_bod %>
-    <p>
-      <%= link_to "Show this turbidity to bod", turbidity_to_bod %>
-    </p>
-  <% end %>
+    <% @turbidity_to_bods.each do |turbidity_to_bod| %>
+      <%= render turbidity_to_bod %>
+      <p>
+        <%= link_to "Show this turbidity to bod", turbidity_to_bod %>
+      </p>
+    <% end %>
+  </div>
 </div>
 
 <div id="howto-bod-background">
@@ -73,9 +45,9 @@
     <div id = "bod-cod-exp">茹で汁の水質は綺麗です。</div>
     <div id = "bod-cod-show">BOD値:50[mg/L]<br>COD値:50[mg/L]</div>
     <div class = "back-root" id = "back-root">
-      <button onclick="careful_show();" 
+      <button data-action="click->sokutei#careful_show" 
       class =undo-button>推定開始</button>
-      <button onclick="document.getElementById('howto-bod-background').style.display='none';" class = undo-button>キャンセル</button>
+      <button data-action="click->sokutei#howto_show" class = undo-button>キャンセル</button>
     </div>
     <%= link_to "UNDOする", root_path, {class:"undo-button", id:"do_undo"}%>
   </div>
