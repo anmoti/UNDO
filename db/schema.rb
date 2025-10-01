@@ -32,6 +32,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_28_051850) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "sessions", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "ip_address"
+    t.string "user_agent"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_sessions_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -43,4 +52,5 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_28_051850) do
 
   add_foreign_key "reviews", "users", column: "reviewee_id"
   add_foreign_key "reviews", "users", column: "reviewer_id"
+  add_foreign_key "sessions", "users"
 end
