@@ -31,5 +31,19 @@
   <main>
     <%= yield %>
   </main>
+  <footer> <!-- 画面下部のナビゲーションバー -->
+    <%= link_to turbidity_to_bods_path, class: "bar_button" do %>
+      <%= image_tag("bar_icons/yeah.png", size: "60x60") %>
+    <% end %>
+    <%= link_to reviews_path, class: "bar_button" do %>
+      <%= image_tag("bar_icons/yeah.png", size: "60x60") %>
+    <% end %>
+    <%= link_to users_path, class: "bar_button" do %>
+      <%= image_tag("bar_icons/yeah.png", size: "60x60") %>
+    <% end %>
+    <button type="button" class="bar_button" onclick="logout_show();">
+      <%= image_tag("bar_icons/yeah.png", size: "60x60", alt: "ログアウト") %>
+    </button>
+  </footer>
 </body>
 </html>

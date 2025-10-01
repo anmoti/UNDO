@@ -1,42 +1,16 @@
-<%#
-<div data-controller="hello"></div>
-%>
-
 <main class="main__container">
-    <header class="header__container">
-        <div class="header__title">UNDO</div>
-    </header>
-    <div class="maps__container" data-controller="maps"></div>
-    <div id="comment-box"> <!-- コメント表示用のボックス -->
-        <div id = "comment-header">
-            <p id = "comment-text">コメント</p>
-            <button type="button" id = "comment-close" onclick="document.getElementById('comment-box').style.display='none';">×</button>
-        </div>
-        <div id = "scroll-box">
-            <div class="scroll-content">
-            <!-- ここにコメントの内容が入る -->
-            </div>
-        </div>
+  <div class="maps__container" data-controller="maps"></div>
+  <div id="comment-box"> <!-- コメント表示用のボックス -->
+    <div id="comment-header">
+      <p id="comment-text">コメント</p>
+      <button type="button" id="comment-close" onclick="document.getElementById('comment-box').style.display='none';">×</button>
     </div>
-    <div class = "main_bar"> <!-- 画面下部のナビゲーションバー -->
-        <%= link_to turbidity_to_bods_path, class: "bar_button" do %>
-            <%= image_tag("bar_icons/yeah.png", size: "60x60") %>
-        <% end %>
-
-        <%= link_to reviews_path, class: "bar_button" do %>
-            <%= image_tag("bar_icons/yeah.png", size: "60x60") %>
-        <% end %>
-
-        <%= link_to users_path, class: "bar_button" do %>
-            <%= image_tag("bar_icons/yeah.png", size: "60x60") %>
-        <% end %>
-
-        <button type="button" class="bar_button" onclick="logout_show();">
-            <%= image_tag("bar_icons/yeah.png", size: "60x60", alt: "ログアウト") %>
-        </button>
-
+    <div id = "scroll-box">
+      <div class="scroll-content">
+        <!-- ここにコメントの内容が入る -->
+      </div>
     </div>
-
+  </div>
 </main>
 <div id="logout-background">
   <div id="logout-box">
@@ -47,17 +21,16 @@
     </div>
   </div>
 </div>
-
 <script>
-    function logout_show() {
-        document.getElementById('logout-background').style.display = 'flex';
-    }
+  function logout_show() {
+      document.getElementById('logout-background').style.display = 'flex';
+  }
 
-    function logout() {
-        alrat("ログアウトしたとする");
-    }
+  function logout() {
+      alrat("ログアウトしたとする");
+  }
 
-    function comment_view() {
-        document.getElementById('comment-box').style.display = 'block';
-    }
+  function comment_view() {
+      document.getElementById('comment-box').style.display = 'block';
+  }
 </script>
