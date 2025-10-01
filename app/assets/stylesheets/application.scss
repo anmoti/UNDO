@@ -33,8 +33,7 @@
 }
 
 #howto-bod-background,
-#check-ground,
-#logout-background {
+#check-ground {
     position: absolute;
     top: 0;
     width: 100vw;
@@ -62,15 +61,6 @@
     padding: 20px;
     text-align: center;
     width: 350px;
-}
-
-#logout-box {
-    background-color: var(--color-6);
-    border: 2px solid var(--color-3);
-    border-radius: 10px;
-    padding: 20px;
-    text-align: center;
-    width: 300px;
 }
 
 #howto-box,

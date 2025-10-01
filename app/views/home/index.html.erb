@@ -12,24 +12,7 @@
     </div>
   </div>
 </main>
-<div id="logout-background">
-  <div id="logout-box">
-    <p id = "logout-surundana">ログアウトしますか？</p>
-    <div class="logout-buttons">
-      <button onclick="document.getElementById('logout-background').style.display='none'; logout();" class = undo-button>ログアウト</button>
-      <button onclick="document.getElementById('logout-background').style.display='none';" class = undo-button>キャンセル</button>
-    </div>
-  </div>
-</div>
 <script>
-  function logout_show() {
-      document.getElementById('logout-background').style.display = 'flex';
-  }
-
-  function logout() {
-      alrat("ログアウトしたとする");
-  }
-
   function comment_view() {
       document.getElementById('comment-box').style.display = 'block';
   }

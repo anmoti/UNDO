@@ -1,12 +1,8 @@
 <p style="color: green"><%= notice %></p>
-
 <% content_for :title, "Reviews" %>
-
-
 <header class="header__container">
   <div class="header__title">UNDO</div>
 </header>
-
 <script defer>
   let udon_score = 5;
 
@@ -66,19 +62,31 @@
     document.getElementById('comment-check').innerText = "コメント: " + document.getElementById('comment').value;
   }
 </script>
-
 <div id="reviews" style="color: black">
   <form id = "review_form" action = "/reviews" method = "post">
-      <table style="text-align: left;">
-        <tr><th>店舗名</th><td>ふたばうどん</td></tr>
-        <tr><th>評価</th><td><div id = "stars"></div></td></tr>
-        <tr><th>コメント</th><td><textarea style = "font-size: 100%" id = "comment" class="textlines"></textarea></td></tr>
-      </table>
-      <div class = "back-root">
-        <button type = "button" class="undo-button" id = "submit_review" onclick = "check_show();">送信</button>
-        <%= link_to "戻る" ,root_path, class: "undo-button"%>
-      </div>
-    </form>
+    <table style="text-align: left;">
+      <tr>
+        <th>店舗名</th>
+        <td>ふたばうどん</td>
+      </tr>
+      <tr>
+        <th>評価</th>
+        <td>
+          <div id = "stars"></div>
+        </td>
+      </tr>
+      <tr>
+        <th>コメント</th>
+        <td>
+          <textarea style = "font-size: 100%" id = "comment" class="textlines"></textarea>
+        </td>
+      </tr>
+    </table>
+    <div class = "back-root">
+      <button type = "button" class="undo-button" id = "submit_review" onclick = "check_show();">送信</button>
+      <%= link_to "戻る" ,root_path, class: "undo-button"%>
+    </div>
+  </form>
   <% @reviews.each do |review| %>
     <%= render review %>
     <p>
@@ -86,7 +94,6 @@
     </p>
   <% end %>
 </div>
-
 <div id = "check-ground">
   <div id = "check-box">
     <p id = "check-text">レビュー内容を確認してください。</p>
@@ -100,6 +107,4 @@
     </div>
   </div>
 </div>
-
-
-<%# <%= link_to "New review", new_review_path %>  
+<%# <%= link_to "New review", new_review_path %>
