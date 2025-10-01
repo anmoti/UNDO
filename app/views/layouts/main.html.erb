@@ -31,34 +31,23 @@
   <main>
     <%= yield %>
   </main>
-  <footer> <!-- 画面下部のナビゲーションバー -->
-    <% if !authenticated? %>
-      <%= link_to signin_path do %>
-        <%= image_tag("bar_icons/bod.png", size: "60x60") %>
-      <% end %>
-    <%else%>
-      <%= link_to turbidity_to_bods_path do %>
-        <%= image_tag("bar_icons/bod.png", size: "60x60") %>
-      <% end %>
+  <footer>
+    <%auth_prefix = authenticated? ? nil : signin_path%>
+
+    <% # 1. BOD/サインインリンク %>
+    <%= link_to (authenticated? ? turbidity_to_bods_path : signin_path) do %>
+      <%= image_tag("bar_icons/bod.png", class:'bar_buttons', style:"height:60px;")%>
     <% end %>
-    <% if !authenticated? %>
-      <%= link_to signin_path do %>
-        <%= image_tag("bar_icons/yeah.png", size: "60x60") %>
-      <% end %>
-    <%else%>
-      <%= link_to reviews_path do %>
-        <%= image_tag("bar_icons/yeah.png", size: "60x60") %>
-      <% end %>
+
+    <% # 2. レビュー/サインインリンク %>
+    <%= link_to (authenticated? ? reviews_path : signin_path) do %>
+      <%= image_tag("bar_icons/yeah.png", class:'bar_buttons', size: "60x60") %>
     <% end %>
-    <% if !authenticated? %>
-      <%= link_to signin_path do %>
-        <%= image_tag("bar_icons/setting.png", size: "60x60") %>
-      <% end %>
-    <%else%>
-      <%= link_to  users_path do %>
-        <%= image_tag("bar_icons/setting.png", size: "60x60") %>
-      <% end %>
+
+    <% # 3. 設定/サインインリンク %>
+    <%= link_to (authenticated? ? users_path : signin_path) do %>
+      <%= image_tag("bar_icons/setting.png", class:'bar_buttons', size: "60x60") %>
     <% end %>
-  </footer>
+</footer>
 </body>
 </html>
