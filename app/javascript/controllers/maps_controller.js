@@ -37,7 +37,6 @@ const shops = [
         lon: 134.0461,
         openTime: "5:00～14:00 麺終了次第",
         address: "香川県高松市西の丸町5-15",
-        yasashi: false,
     },
     {
         name: "こだわり麺や高松店",
@@ -45,7 +44,6 @@ const shops = [
         lon: 134.0498,
         openTime: "9:00〜20:00（土日祝6:30〜15:00）",
         address: "香川県高松市天神前5-25",
-        yasashi: false,
     },
     {
         name: "さか枝うどん本店",
@@ -53,7 +51,6 @@ const shops = [
         lon: 134.0485,
         openTime: "7:00～15:00",
         address: "香川県高松市番町5-2-23",
-        yasashi: false,
     },
     {
         name: "めりけんや高松駅前店",
@@ -61,7 +58,6 @@ const shops = [
         lon: 134.0465,
         openTime: "7:00〜20:00",
         address: "香川県高松市西の丸町6-20",
-        yasashi: false,
     },
     {
         name: "植田うどん",
@@ -69,7 +65,6 @@ const shops = [
         lon: 134.0492,
         openTime: "9:38～14:30（麺終了次第）",
         address: "香川県高松市内町1-8",
-        yasashi: false,
     },
     {
         name: "うどん市場めんくい",
@@ -77,7 +72,6 @@ const shops = [
         lon: 134.0478,
         openTime: "月～金曜 11:00～15:00, 土日祝 11:00～14:00, 麺終了次第",
         address: "香川県高松市塩屋町9-7",
-        yasashi: false,
     },
     {
         name: "釜揚げうどん 岡じま",
@@ -85,7 +79,6 @@ const shops = [
         lon: 134.0482,
         openTime: "10:00～15:00",
         address: "香川県高松市寿町1-4-3 高松中央通りビル１Ｆ北側",
-        yasashi: false,
     },
     {
         name: "さか枝うどん 南新町店",
@@ -93,7 +86,6 @@ const shops = [
         lon: 134.0489,
         openTime: "7:00～17:00",
         address: "香川県高松市南新町4-6",
-        yasashi: false,
     },
     {
         name: "松下製麺所",
@@ -101,7 +93,6 @@ const shops = [
         lon: 134.044763,
         openTime: "7時～15時頃（麺がなくなり次第終了）",
         address: "香川県高松市中野町2-2",
-        yasashi: false,
     },
     {
         name: "手打うどん 三徳",
@@ -109,7 +100,6 @@ const shops = [
         lon: 134.069001,
         openTime: "11時～16時（LO15時45分）",
         address: "香川県高松市林町390-1",
-        yasashi: false,
     },
     {
         name: "手打十段 うどんバカ一代",
@@ -117,7 +107,6 @@ const shops = [
         lon: 134.058423,
         openTime: "6時～18時",
         address: "香川県高松市多賀町1-6-7",
-        yasashi: false,
     },
     {
         name: "さぬき一番 一宮店",
@@ -125,7 +114,6 @@ const shops = [
         lon: 134.033044,
         openTime: "10時～21時",
         address: "香川県高松市三名町105-2",
-        yasashi: false,
     },
     {
         name: "本格手打ちもり家",
@@ -141,7 +129,6 @@ const shops = [
         lon: 133.821004,
         openTime: "11:00（土日祝は10:45）～19:00",
         address: "香川県綾歌郡宇多津町浜八番丁129-10",
-        yasashi: false,
     },
     {
         name: "元祖セルフうどんの店 竹清",
@@ -149,7 +136,6 @@ const shops = [
         lon: 134.042292,
         openTime: "11:00～14:30（売り切れ次第終了）",
         address: "香川県高松市亀岡町2-23",
-        yasashi: false,
     },
     {
         name: "めりけんや",
@@ -157,7 +143,6 @@ const shops = [
         lon: 133.814618,
         openTime: "9:00～15:00（土日祝は16:00まで）",
         address: "香川県綾歌郡宇多津町浜三番丁36-1",
-        yasashi: false,
     },
     {
         name: "ふたばうどん",
@@ -181,14 +166,9 @@ export default class extends Controller {
         this.map = new GMaps(this.element, mapOptions);
         console.log("Map initialized:", this.map);
 
-        this.map.addListener("click", this.onMapClick.bind(this));
-
         // マーカーを作成して店舗を表示
         await this.createShopMarkers();
     }
-
-    /** @param {google.maps.MapMouseEvent} event */
-    async onMapClick(event) {}
 
     async createShopMarkers() {
         // 各店舗にマーカーを作成
@@ -215,12 +195,6 @@ export default class extends Controller {
                 // マーカーがクリックされたときに情報ウィンドウを表示
                 this.showShopInfo(shop, marker);
             });
-
-            // マーカーを配列に保存
-            if (!this.markers) {
-                this.markers = [];
-            }
-            this.markers.push({ marker, shop });
         }
     }
 
