@@ -17,6 +17,7 @@ function getGoogleMapsApiKey() {
 const loader = new Loader({
     apiKey: getGoogleMapsApiKey(),
     version: "weekly",
+    libraries: ["maps", "marker"],
 });
 
 // 香川県範囲 34.2128846,134.065572,10.75z
@@ -39,7 +40,7 @@ const mapOptions = {
  * @property {number} lon
  * @property {string} openTime
  * @property {string} address
- * @property {boolean} [yasashi]
+ * @property {boolean} [eco]
  */
 
 /** @type {Shop[]} */
@@ -134,7 +135,7 @@ const shops = [
         lon: 134.051456,
         openTime: "10:30～18:00",
         address: "香川県高松市香川町川内原1575-1",
-        yasashi: true,
+        eco: true,
     },
     {
         name: "本格手打ちうどん おか泉",
@@ -163,7 +164,7 @@ const shops = [
         lon: 133.066622,
         openTime: "24時間営業(例)",
         address: "島根県松江市学園南１丁目２−１",
-        yasashi: true,
+        eco: true,
     },
 ];
 
@@ -233,34 +234,64 @@ export default class extends Controller {
             this.infoWindow.close();
         }
 
-        // 新しい情報ウィンドウを作成
         this.infoWindow = new InfoWindow();
 
         // 情報ウィンドウのコンテンツを作成
-        const content = `
-            <div style="min-width: 200px; padding: 4px; font-family: Arial, sans-serif;">
-                <h3 style="margin: 0 0 2px 0; color: #333; font-size: 16px;">${
-                    shop.name
-                }</h3>
-                <img src="yasasii.png" width="16px" height="16px" />
-                <span style="font-size: 12px; margin: 0 0 6px 0; background-color: #0c0; font-size: 14px; display: ${
-                    shop.yasashi ? "inline" : "none"
-                };">環境に優しいうどん店</span>
-                <div style="margin-bottom: 6px; color: #666; font-size: 13px;">
-                    <strong>住所:</strong> ${shop.address}
-                </div>
-                <div style="margin: 0 0 8px 0; color: #666; font-size: 13px;">
-                    <strong>営業時間:</strong> ${shop.openTime}
-                </div>
-                <div class = "review-comment">
-                    <button id = "review-button" onclick="">レビューする</button>
-                    <button id = "review-button" onclick="comment_view();">コメントを見る</button>
-                </div>
-            </div>
-        `;
+        const content = document.createElement("div");
+        content.className = "maps__info";
+
+        const title = document.createElement("h3");
+        title.className = "maps__info--title";
+        title.textContent = shop.name;
+        content.appendChild(title);
+
+        if (shop.eco) {
+            const ecoImg = document.createElement("img");
+            ecoImg.src = "yasasii.png";
+            ecoImg.width = 16;
+            ecoImg.height = 16;
+            content.appendChild(ecoImg);
+
+            const ecoDesc = document.createElement("span");
+            ecoDesc.className = "maps__info--eco";
+            ecoDesc.textContent = "環境に優しいうどん店";
+            content.appendChild(ecoDesc);
+        }
+
+        const address = document.createElement("div");
+        address.textContent = `住所: ${shop.address}`;
+        content.appendChild(address);
+
+        const openTime = document.createElement("div");
+        openTime.textContent = `営業時間: ${shop.openTime}`;
+        content.appendChild(openTime);
+
+        const buttons = document.createElement("div");
+        buttons.className = "maps__info--buttons";
+        content.appendChild(buttons);
+
+        const reviewButton = document.createElement("button");
+        reviewButton.id = "review-button";
+        reviewButton.textContent = "レビューする";
+        reviewButton.onclick = () => void 0;
+        buttons.appendChild(reviewButton);
+
+        const commentButton = document.createElement("button");
+        commentButton.id = "review-button";
+        commentButton.textContent = "コメントを見る";
+        commentButton.onclick = this.commentView;
+        buttons.appendChild(commentButton);
 
         // 情報ウィンドウを開く
         this.infoWindow.setContent(content);
         this.infoWindow.open(await this.map, marker);
+    }
+
+    /**
+     * レビューフォームを表示する関数
+     * TODO: 実装する
+     */
+    commentView() {
+        // document.getElementById("comment-box").style.display = "block";
     }
 }
