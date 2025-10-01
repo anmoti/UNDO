@@ -23,6 +23,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_25_102751) do
     t.index ["reviewer_id"], name: "index_reviews_on_reviewer_id"
   end
 
+  create_table "turbidity_to_bods", force: :cascade do |t|
+    t.string "name"
+    t.float "turbidity"
+    t.float "BOD"
+    t.float "COD"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "ip_address"

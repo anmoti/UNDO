@@ -37,6 +37,7 @@ const shops = [
         lon: 134.0461,
         openTime: "5:00～14:00 麺終了次第",
         address: "香川県高松市西の丸町5-15",
+        yasashi: false,
     },
     {
         name: "こだわり麺や高松店",
@@ -44,6 +45,7 @@ const shops = [
         lon: 134.0498,
         openTime: "9:00〜20:00（土日祝6:30〜15:00）",
         address: "香川県高松市天神前5-25",
+        yasashi: false,
     },
     {
         name: "さか枝うどん本店",
@@ -51,6 +53,7 @@ const shops = [
         lon: 134.0485,
         openTime: "7:00～15:00",
         address: "香川県高松市番町5-2-23",
+        yasashi: false,
     },
     {
         name: "めりけんや高松駅前店",
@@ -58,6 +61,7 @@ const shops = [
         lon: 134.0465,
         openTime: "7:00〜20:00",
         address: "香川県高松市西の丸町6-20",
+        yasashi: false,
     },
     {
         name: "植田うどん",
@@ -65,6 +69,7 @@ const shops = [
         lon: 134.0492,
         openTime: "9:38～14:30（麺終了次第）",
         address: "香川県高松市内町1-8",
+        yasashi: false,
     },
     {
         name: "うどん市場めんくい",
@@ -72,6 +77,7 @@ const shops = [
         lon: 134.0478,
         openTime: "月～金曜 11:00～15:00, 土日祝 11:00～14:00, 麺終了次第",
         address: "香川県高松市塩屋町9-7",
+        yasashi: false,
     },
     {
         name: "釜揚げうどん 岡じま",
@@ -79,6 +85,7 @@ const shops = [
         lon: 134.0482,
         openTime: "10:00～15:00",
         address: "香川県高松市寿町1-4-3 高松中央通りビル１Ｆ北側",
+        yasashi: false,
     },
     {
         name: "さか枝うどん 南新町店",
@@ -86,6 +93,7 @@ const shops = [
         lon: 134.0489,
         openTime: "7:00～17:00",
         address: "香川県高松市南新町4-6",
+        yasashi: false,
     },
     {
         name: "松下製麺所",
@@ -93,6 +101,7 @@ const shops = [
         lon: 134.044763,
         openTime: "7時～15時頃（麺がなくなり次第終了）",
         address: "香川県高松市中野町2-2",
+        yasashi: false,
     },
     {
         name: "手打うどん 三徳",
@@ -100,6 +109,7 @@ const shops = [
         lon: 134.069001,
         openTime: "11時～16時（LO15時45分）",
         address: "香川県高松市林町390-1",
+        yasashi: false,
     },
     {
         name: "手打十段 うどんバカ一代",
@@ -107,6 +117,7 @@ const shops = [
         lon: 134.058423,
         openTime: "6時～18時",
         address: "香川県高松市多賀町1-6-7",
+        yasashi: false,
     },
     {
         name: "さぬき一番 一宮店",
@@ -114,6 +125,7 @@ const shops = [
         lon: 134.033044,
         openTime: "10時～21時",
         address: "香川県高松市三名町105-2",
+        yasashi: false,
     },
     {
         name: "本格手打ちもり家",
@@ -121,6 +133,7 @@ const shops = [
         lon: 134.051456,
         openTime: "10:30～18:00",
         address: "香川県高松市香川町川内原1575-1",
+        yasashi: true,
     },
     {
         name: "本格手打ちうどん おか泉",
@@ -128,6 +141,7 @@ const shops = [
         lon: 133.821004,
         openTime: "11:00（土日祝は10:45）～19:00",
         address: "香川県綾歌郡宇多津町浜八番丁129-10",
+        yasashi: false,
     },
     {
         name: "元祖セルフうどんの店 竹清",
@@ -135,6 +149,7 @@ const shops = [
         lon: 134.042292,
         openTime: "11:00～14:30（売り切れ次第終了）",
         address: "香川県高松市亀岡町2-23",
+        yasashi: false,
     },
     {
         name: "めりけんや",
@@ -142,6 +157,15 @@ const shops = [
         lon: 133.814618,
         openTime: "9:00～15:00（土日祝は16:00まで）",
         address: "香川県綾歌郡宇多津町浜三番丁36-1",
+        yasashi: false,
+    },
+    {
+        name: "ふたばうどん",
+        lat: 35.468838,
+        lon: 133.066622,
+        openTime: "24時間営業(例)",
+        address: "島根県松江市学園南１丁目２−１",
+        yasashi: true,
     },
 ];
 
@@ -164,7 +188,7 @@ export default class extends Controller {
     }
 
     /** @param {google.maps.MapMouseEvent} event */
-    async onMapClick(event) {}
+    async onMapClick(event) { }
 
     async createShopMarkers() {
         // 各店舗にマーカーを作成
@@ -249,13 +273,19 @@ export default class extends Controller {
 
         // 情報ウィンドウのコンテンツを作成
         const content = `
-            <div style="min-width: 200px; padding: 12px; font-family: Arial, sans-serif;">
-                <h3 style="margin: 0 0 8px 0; color: #333; font-size: 16px;">${shop.name}</h3>
+            <div style="min-width: 200px; padding: 4px; font-family: Arial, sans-serif;">
+                <h3 style="margin: 0 0 2px 0; color: #333; font-size: 16px;">${shop.name}</h3>
+                <img src="yasasii.png" width="16px" height="16px" />
+                <span style="font-size: 12px; margin: 0 0 6px 0; background-color: #0c0; font-size: 14px; display: ${shop.yasashi ? 'inline' : 'none'};">環境に優しいうどん店</span>
                 <div style="margin-bottom: 6px; color: #666; font-size: 13px;">
                     <strong>住所:</strong> ${shop.address}
                 </div>
-                <div style="color: #666; font-size: 13px;">
+                <div style="margin: 0 0 8px 0; color: #666; font-size: 13px;">
                     <strong>営業時間:</strong> ${shop.openTime}
+                </div>
+                <div class = "review-comment">
+                    <button id = "review-button" onclick="">レビューする</button>
+                    <button id = "review-button" onclick="comment_view();">コメントを見る</button>
                 </div>
             </div>
         `;

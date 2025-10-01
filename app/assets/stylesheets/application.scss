@@ -1,0 +1,322 @@
+// Sassy
+
+@font-face {
+    font-family: "Caprasimo";
+    font-style: normal;
+    font-display: swap;
+    font-weight: 400;
+    src: url(https://cdn.jsdelivr.net/fontsource/fonts/caprasimo@latest/latin-400-normal.woff2) format("woff2");
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+        U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191,
+        U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+    --font-title: "Caprasimo", cursive;
+
+    --color-1: #267365;
+    --color-2: #f2cb05;
+    --color-3: #f29f05;
+    --color-4: #f28705;
+    --color-5: #f23030;
+    --color-6: #ffffff;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0 solid;
+}
+
+html,
+body {
+    height: 100%;
+    color: var(--color-6);
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+.main__container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.header__container {
+    height: 60px;
+    background-color: var(--color-4);
+    border-bottom: 1px solid var(--color-3);
+}
+
+.header__title {
+    font-family: var(--font-title);
+    font-size: 32px;
+    line-height: 60px;
+    margin-left: 20px;
+}
+
+.maps__container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.map__marker {
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.2s ease;
+    border-radius: 50%;
+    background-color: var(--color-5);
+    border: 2px solid var(--color-6);
+}
+
+.main_bar {
+    height: 60px;
+    background-color: var(--color-4);
+    border-bottom: 1px solid var(--color-3);
+    display: flex;
+    justify-content: space-evenly;
+    align-items: stretch;
+    z-index: 10;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.main_bar button {
+    width: 60px;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+}
+
+// .bar_button のスタイルは変更なし
+.bar_button {
+    width: auto;
+    height: auto;
+    object-fit: contain;
+
+    display: block;
+    border-radius: 10px;
+
+}
+
+#howto-bod-background,
+#check-ground,
+#logout-background {
+    position: absolute;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.7));
+    display: none;
+    z-index: 9999;
+}
+
+#howto-box {
+    background-color: var(--color-6);
+    border: 2px solid var(--color-3);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    width: 500px;
+}
+
+#check-box {
+    background-color: var(--color-6);
+    border: 2px solid var(--color-3);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    width: 350px;
+}
+
+#logout-box {
+    background-color: var(--color-6);
+    border: 2px solid var(--color-3);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    width: 300px;
+}
+
+#howto-box,
+#check-text,
+#logout-surundana {
+    color: var(--color-1);
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.check-text-main {
+    color: var(--color-1);
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+
+#review-comment,
+.back-root {
+    display: flex;
+    justify-content: center;
+    gap: 80px;
+}
+
+.logout-buttons {
+    display: flex;
+    justify-content: space-around;
+}
+
+.undo-button {
+    background-color: var(--color-4);
+    color: var(--color-6);
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#review-button {
+    background-color: var(--color-4);
+    color: var(--color-6);
+    padding: 2px 5px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#comment {
+    border: 2px solid var(--color-3);
+    border-radius: 0.5em;
+    padding: 0.5em;
+    background-color: snow;
+    width: 20em;
+    height: 5em;
+    font-size: 1em;
+    line-height: 1.2;
+}
+
+#stars,
+#check-score {
+    font-size: 36px;
+    color: gold;
+    cursor: pointer;
+}
+
+table th,
+table td {
+    padding-right: 20px;
+    padding-bottom: 6px;
+}
+
+form {
+    text-align: center;
+}
+
+form table {
+    display: inline-table;
+}
+
+.circle-number {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    background-color: var(--color-4);
+    color: white;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 24px;
+    font-size: 24px;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    margin-right: 4px;
+}
+
+.howto_exp {
+    font-size: 12px;
+}
+
+.circle-step {
+    padding-bottom: 10px;
+    text-align: left;
+    /* 上下に空間 */
+}
+
+#bod-cod-exp {
+    font-size: 28px;
+    color: black;
+    margin-bottom: 20px;
+    text-align: center;
+    display: none;
+}
+
+#bod-cod-show {
+    font-size: 36px;
+    font-weight: bold;
+    color: black;
+    margin-bottom: 20px;
+    display: none;
+}
+
+#careful_view {
+    font-size: 12px;
+    color: red;
+    display: none;
+}
+
+#do_undo {
+    display: none;
+}
+
+#comment-box {
+    position: absolute;
+    bottom: 60px;
+    background-color: var(--color-6);
+    z-index: 1;
+    display: none;
+
+    width: 100vw;
+    height: 40vh;
+
+    justify-content: flex-start;
+    // align-items: flex-start;
+}
+
+#comment-text {
+    font-size: 32px;
+    bottom: 0;
+    text-align: center;
+    padding-bottom: 4px;
+}
+
+#scroll-box {
+    overflow-y: auto;
+    height: 80%;
+    padding: 10px;
+}
+
+#comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    background-color: var(--color-4);
+}
+
+#comment-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0 10px;
+    color: var(--color-1);
+}
