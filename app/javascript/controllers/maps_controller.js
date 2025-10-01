@@ -1,9 +1,11 @@
 import { Controller } from "@hotwired/stimulus";
 import { Loader } from "@googlemaps/js-api-loader";
 
-// Helper to read Google Maps API key from meta tag
+/** @import { Context } from "@hotwired/stimulus"  */
+
+/** Helper to read Google Maps API key from meta tag */
 function getGoogleMapsApiKey() {
-    /** @type {HTMLMetaElement} */
+    /** @type {HTMLMetaElement | null} */
     const meta = document.querySelector('meta[name="google-maps-api-key"]');
     if (!meta) {
         console.warn("Google Maps API key meta tag not found.");
@@ -30,6 +32,17 @@ const mapOptions = {
     disableDefaultUI: true,
 };
 
+/**
+ * @typedef {Object} Shop
+ * @property {string} name
+ * @property {number} lat
+ * @property {number} lon
+ * @property {string} openTime
+ * @property {string} address
+ * @property {boolean} [yasashi]
+ */
+
+/** @type {Shop[]} */
 const shops = [
     {
         name: "味庄",
@@ -157,14 +170,24 @@ const shops = [
 // Connects to data-controller="maps"
 /** @extends {Controller<HTMLDivElement>} */
 export default class extends Controller {
-    /** @type {google.maps.Map} */
+    /** @type {Promise<google.maps.Map>} */
     map;
+
+    /**
+     * @param  {Context} context
+     */
+    constructor(context) {
+        super(context);
+
+        this.map = loader.importLibrary("maps").then(async ({ Map: GMaps }) => {
+            const map = new GMaps(this.element, mapOptions);
+            console.log("Map initialized:", map);
+            return map;
+        });
+    }
 
     async connect() {
         console.log("Maps controller connected");
-        const { Map: GMaps } = await loader.importLibrary("maps");
-        this.map = new GMaps(this.element, mapOptions);
-        console.log("Map initialized:", this.map);
 
         // マーカーを作成して店舗を表示
         await this.createShopMarkers();
@@ -185,7 +208,7 @@ export default class extends Controller {
             // マーカーを作成
             const marker = new AdvancedMarkerElement({
                 position: position,
-                map: this.map,
+                map: await this.map,
                 title: shop.name,
                 content: markerIcon,
                 gmpClickable: true,
@@ -198,6 +221,10 @@ export default class extends Controller {
         }
     }
 
+    /**
+     * @param {Shop} shop
+     * @param {google.maps.marker.AdvancedMarkerElement} marker
+     */
     async showShopInfo(shop, marker) {
         const { InfoWindow } = await loader.importLibrary("maps");
 
@@ -234,6 +261,6 @@ export default class extends Controller {
 
         // 情報ウィンドウを開く
         this.infoWindow.setContent(content);
-        this.infoWindow.open(this.map, marker);
+        this.infoWindow.open(await this.map, marker);
     }
 }
