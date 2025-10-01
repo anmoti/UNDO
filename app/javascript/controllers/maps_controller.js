@@ -188,7 +188,7 @@ export default class extends Controller {
     }
 
     /** @param {google.maps.MapMouseEvent} event */
-    async onMapClick(event) { }
+    async onMapClick(event) {}
 
     async createShopMarkers() {
         // 各店舗にマーカーを作成
@@ -211,44 +211,8 @@ export default class extends Controller {
                 gmpClickable: true,
             });
 
-            // ホバーエフェクト用のスタイル
-            const originalContent = markerIcon.innerHTML;
-
-            // ホバーイベント
-            marker.addListener("mouseover", () => {
-                // ホバー時に名前を表示するツールチップ
-                const tooltip = document.createElement("div");
-                tooltip.className = "shop-tooltip";
-                tooltip.textContent = shop.name;
-                tooltip.style.cssText = `
-                    position: absolute;
-                    background: rgba(0, 0, 0, 0.8);
-                    color: white;
-                    padding: 4px 8px;
-                    border-radius: 4px;
-                    font-size: 12px;
-                    white-space: nowrap;
-                    z-index: 1000;
-                    pointer-events: none;
-                    transform: translate(-50%, -100%);
-                    margin-top: -8px;
-                `;
-
-                markerIcon.appendChild(tooltip);
-                markerIcon.style.transform = "scale(1.1)";
-            });
-
-            marker.addListener("mouseout", () => {
-                // ツールチップを削除
-                const tooltip = markerIcon.querySelector(".shop-tooltip");
-                if (tooltip) {
-                    tooltip.remove();
-                }
-                markerIcon.style.transform = "scale(1)";
-            });
-
-            // クリックイベント
             marker.addListener("click", () => {
+                // マーカーがクリックされたときに情報ウィンドウを表示
                 this.showShopInfo(shop, marker);
             });
 
@@ -274,9 +238,13 @@ export default class extends Controller {
         // 情報ウィンドウのコンテンツを作成
         const content = `
             <div style="min-width: 200px; padding: 4px; font-family: Arial, sans-serif;">
-                <h3 style="margin: 0 0 2px 0; color: #333; font-size: 16px;">${shop.name}</h3>
+                <h3 style="margin: 0 0 2px 0; color: #333; font-size: 16px;">${
+                    shop.name
+                }</h3>
                 <img src="yasasii.png" width="16px" height="16px" />
-                <span style="font-size: 12px; margin: 0 0 6px 0; background-color: #0c0; font-size: 14px; display: ${shop.yasashi ? 'inline' : 'none'};">環境に優しいうどん店</span>
+                <span style="font-size: 12px; margin: 0 0 6px 0; background-color: #0c0; font-size: 14px; display: ${
+                    shop.yasashi ? "inline" : "none"
+                };">環境に優しいうどん店</span>
                 <div style="margin-bottom: 6px; color: #666; font-size: 13px;">
                     <strong>住所:</strong> ${shop.address}
                 </div>
