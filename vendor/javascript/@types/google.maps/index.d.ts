@@ -752,7 +752,7 @@ declare namespace google.maps {
     /**
      * Key-value mapping of the feature&#39;s attributes.
      */
-    datasetAttributes: { [key: string]: string };
+    datasetAttributes: {[key: string]: string};
     /**
      * Dataset id of the dataset that this feature belongs to.
      */
@@ -1048,10 +1048,10 @@ declare namespace google.maps {
      * geocoded, or a <code>LatLng</code>, or a <code>Place</code>. Required.
      */
     destination:
-    | string
-    | google.maps.LatLng
-    | google.maps.Place
-    | google.maps.LatLngLiteral;
+      | string
+      | google.maps.LatLng
+      | google.maps.Place
+      | google.maps.LatLngLiteral;
     /**
      * Settings that apply only to requests where <code>travelMode</code> is
      * <code>DRIVING</code>. This object will have no effect for other travel
@@ -1078,10 +1078,10 @@ declare namespace google.maps {
      * geocoded, or a <code>LatLng</code>, or a <code>Place</code>. Required.
      */
     origin:
-    | string
-    | google.maps.LatLng
-    | google.maps.Place
-    | google.maps.LatLngLiteral;
+      | string
+      | google.maps.LatLng
+      | google.maps.Place
+      | google.maps.LatLngLiteral;
     /**
      * Whether or not route alternatives should be provided. Optional.
      */
@@ -1393,12 +1393,12 @@ declare namespace google.maps {
    * @deprecated Deprecated as of 2011. Use {@link google.maps.TravelMode}
    *     instead.
    */
-  export enum DirectionsTravelMode { }
+  export enum DirectionsTravelMode {}
   /**
    * @deprecated Deprecated as of 2011. Use {@link google.maps.UnitSystem}
    *     instead.
    */
-  export enum DirectionsUnitSystem { }
+  export enum DirectionsUnitSystem {}
   /**
    * A <code>DirectionsWaypoint</code> represents a location between origin and
    * destination through which the trip should be routed.
@@ -1409,10 +1409,10 @@ declare namespace google.maps {
      * <code>Place</code>. Optional.
      */
     location?:
-    | string
-    | google.maps.LatLng
-    | google.maps.LatLngLiteral
-    | google.maps.Place;
+      | string
+      | google.maps.LatLng
+      | google.maps.LatLngLiteral
+      | google.maps.Place;
     /**
      * If <code>true</code>, indicates that this waypoint is a stop between the
      * origin and destination. This has the effect of splitting the route into
@@ -1889,9 +1889,9 @@ declare namespace google.maps {
      * nothing and logs an error.
      */
     style?:
-    | google.maps.FeatureStyleOptions
-    | null
-    | google.maps.FeatureStyleFunction;
+      | google.maps.FeatureStyleOptions
+      | null
+      | google.maps.FeatureStyleFunction;
   }
   /**
    * This object is returned from a mouse event on a <code>FeatureLayer</code>.
@@ -2006,9 +2006,9 @@ declare namespace google.maps {
       request: google.maps.GeocoderRequest,
       callback?:
         | ((
-          a: google.maps.GeocoderResult[] | null,
-          b: google.maps.GeocoderStatus,
-        ) => void)
+            a: google.maps.GeocoderResult[] | null,
+            b: google.maps.GeocoderStatus,
+          ) => void)
         | null,
     ): Promise<google.maps.GeocoderResponse>;
   }
@@ -2494,7 +2494,8 @@ declare namespace google.maps {
    */
   export class ImageMapType
     extends google.maps.MVCObject
-    implements google.maps.MapType {
+    implements google.maps.MapType
+  {
     /**
      * This class implements the MapType interface and is provided for rendering
      * image tiles.
@@ -2681,9 +2682,9 @@ declare namespace google.maps {
      * the anchor <strong>(when available)</strong>.
      */
     anchor?:
-    | google.maps.MVCObject
-    | null
-    | google.maps.marker.AdvancedMarkerElement;
+      | google.maps.MVCObject
+      | null
+      | google.maps.marker.AdvancedMarkerElement;
     /**
      * The map or panorama on which to render this InfoWindow.
      */
@@ -3204,7 +3205,8 @@ declare namespace google.maps {
    * https://developers.google.com/maps/documentation/javascript/libraries.
    */
   export class LatLngAltitude
-    implements google.maps.LatLngAltitudeLiteral, google.maps.LatLngLiteral {
+    implements google.maps.LatLngAltitudeLiteral, google.maps.LatLngLiteral
+  {
     /**
      * A <code>LatLngAltitude</code> is a 3D point in geographical coordinates:
      * latitude, longitude, and altitude.<br> <ul> <li>Latitude ranges between
@@ -3950,7 +3952,8 @@ declare namespace google.maps {
    */
   export class MapElement
     extends HTMLElement
-    implements google.maps.MapElementOptions {
+    implements google.maps.MapElementOptions
+  {
     /**
      * Available only in the v=beta channel: https://goo.gle/3oAthT3.
      *
@@ -5875,9 +5878,9 @@ declare namespace google.maps {
      * update the polyline on the map.
      */
     path?:
-    | google.maps.MVCArray<google.maps.LatLng>
-    | (google.maps.LatLng | google.maps.LatLngLiteral)[]
-    | null;
+      | google.maps.MVCArray<google.maps.LatLng>
+      | (google.maps.LatLng | google.maps.LatLngLiteral)[]
+      | null;
     /**
      * The stroke color. All CSS3 colors are supported except for extended named
      * colors.
@@ -6867,7 +6870,8 @@ declare namespace google.maps {
    */
   export class StyledMapType
     extends google.maps.MVCObject
-    implements google.maps.MapType {
+    implements google.maps.MapType
+  {
     /**
      * Creates a <code>MapType</code> with a custom style.
      *
@@ -7847,8 +7851,8 @@ declare namespace google.maps.Data {
      * that Geometry instead. Defaults to <code>null</code>.
      */
     featureFactory?:
-    | ((a: google.maps.Data.Geometry) => google.maps.Data.Feature)
-    | null;
+      | ((a: google.maps.Data.Geometry) => google.maps.Data.Feature)
+      | null;
     /**
      * Map on which to display the features in the collection.
      */
@@ -7929,10 +7933,10 @@ declare namespace google.maps.Data {
      * will be converted to a <code>Data.Point</code> geometry.
      */
     geometry?:
-    | google.maps.Data.Geometry
-    | null
-    | google.maps.LatLng
-    | google.maps.LatLngLiteral;
+      | google.maps.Data.Geometry
+      | null
+      | google.maps.LatLng
+      | google.maps.LatLngLiteral;
     /**
      * Feature ID is optional. If provided, it can be used to look up the
      * feature in a <code>Data</code> object using the
@@ -8193,9 +8197,9 @@ declare namespace google.maps.Data {
       elements: (
         | google.maps.Data.Polygon
         | (
-          | google.maps.Data.LinearRing
-          | (google.maps.LatLng | google.maps.LatLngLiteral)[]
-        )[]
+            | google.maps.Data.LinearRing
+            | (google.maps.LatLng | google.maps.LatLngLiteral)[]
+          )[]
       )[],
     );
     forEachLatLng(callback: (a: google.maps.LatLng) => void): void;
@@ -8605,11 +8609,11 @@ declare namespace google.maps.drawing {
      * The completed overlay.
      */
     overlay:
-    | google.maps.Marker
-    | google.maps.Polygon
-    | google.maps.Polyline
-    | google.maps.Rectangle
-    | google.maps.Circle;
+      | google.maps.Marker
+      | google.maps.Polygon
+      | google.maps.Polyline
+      | google.maps.Rectangle
+      | google.maps.Circle;
     /**
      * The completed overlay&#39;s type.
      */
@@ -8905,7 +8909,7 @@ declare namespace google.maps.journeySharing {
     /**
      * Custom delivery vehicle attributes.
      */
-    attributes: { [key: string]: string | null };
+    attributes: {[key: string]: string | null};
     /**
      * The location where the current route segment ends.
      */
@@ -9091,10 +9095,10 @@ declare namespace google.maps.journeySharing {
      * for a list of supplied parameters and their uses.</li></ul>
      */
     deliveryVehicleMarkerCustomization?:
-    | ((
-      a: google.maps.journeySharing.DeliveryVehicleMarkerCustomizationFunctionParams,
-    ) => void)
-    | null;
+      | ((
+          a: google.maps.journeySharing.DeliveryVehicleMarkerCustomizationFunctionParams,
+        ) => void)
+      | null;
     /**
      * The latitude/longitude bounds within which to track vehicles immediately
      * after the location provider is instantiated. If not set, the location
@@ -9104,9 +9108,9 @@ declare namespace google.maps.journeySharing {
      * regardless of location, set bounds equivalent to the entire earth.
      */
     locationRestriction:
-    | google.maps.LatLngBounds
-    | null
-    | google.maps.LatLngBoundsLiteral;
+      | google.maps.LatLngBounds
+      | null
+      | google.maps.LatLngBoundsLiteral;
     /**
      * The consumer&#39;s project ID from Google Cloud Console.
      */
@@ -9198,11 +9202,11 @@ declare namespace google.maps.journeySharing {
      * for a list of supplied parameters and their uses.</li></ul>
      */
     activePolylineCustomization?:
-    | ((
-      a: google.maps.journeySharing.DeliveryVehiclePolylineCustomizationFunctionParams,
-    ) => void)
-    | google.maps.PolylineOptions
-    | null;
+      | ((
+          a: google.maps.journeySharing.DeliveryVehiclePolylineCustomizationFunctionParams,
+        ) => void)
+      | google.maps.PolylineOptions
+      | null;
     /**
      * Provides JSON Web Tokens for authenticating the client to Fleet Engine.
      */
@@ -9235,11 +9239,11 @@ declare namespace google.maps.journeySharing {
      * for a list of supplied parameters and their uses.</li></ul>
      */
     deliveryVehicleMarkerCustomization?:
-    | ((
-      a: google.maps.journeySharing.DeliveryVehicleMarkerCustomizationFunctionParams,
-    ) => void)
-    | google.maps.MarkerOptions
-    | null;
+      | ((
+          a: google.maps.journeySharing.DeliveryVehicleMarkerCustomizationFunctionParams,
+        ) => void)
+      | google.maps.MarkerOptions
+      | null;
     /**
      * Customization applied to a planned stop marker. <br><br>Use this field to
      * specify custom styling (such as marker icon) and interactivity (such as
@@ -9257,11 +9261,11 @@ declare namespace google.maps.journeySharing {
      * for a list of supplied parameters and their uses.</li></ul>
      */
     plannedStopMarkerCustomization?:
-    | ((
-      a: google.maps.journeySharing.PlannedStopMarkerCustomizationFunctionParams,
-    ) => void)
-    | google.maps.MarkerOptions
-    | null;
+      | ((
+          a: google.maps.journeySharing.PlannedStopMarkerCustomizationFunctionParams,
+        ) => void)
+      | google.maps.MarkerOptions
+      | null;
     /**
      * Minimum time between fetching location updates in milliseconds. If it
      * takes longer than <code>pollingIntervalMillis</code> to fetch a location
@@ -9296,11 +9300,11 @@ declare namespace google.maps.journeySharing {
      * for a list of supplied parameters and their uses.</li></ul>
      */
     remainingPolylineCustomization?:
-    | ((
-      a: google.maps.journeySharing.DeliveryVehiclePolylineCustomizationFunctionParams,
-    ) => void)
-    | google.maps.PolylineOptions
-    | null;
+      | ((
+          a: google.maps.journeySharing.DeliveryVehiclePolylineCustomizationFunctionParams,
+        ) => void)
+      | google.maps.PolylineOptions
+      | null;
     /**
      * Boolean to show or hide outcome locations for the fetched tasks.
      */
@@ -9337,11 +9341,11 @@ declare namespace google.maps.journeySharing {
      * for a list of supplied parameters and their uses.</li></ul>
      */
     takenPolylineCustomization?:
-    | ((
-      a: google.maps.journeySharing.DeliveryVehiclePolylineCustomizationFunctionParams,
-    ) => void)
-    | google.maps.PolylineOptions
-    | null;
+      | ((
+          a: google.maps.journeySharing.DeliveryVehiclePolylineCustomizationFunctionParams,
+        ) => void)
+      | google.maps.PolylineOptions
+      | null;
     /**
      * Filter options to apply when fetching tasks. The options can include
      * specific vehicle, time, and task status.
@@ -9365,11 +9369,11 @@ declare namespace google.maps.journeySharing {
      * list of supplied parameters and their uses.</li></ul>
      */
     taskMarkerCustomization?:
-    | ((
-      a: google.maps.journeySharing.TaskMarkerCustomizationFunctionParams,
-    ) => void)
-    | google.maps.MarkerOptions
-    | null;
+      | ((
+          a: google.maps.journeySharing.TaskMarkerCustomizationFunctionParams,
+        ) => void)
+      | google.maps.MarkerOptions
+      | null;
     /**
      * Customization applied to a task outcome marker. A task outcome marker is
      * rendered at the actual outcome location of each task assigned to the
@@ -9388,10 +9392,10 @@ declare namespace google.maps.journeySharing {
      * list of supplied parameters and their uses.</li></ul>
      */
     taskOutcomeMarkerCustomization?:
-    | ((
-      a: google.maps.journeySharing.TaskMarkerCustomizationFunctionParams,
-    ) => void)
-    | null;
+      | ((
+          a: google.maps.journeySharing.TaskMarkerCustomizationFunctionParams,
+        ) => void)
+      | null;
   }
   /**
    * The event object passed to the event handler when the {@link
@@ -9404,8 +9408,8 @@ declare namespace google.maps.journeySharing {
      * Unmodifiable.
      */
     completedVehicleJourneySegments:
-    | google.maps.journeySharing.VehicleJourneySegment[]
-    | null;
+      | google.maps.journeySharing.VehicleJourneySegment[]
+      | null;
     /**
      * The delivery vehicle data structure returned by the update. Unmodifiable.
      */
@@ -9481,9 +9485,9 @@ declare namespace google.maps.journeySharing {
      * location, set bounds equivalent to the entire earth.
      */
     locationRestriction:
-    | google.maps.LatLngBounds
-    | null
-    | google.maps.LatLngBoundsLiteral;
+      | google.maps.LatLngBounds
+      | null
+      | google.maps.LatLngBoundsLiteral;
     /**
      * The consumer&#39;s project ID from Google Cloud Console.
      */
@@ -9523,10 +9527,10 @@ declare namespace google.maps.journeySharing {
      * a list of supplied parameters and their uses.</li></ul>
      */
     vehicleMarkerCustomization?:
-    | ((
-      a: google.maps.journeySharing.VehicleMarkerCustomizationFunctionParams,
-    ) => void)
-    | null;
+      | ((
+          a: google.maps.journeySharing.VehicleMarkerCustomizationFunctionParams,
+        ) => void)
+      | null;
   }
   /**
    * Available only in the v=beta channel: https://goo.gle/3oAthT3.
@@ -9619,11 +9623,11 @@ declare namespace google.maps.journeySharing {
      * for a list of supplied parameters and their uses.</li></ul>
      */
     activePolylineCustomization?:
-    | ((
-      a: google.maps.journeySharing.ShipmentPolylineCustomizationFunctionParams,
-    ) => void)
-    | google.maps.PolylineOptions
-    | null;
+      | ((
+          a: google.maps.journeySharing.ShipmentPolylineCustomizationFunctionParams,
+        ) => void)
+      | google.maps.PolylineOptions
+      | null;
     /**
      * Provides JSON Web Tokens for authenticating the client to Fleet Engine.
      */
@@ -9648,11 +9652,11 @@ declare namespace google.maps.journeySharing {
      * a list of supplied parameters and their uses.</li></ul>
      */
     deliveryVehicleMarkerCustomization?:
-    | ((
-      a: google.maps.journeySharing.ShipmentMarkerCustomizationFunctionParams,
-    ) => void)
-    | google.maps.MarkerOptions
-    | null;
+      | ((
+          a: google.maps.journeySharing.ShipmentMarkerCustomizationFunctionParams,
+        ) => void)
+      | google.maps.MarkerOptions
+      | null;
     /**
      * Customization applied to the destination marker. <br><br>Use this field
      * to specify custom styling (such as marker icon) and interactivity (such
@@ -9670,11 +9674,11 @@ declare namespace google.maps.journeySharing {
      * a list of supplied parameters and their uses.</li></ul>
      */
     destinationMarkerCustomization?:
-    | ((
-      a: google.maps.journeySharing.ShipmentMarkerCustomizationFunctionParams,
-    ) => void)
-    | google.maps.MarkerOptions
-    | null;
+      | ((
+          a: google.maps.journeySharing.ShipmentMarkerCustomizationFunctionParams,
+        ) => void)
+      | google.maps.MarkerOptions
+      | null;
     /**
      * Minimum time between fetching location updates in milliseconds. If it
      * takes longer than <code>pollingIntervalMillis</code> to fetch a location
@@ -9712,11 +9716,11 @@ declare namespace google.maps.journeySharing {
      * for a list of supplied parameters and their uses.</li></ul>
      */
     remainingPolylineCustomization?:
-    | ((
-      a: google.maps.journeySharing.ShipmentPolylineCustomizationFunctionParams,
-    ) => void)
-    | google.maps.PolylineOptions
-    | null;
+      | ((
+          a: google.maps.journeySharing.ShipmentPolylineCustomizationFunctionParams,
+        ) => void)
+      | google.maps.PolylineOptions
+      | null;
     /**
      * Customization applied to the taken polyline. A taken polyline corresponds
      * to a portion of the route the vehicle has already traversed through.
@@ -9735,11 +9739,11 @@ declare namespace google.maps.journeySharing {
      * for a list of supplied parameters and their uses.</li></ul>
      */
     takenPolylineCustomization?:
-    | ((
-      a: google.maps.journeySharing.ShipmentPolylineCustomizationFunctionParams,
-    ) => void)
-    | google.maps.PolylineOptions
-    | null;
+      | ((
+          a: google.maps.journeySharing.ShipmentPolylineCustomizationFunctionParams,
+        ) => void)
+      | google.maps.PolylineOptions
+      | null;
     /**
      * The tracking ID of the task to track immediately after the location
      * provider is instantiated. If not specified, the location provider does
@@ -9856,11 +9860,11 @@ declare namespace google.maps.journeySharing {
      * list of supplied parameters and their uses.</li></ul>
      */
     activePolylineCustomization?:
-    | ((
-      a: google.maps.journeySharing.TripPolylineCustomizationFunctionParams,
-    ) => void)
-    | google.maps.PolylineOptions
-    | null;
+      | ((
+          a: google.maps.journeySharing.TripPolylineCustomizationFunctionParams,
+        ) => void)
+      | google.maps.PolylineOptions
+      | null;
     /**
      * Provides JSON Web Tokens for authenticating the client to Fleet Engine.
      */
@@ -9885,11 +9889,11 @@ declare namespace google.maps.journeySharing {
      * list of supplied parameters and their uses.</li></ul>
      */
     destinationMarkerCustomization?:
-    | ((
-      a: google.maps.journeySharing.TripMarkerCustomizationFunctionParams,
-    ) => void)
-    | google.maps.MarkerOptions
-    | null;
+      | ((
+          a: google.maps.journeySharing.TripMarkerCustomizationFunctionParams,
+        ) => void)
+      | google.maps.MarkerOptions
+      | null;
     /**
      * Customization applied to the origin marker. <br><br>Use this field to
      * specify custom styling (such as marker icon) and interactivity (such as
@@ -9907,11 +9911,11 @@ declare namespace google.maps.journeySharing {
      * list of supplied parameters and their uses.</li></ul>
      */
     originMarkerCustomization?:
-    | ((
-      a: google.maps.journeySharing.TripMarkerCustomizationFunctionParams,
-    ) => void)
-    | google.maps.MarkerOptions
-    | null;
+      | ((
+          a: google.maps.journeySharing.TripMarkerCustomizationFunctionParams,
+        ) => void)
+      | google.maps.MarkerOptions
+      | null;
     /**
      * Minimum time between fetching location updates in milliseconds. If it
      * takes longer than <code>pollingIntervalMillis</code> to fetch a location
@@ -9946,11 +9950,11 @@ declare namespace google.maps.journeySharing {
      * list of supplied parameters and their uses.</li></ul>
      */
     remainingPolylineCustomization?:
-    | ((
-      a: google.maps.journeySharing.TripPolylineCustomizationFunctionParams,
-    ) => void)
-    | google.maps.PolylineOptions
-    | null;
+      | ((
+          a: google.maps.journeySharing.TripPolylineCustomizationFunctionParams,
+        ) => void)
+      | google.maps.PolylineOptions
+      | null;
     /**
      * Customization applied to the taken polyline. A taken polyline corresponds
      * to a portion of the route the vehicle has already traversed through.
@@ -9969,11 +9973,11 @@ declare namespace google.maps.journeySharing {
      * list of supplied parameters and their uses.</li></ul>
      */
     takenPolylineCustomization?:
-    | ((
-      a: google.maps.journeySharing.TripPolylineCustomizationFunctionParams,
-    ) => void)
-    | google.maps.PolylineOptions
-    | null;
+      | ((
+          a: google.maps.journeySharing.TripPolylineCustomizationFunctionParams,
+        ) => void)
+      | google.maps.PolylineOptions
+      | null;
     /**
      * The trip ID to track immediately after the location provider is
      * instantiated. If not specified, the location provider does not start
@@ -9999,11 +10003,11 @@ declare namespace google.maps.journeySharing {
      * list of supplied parameters and their uses.</li></ul>
      */
     vehicleMarkerCustomization?:
-    | ((
-      a: google.maps.journeySharing.TripMarkerCustomizationFunctionParams,
-    ) => void)
-    | google.maps.MarkerOptions
-    | null;
+      | ((
+          a: google.maps.journeySharing.TripMarkerCustomizationFunctionParams,
+        ) => void)
+      | google.maps.MarkerOptions
+      | null;
     /**
      * Customization applied to a waypoint marker. <br><br>Use this field to
      * specify custom styling (such as marker icon) and interactivity (such as
@@ -10021,11 +10025,11 @@ declare namespace google.maps.journeySharing {
      * for a list of supplied parameters and their uses.</li></ul>
      */
     waypointMarkerCustomization?:
-    | ((
-      a: google.maps.journeySharing.TripWaypointMarkerCustomizationFunctionParams,
-    ) => void)
-    | google.maps.MarkerOptions
-    | null;
+      | ((
+          a: google.maps.journeySharing.TripWaypointMarkerCustomizationFunctionParams,
+        ) => void)
+      | google.maps.MarkerOptions
+      | null;
   }
   /**
    * The event object passed to the event handler when the {@link
@@ -10123,11 +10127,11 @@ declare namespace google.maps.journeySharing {
      * for a list of supplied parameters and their uses.</li></ul>
      */
     activePolylineCustomization?:
-    | ((
-      a: google.maps.journeySharing.VehiclePolylineCustomizationFunctionParams,
-    ) => void)
-    | google.maps.PolylineOptions
-    | null;
+      | ((
+          a: google.maps.journeySharing.VehiclePolylineCustomizationFunctionParams,
+        ) => void)
+      | google.maps.PolylineOptions
+      | null;
     /**
      * Provides JSON Web Tokens for authenticating the client to Fleet Engine.
      */
@@ -10152,11 +10156,11 @@ declare namespace google.maps.journeySharing {
      * for a list of supplied parameters and their uses.</li></ul>
      */
     destinationMarkerCustomization?:
-    | ((
-      a: google.maps.journeySharing.VehicleWaypointMarkerCustomizationFunctionParams,
-    ) => void)
-    | google.maps.MarkerOptions
-    | null;
+      | ((
+          a: google.maps.journeySharing.VehicleWaypointMarkerCustomizationFunctionParams,
+        ) => void)
+      | google.maps.MarkerOptions
+      | null;
     /**
      * Customization applied to the vehicle trip intermediate destination
      * markers. <br><br>Use this field to specify custom styling (such as marker
@@ -10174,11 +10178,11 @@ declare namespace google.maps.journeySharing {
      * for a list of supplied parameters and their uses.</li></ul>
      */
     intermediateDestinationMarkerCustomization?:
-    | ((
-      a: google.maps.journeySharing.VehicleWaypointMarkerCustomizationFunctionParams,
-    ) => void)
-    | google.maps.MarkerOptions
-    | null;
+      | ((
+          a: google.maps.journeySharing.VehicleWaypointMarkerCustomizationFunctionParams,
+        ) => void)
+      | google.maps.MarkerOptions
+      | null;
     /**
      * Customization applied to the vehicle trip origin marker. <br><br>Use this
      * field to specify custom styling (such as marker icon) and interactivity
@@ -10196,11 +10200,11 @@ declare namespace google.maps.journeySharing {
      * for a list of supplied parameters and their uses.</li></ul>
      */
     originMarkerCustomization?:
-    | ((
-      a: google.maps.journeySharing.VehicleWaypointMarkerCustomizationFunctionParams,
-    ) => void)
-    | google.maps.MarkerOptions
-    | null;
+      | ((
+          a: google.maps.journeySharing.VehicleWaypointMarkerCustomizationFunctionParams,
+        ) => void)
+      | google.maps.MarkerOptions
+      | null;
     /**
      * Minimum time between fetching location updates in milliseconds. If it
      * takes longer than <code>pollingIntervalMillis</code> to fetch a location
@@ -10235,11 +10239,11 @@ declare namespace google.maps.journeySharing {
      * for a list of supplied parameters and their uses.</li></ul>
      */
     remainingPolylineCustomization?:
-    | ((
-      a: google.maps.journeySharing.VehiclePolylineCustomizationFunctionParams,
-    ) => void)
-    | google.maps.PolylineOptions
-    | null;
+      | ((
+          a: google.maps.journeySharing.VehiclePolylineCustomizationFunctionParams,
+        ) => void)
+      | google.maps.PolylineOptions
+      | null;
     /**
      * Threshold for stale vehicle location. If the last updated location for
      * the vehicle is older this threshold, the vehicle will not be displayed.
@@ -10266,11 +10270,11 @@ declare namespace google.maps.journeySharing {
      * for a list of supplied parameters and their uses.</li></ul>
      */
     takenPolylineCustomization?:
-    | ((
-      a: google.maps.journeySharing.VehiclePolylineCustomizationFunctionParams,
-    ) => void)
-    | google.maps.PolylineOptions
-    | null;
+      | ((
+          a: google.maps.journeySharing.VehiclePolylineCustomizationFunctionParams,
+        ) => void)
+      | google.maps.PolylineOptions
+      | null;
     /**
      * The vehicle ID to track immediately after the location provider is
      * instantiated. If not specified, the location provider does not start
@@ -10296,11 +10300,11 @@ declare namespace google.maps.journeySharing {
      * a list of supplied parameters and their uses.</li></ul>
      */
     vehicleMarkerCustomization?:
-    | ((
-      a: google.maps.journeySharing.VehicleMarkerCustomizationFunctionParams,
-    ) => void)
-    | google.maps.MarkerOptions
-    | null;
+      | ((
+          a: google.maps.journeySharing.VehicleMarkerCustomizationFunctionParams,
+        ) => void)
+      | google.maps.MarkerOptions
+      | null;
   }
   /**
    * Available only in the v=beta channel: https://goo.gle/3oAthT3.
@@ -10367,8 +10371,8 @@ declare namespace google.maps.journeySharing {
     anticipatedRoutePolylineSetup:
       | google.maps.journeySharing.PolylineSetupOptions
       | ((
-        a: google.maps.journeySharing.DefaultPolylineSetupOptions,
-      ) => google.maps.journeySharing.PolylineSetupOptions);
+          a: google.maps.journeySharing.DefaultPolylineSetupOptions,
+        ) => google.maps.journeySharing.PolylineSetupOptions);
     /**
      * Returns the anticipated route polylines, if any.
      * @deprecated getting a list of polylines via the <code>MapView</code> is
@@ -10402,8 +10406,8 @@ declare namespace google.maps.journeySharing {
     destinationMarkerSetup:
       | google.maps.journeySharing.MarkerSetupOptions
       | ((
-        a: google.maps.journeySharing.DefaultMarkerSetupOptions,
-      ) => google.maps.journeySharing.MarkerSetupOptions);
+          a: google.maps.journeySharing.DefaultMarkerSetupOptions,
+        ) => google.maps.journeySharing.MarkerSetupOptions);
     /**
      * Returns the destination markers, if any.
      * @deprecated getting a list of markers via the <code>MapView</code> is
@@ -10467,8 +10471,8 @@ declare namespace google.maps.journeySharing {
     originMarkerSetup:
       | google.maps.journeySharing.MarkerSetupOptions
       | ((
-        a: google.maps.journeySharing.DefaultMarkerSetupOptions,
-      ) => google.maps.journeySharing.MarkerSetupOptions);
+          a: google.maps.journeySharing.DefaultMarkerSetupOptions,
+        ) => google.maps.journeySharing.MarkerSetupOptions);
     /**
      * Returns the origin markers, if any.
      * @deprecated getting a list of markers via the <code>MapView</code> is
@@ -10498,8 +10502,8 @@ declare namespace google.maps.journeySharing {
     pingMarkerSetup:
       | google.maps.journeySharing.MarkerSetupOptions
       | ((
-        a: google.maps.journeySharing.DefaultMarkerSetupOptions,
-      ) => google.maps.journeySharing.MarkerSetupOptions);
+          a: google.maps.journeySharing.DefaultMarkerSetupOptions,
+        ) => google.maps.journeySharing.MarkerSetupOptions);
     /**
      * Removes a location provider from the map view. If the location provider
      * is not already added to the map view, no action is performed.
@@ -10529,8 +10533,8 @@ declare namespace google.maps.journeySharing {
     successfulTaskMarkerSetup:
       | google.maps.journeySharing.MarkerSetupOptions
       | ((
-        a: google.maps.journeySharing.DefaultMarkerSetupOptions,
-      ) => google.maps.journeySharing.MarkerSetupOptions);
+          a: google.maps.journeySharing.DefaultMarkerSetupOptions,
+        ) => google.maps.journeySharing.MarkerSetupOptions);
     /**
      * Returns the successful task markers, if any.
      * @deprecated getting a list of markers via the <code>MapView</code> is
@@ -10560,8 +10564,8 @@ declare namespace google.maps.journeySharing {
     takenRoutePolylineSetup:
       | google.maps.journeySharing.PolylineSetupOptions
       | ((
-        a: google.maps.journeySharing.DefaultPolylineSetupOptions,
-      ) => google.maps.journeySharing.PolylineSetupOptions);
+          a: google.maps.journeySharing.DefaultPolylineSetupOptions,
+        ) => google.maps.journeySharing.PolylineSetupOptions);
     /**
      * Returns the taken route polylines, if any.
      * @deprecated getting a list of polylines via the <code>MapView</code> is
@@ -10591,8 +10595,8 @@ declare namespace google.maps.journeySharing {
     taskOutcomeMarkerSetup:
       | google.maps.journeySharing.MarkerSetupOptions
       | ((
-        a: google.maps.journeySharing.DefaultMarkerSetupOptions,
-      ) => google.maps.journeySharing.MarkerSetupOptions);
+          a: google.maps.journeySharing.DefaultMarkerSetupOptions,
+        ) => google.maps.journeySharing.MarkerSetupOptions);
     /**
      * Returns the task outcome markers, if any.
      * @deprecated getting a list of markers via the <code>MapView</code> is
@@ -10622,8 +10626,8 @@ declare namespace google.maps.journeySharing {
     unsuccessfulTaskMarkerSetup:
       | google.maps.journeySharing.MarkerSetupOptions
       | ((
-        a: google.maps.journeySharing.DefaultMarkerSetupOptions,
-      ) => google.maps.journeySharing.MarkerSetupOptions);
+          a: google.maps.journeySharing.DefaultMarkerSetupOptions,
+        ) => google.maps.journeySharing.MarkerSetupOptions);
     /**
      * Returns the unsuccessful task markers, if any.
      * @deprecated getting a list of markers via the <code>MapView</code> is
@@ -10653,8 +10657,8 @@ declare namespace google.maps.journeySharing {
     vehicleMarkerSetup:
       | google.maps.journeySharing.MarkerSetupOptions
       | ((
-        a: google.maps.journeySharing.DefaultMarkerSetupOptions,
-      ) => google.maps.journeySharing.MarkerSetupOptions);
+          a: google.maps.journeySharing.DefaultMarkerSetupOptions,
+        ) => google.maps.journeySharing.MarkerSetupOptions);
     /**
      * Returns the vehicle markers, if any.
      * @deprecated getting a list of markers via the <code>MapView</code> is
@@ -10684,8 +10688,8 @@ declare namespace google.maps.journeySharing {
     waypointMarkerSetup:
       | google.maps.journeySharing.MarkerSetupOptions
       | ((
-        a: google.maps.journeySharing.DefaultMarkerSetupOptions,
-      ) => google.maps.journeySharing.MarkerSetupOptions);
+          a: google.maps.journeySharing.DefaultMarkerSetupOptions,
+        ) => google.maps.journeySharing.MarkerSetupOptions);
     /**
      * Returns the waypoint markers, if any.
      * @deprecated getting a list of markers via the <code>MapView</code> is
@@ -10718,11 +10722,11 @@ declare namespace google.maps.journeySharing {
      *     provider instead. This field will be removed in the future.
      */
     anticipatedRoutePolylineSetup?:
-    | google.maps.journeySharing.PolylineSetupOptions
-    | ((
-      a: google.maps.journeySharing.DefaultPolylineSetupOptions,
-    ) => google.maps.journeySharing.PolylineSetupOptions)
-    | null;
+      | google.maps.journeySharing.PolylineSetupOptions
+      | ((
+          a: google.maps.journeySharing.DefaultPolylineSetupOptions,
+        ) => google.maps.journeySharing.PolylineSetupOptions)
+      | null;
     /**
      * Automatic viewport mode. Default value is FIT_ANTICIPATED_ROUTE, which
      * enables the map view to automatically adjust the viewport to fit vehicle
@@ -10749,11 +10753,11 @@ declare namespace google.maps.journeySharing {
      *     provider instead. This field will be removed in the future.
      */
     destinationMarkerSetup?:
-    | google.maps.journeySharing.MarkerSetupOptions
-    | ((
-      a: google.maps.journeySharing.DefaultMarkerSetupOptions,
-    ) => google.maps.journeySharing.MarkerSetupOptions)
-    | null;
+      | google.maps.journeySharing.MarkerSetupOptions
+      | ((
+          a: google.maps.journeySharing.DefaultMarkerSetupOptions,
+        ) => google.maps.journeySharing.MarkerSetupOptions)
+      | null;
     /**
      * The DOM element backing the view. Required.
      */
@@ -10794,11 +10798,11 @@ declare namespace google.maps.journeySharing {
      *     provider instead. This field will be removed in the future.
      */
     originMarkerSetup?:
-    | google.maps.journeySharing.MarkerSetupOptions
-    | ((
-      a: google.maps.journeySharing.DefaultMarkerSetupOptions,
-    ) => google.maps.journeySharing.MarkerSetupOptions)
-    | null;
+      | google.maps.journeySharing.MarkerSetupOptions
+      | ((
+          a: google.maps.journeySharing.DefaultMarkerSetupOptions,
+        ) => google.maps.journeySharing.MarkerSetupOptions)
+      | null;
     /**
      * Configures options for a ping location marker. Invoked whenever a new
      * ping marker is rendered. <br><br>If specifying a function, the function
@@ -10818,11 +10822,11 @@ declare namespace google.maps.journeySharing {
      *     provider instead. This field will be removed in the future.
      */
     pingMarkerSetup?:
-    | google.maps.journeySharing.MarkerSetupOptions
-    | ((
-      a: google.maps.journeySharing.DefaultMarkerSetupOptions,
-    ) => google.maps.journeySharing.MarkerSetupOptions)
-    | null;
+      | google.maps.journeySharing.MarkerSetupOptions
+      | ((
+          a: google.maps.journeySharing.DefaultMarkerSetupOptions,
+        ) => google.maps.journeySharing.MarkerSetupOptions)
+      | null;
     /**
      * Configures options for a successful task location marker. Invoked
      * whenever a new successful task marker is rendered. <br><br>If specifying
@@ -10842,11 +10846,11 @@ declare namespace google.maps.journeySharing {
      *     provider instead. This field will be removed in the future.
      */
     successfulTaskMarkerSetup?:
-    | google.maps.journeySharing.MarkerSetupOptions
-    | ((
-      a: google.maps.journeySharing.DefaultMarkerSetupOptions,
-    ) => google.maps.journeySharing.MarkerSetupOptions)
-    | null;
+      | google.maps.journeySharing.MarkerSetupOptions
+      | ((
+          a: google.maps.journeySharing.DefaultMarkerSetupOptions,
+        ) => google.maps.journeySharing.MarkerSetupOptions)
+      | null;
     /**
      * Configures options for a taken route polyline. Invoked whenever a new
      * taken route polyline is rendered. <br><br>If specifying a function, the
@@ -10866,11 +10870,11 @@ declare namespace google.maps.journeySharing {
      *     provider instead. This field will be removed in the future.
      */
     takenRoutePolylineSetup?:
-    | google.maps.journeySharing.PolylineSetupOptions
-    | ((
-      a: google.maps.journeySharing.DefaultPolylineSetupOptions,
-    ) => google.maps.journeySharing.PolylineSetupOptions)
-    | null;
+      | google.maps.journeySharing.PolylineSetupOptions
+      | ((
+          a: google.maps.journeySharing.DefaultPolylineSetupOptions,
+        ) => google.maps.journeySharing.PolylineSetupOptions)
+      | null;
     /**
      * Configures options for a task outcome location marker. Invoked whenever a
      * new task outcome location marker is rendered. <br><br>If specifying a
@@ -10890,11 +10894,11 @@ declare namespace google.maps.journeySharing {
      *     provider instead. This field will be removed in the future.
      */
     taskOutcomeMarkerSetup?:
-    | google.maps.journeySharing.MarkerSetupOptions
-    | ((
-      a: google.maps.journeySharing.DefaultMarkerSetupOptions,
-    ) => google.maps.journeySharing.MarkerSetupOptions)
-    | null;
+      | google.maps.journeySharing.MarkerSetupOptions
+      | ((
+          a: google.maps.journeySharing.DefaultMarkerSetupOptions,
+        ) => google.maps.journeySharing.MarkerSetupOptions)
+      | null;
     /**
      * Configures options for an unsuccessful task location marker. Invoked
      * whenever a new unsuccessful task marker is rendered. <br><br>If
@@ -10914,11 +10918,11 @@ declare namespace google.maps.journeySharing {
      *     provider instead. This field will be removed in the future.
      */
     unsuccessfulTaskMarkerSetup?:
-    | google.maps.journeySharing.MarkerSetupOptions
-    | ((
-      a: google.maps.journeySharing.DefaultMarkerSetupOptions,
-    ) => google.maps.journeySharing.MarkerSetupOptions)
-    | null;
+      | google.maps.journeySharing.MarkerSetupOptions
+      | ((
+          a: google.maps.journeySharing.DefaultMarkerSetupOptions,
+        ) => google.maps.journeySharing.MarkerSetupOptions)
+      | null;
     /**
      * Configures options for a vehicle location marker. Invoked whenever a new
      * vehicle marker is rendered. <br><br>If specifying a function, the
@@ -10938,11 +10942,11 @@ declare namespace google.maps.journeySharing {
      *     provider instead. This field will be removed in the future.
      */
     vehicleMarkerSetup?:
-    | google.maps.journeySharing.MarkerSetupOptions
-    | ((
-      a: google.maps.journeySharing.DefaultMarkerSetupOptions,
-    ) => google.maps.journeySharing.MarkerSetupOptions)
-    | null;
+      | google.maps.journeySharing.MarkerSetupOptions
+      | ((
+          a: google.maps.journeySharing.DefaultMarkerSetupOptions,
+        ) => google.maps.journeySharing.MarkerSetupOptions)
+      | null;
     /**
      * Configures options for a waypoint location marker. Invoked whenever a new
      * waypoint marker is rendered. <br><br>If specifying a function, the
@@ -10962,11 +10966,11 @@ declare namespace google.maps.journeySharing {
      *     provider instead. This field will be removed in the future.
      */
     waypointMarkerSetup?:
-    | google.maps.journeySharing.MarkerSetupOptions
-    | ((
-      a: google.maps.journeySharing.DefaultMarkerSetupOptions,
-    ) => google.maps.journeySharing.MarkerSetupOptions)
-    | null;
+      | google.maps.journeySharing.MarkerSetupOptions
+      | ((
+          a: google.maps.journeySharing.DefaultMarkerSetupOptions,
+        ) => google.maps.journeySharing.MarkerSetupOptions)
+      | null;
   }
   /**
    * Parent class of all location providers.
@@ -11013,8 +11017,8 @@ declare namespace google.maps.journeySharing {
   export type MarkerSetup =
     | google.maps.journeySharing.MarkerSetupOptions
     | ((
-      a: google.maps.journeySharing.DefaultMarkerSetupOptions,
-    ) => google.maps.journeySharing.MarkerSetupOptions);
+        a: google.maps.journeySharing.DefaultMarkerSetupOptions,
+      ) => google.maps.journeySharing.MarkerSetupOptions);
   /**
    * MarkerSetup options.
    * @deprecated Marker setup is deprecated. Use the
@@ -11107,8 +11111,8 @@ declare namespace google.maps.journeySharing {
   export type PolylineSetup =
     | google.maps.journeySharing.PolylineSetupOptions
     | ((
-      a: google.maps.journeySharing.DefaultPolylineSetupOptions,
-    ) => google.maps.journeySharing.PolylineSetupOptions);
+        a: google.maps.journeySharing.DefaultPolylineSetupOptions,
+      ) => google.maps.journeySharing.PolylineSetupOptions);
   /**
    * PolylineSetup options.
    * @deprecated Polyline setup is deprecated. Use the
@@ -11197,7 +11201,7 @@ declare namespace google.maps.journeySharing {
     /**
      * Attributes assigned to the task.
      */
-    attributes: { [key: string]: unknown };
+    attributes: {[key: string]: unknown};
     /**
      * The timestamp of the estimated completion time of the task.
      */
@@ -11300,7 +11304,7 @@ declare namespace google.maps.journeySharing {
     /**
      * Attributes assigned to the task.
      */
-    attributes: { [key: string]: unknown };
+    attributes: {[key: string]: unknown};
     /**
      * The estimated arrival time to the stop location.
      */
@@ -11533,8 +11537,8 @@ declare namespace google.maps.journeySharing {
      * google.maps.journeySharing.SpeedReadingInterval} for more details.
      */
     speedReadingIntervals:
-    | google.maps.journeySharing.SpeedReadingInterval[]
-    | null;
+      | google.maps.journeySharing.SpeedReadingInterval[]
+      | null;
     /**
      * The trip associated with this waypoint.
      */
@@ -11567,7 +11571,7 @@ declare namespace google.maps.journeySharing {
     /**
      * Custom vehicle attributes.
      */
-    attributes: { [key: string]: unknown };
+    attributes: {[key: string]: unknown};
     /**
      * The waypoint where current route segment ends.
      */
@@ -11819,8 +11823,8 @@ declare namespace google.maps.journeySharing {
      * google.maps.journeySharing.SpeedReadingInterval} for more details.
      */
     speedReadingIntervals:
-    | google.maps.journeySharing.SpeedReadingInterval[]
-    | null;
+      | google.maps.journeySharing.SpeedReadingInterval[]
+      | null;
   }
   /**
    * Available only in the v=beta channel: https://goo.gle/3oAthT3.
@@ -11894,7 +11898,8 @@ declare namespace google.maps.localContext {
    *     for the Places Library can help you.
    */
   export class LocalContextMapView
-    implements google.maps.localContext.LocalContextMapViewOptions {
+    implements google.maps.localContext.LocalContextMapViewOptions
+  {
     /**
      * Available only in the v=beta channel: https://goo.gle/3oAthT3.
      *
@@ -11982,29 +11987,29 @@ declare namespace google.maps.localContext {
     maxPlaceCount: number;
     pinOptionsSetup?:
       | ((a: {
-        isHighlighted: boolean;
-        isSelected: boolean;
-      }) => google.maps.localContext.PinOptions | null | undefined)
+          isHighlighted: boolean;
+          isSelected: boolean;
+        }) => google.maps.localContext.PinOptions | null | undefined)
       | google.maps.localContext.PinOptions
       | null;
     placeChooserViewSetup?:
       | ((a: {
-        defaultLayoutMode: google.maps.localContext.PlaceChooserLayoutMode;
-        defaultPosition: google.maps.localContext.PlaceChooserPosition | null;
-      }) =>
-        | google.maps.localContext.PlaceChooserViewSetupOptions
-        | null
-        | undefined)
+          defaultLayoutMode: google.maps.localContext.PlaceChooserLayoutMode;
+          defaultPosition: google.maps.localContext.PlaceChooserPosition | null;
+        }) =>
+          | google.maps.localContext.PlaceChooserViewSetupOptions
+          | null
+          | undefined)
       | google.maps.localContext.PlaceChooserViewSetupOptions
       | null;
     placeDetailsViewSetup?:
       | ((a: {
-        defaultLayoutMode: google.maps.localContext.PlaceDetailsLayoutMode;
-        defaultPosition: google.maps.localContext.PlaceDetailsPosition | null;
-      }) =>
-        | google.maps.localContext.PlaceDetailsViewSetupOptions
-        | null
-        | undefined)
+          defaultLayoutMode: google.maps.localContext.PlaceDetailsLayoutMode;
+          defaultPosition: google.maps.localContext.PlaceDetailsPosition | null;
+        }) =>
+          | google.maps.localContext.PlaceDetailsViewSetupOptions
+          | null
+          | undefined)
       | google.maps.localContext.PlaceDetailsViewSetupOptions
       | null;
     /**
@@ -12044,22 +12049,22 @@ declare namespace google.maps.localContext {
      * @defaultValue <code>null</code>
      */
     locationBias?:
-    | google.maps.LatLng
-    | google.maps.LatLngLiteral
-    | google.maps.LatLngBounds
-    | google.maps.LatLngBoundsLiteral
-    | google.maps.Circle
-    | google.maps.CircleLiteral
-    | string
-    | null;
+      | google.maps.LatLng
+      | google.maps.LatLngLiteral
+      | google.maps.LatLngBounds
+      | google.maps.LatLngBoundsLiteral
+      | google.maps.Circle
+      | google.maps.CircleLiteral
+      | string
+      | null;
     /**
      * Bounds to constrain search results. If not specified, results will be
      * constrained to the map viewport.
      */
     locationRestriction?:
-    | google.maps.LatLngBounds
-    | google.maps.LatLngBoundsLiteral
-    | null;
+      | google.maps.LatLngBounds
+      | google.maps.LatLngBoundsLiteral
+      | null;
     /**
      * An already instantiated {@link google.maps.Map} instance. If passed in,
      * the map will be moved into the LocalContextMapView&#39;s DOM, and will
@@ -12082,12 +12087,12 @@ declare namespace google.maps.localContext {
      * will be logged to the console).
      */
     pinOptionsSetup?:
-    | ((a: {
-      isHighlighted: boolean;
-      isSelected: boolean;
-    }) => google.maps.localContext.PinOptions | null | undefined)
-    | google.maps.localContext.PinOptions
-    | null;
+      | ((a: {
+          isHighlighted: boolean;
+          isSelected: boolean;
+        }) => google.maps.localContext.PinOptions | null | undefined)
+      | google.maps.localContext.PinOptions
+      | null;
     /**
      * Overrides the setup of the place chooser view. Pass a function to
      * dynamically override the default setup when the LocalContextMapView might
@@ -12097,15 +12102,15 @@ declare namespace google.maps.localContext {
      * construction will cause errors to be thrown synchronously.
      */
     placeChooserViewSetup?:
-    | ((a: {
-      defaultLayoutMode: google.maps.localContext.PlaceChooserLayoutMode;
-      defaultPosition: google.maps.localContext.PlaceChooserPosition | null;
-    }) =>
+      | ((a: {
+          defaultLayoutMode: google.maps.localContext.PlaceChooserLayoutMode;
+          defaultPosition: google.maps.localContext.PlaceChooserPosition | null;
+        }) =>
+          | google.maps.localContext.PlaceChooserViewSetupOptions
+          | null
+          | undefined)
       | google.maps.localContext.PlaceChooserViewSetupOptions
-      | null
-      | undefined)
-    | google.maps.localContext.PlaceChooserViewSetupOptions
-    | null;
+      | null;
     /**
      * Overrides the setup of the place details view. Pass a function to
      * dynamically override the default setup when the LocalContextMapView might
@@ -12115,15 +12120,15 @@ declare namespace google.maps.localContext {
      * construction will cause errors to be thrown synchronously.
      */
     placeDetailsViewSetup?:
-    | ((a: {
-      defaultLayoutMode: google.maps.localContext.PlaceDetailsLayoutMode;
-      defaultPosition: google.maps.localContext.PlaceDetailsPosition | null;
-    }) =>
+      | ((a: {
+          defaultLayoutMode: google.maps.localContext.PlaceDetailsLayoutMode;
+          defaultPosition: google.maps.localContext.PlaceDetailsPosition | null;
+        }) =>
+          | google.maps.localContext.PlaceDetailsViewSetupOptions
+          | null
+          | undefined)
       | google.maps.localContext.PlaceDetailsViewSetupOptions
-      | null
-      | undefined)
-    | google.maps.localContext.PlaceDetailsViewSetupOptions
-    | null;
+      | null;
     /**
      * The types of places to search for (up to 10). The type
      * <code>Iterable&lt;string|PlaceTypePreference&gt;</code> is also accepted,
@@ -12143,7 +12148,8 @@ declare namespace google.maps.localContext {
    * https://developers.google.com/maps/documentation/javascript/libraries.
    */
   export class MapDirectionsOptions
-    implements google.maps.localContext.MapDirectionsOptionsLiteral {
+    implements google.maps.localContext.MapDirectionsOptionsLiteral
+  {
     /**
      * Adds the given listener function to the given event name.
      */
@@ -12308,7 +12314,7 @@ declare namespace google.maps.localContext {
   /**
    * Available only in the v=beta channel: https://goo.gle/3oAthT3.
    */
-  export type PlaceTypePreference = { type: string; weight?: number };
+  export type PlaceTypePreference = {type: string; weight?: number};
 }
 declare namespace google.maps.maps3d {
   /**
@@ -12435,7 +12441,8 @@ declare namespace google.maps.maps3d {
    */
   export class Map3DElement
     extends HTMLElement
-    implements google.maps.maps3d.Map3DElementOptions {
+    implements google.maps.maps3d.Map3DElementOptions
+  {
     /**
      * Available only in the v=alpha channel: https://goo.gle/js-alpha-channel.
      *
@@ -12610,7 +12617,8 @@ declare namespace google.maps.maps3d {
    */
   export class Polygon3DElement
     extends HTMLElement
-    implements google.maps.maps3d.Polygon3DElementOptions {
+    implements google.maps.maps3d.Polygon3DElementOptions
+  {
     /**
      * Available only in the v=alpha channel: https://goo.gle/js-alpha-channel.
      *
@@ -12755,7 +12763,8 @@ declare namespace google.maps.maps3d {
    */
   export class Polyline3DElement
     extends HTMLElement
-    implements google.maps.maps3d.Polyline3DElementOptions {
+    implements google.maps.maps3d.Polyline3DElementOptions
+  {
     /**
      * Available only in the v=alpha channel: https://goo.gle/js-alpha-channel.
      *
@@ -13021,7 +13030,8 @@ declare namespace google.maps.marker {
    */
   export class AdvancedMarkerElement
     extends HTMLElement
-    implements google.maps.marker.AdvancedMarkerElementOptions {
+    implements google.maps.marker.AdvancedMarkerElementOptions
+  {
     /**
      * Shows a position on a map. Note that the <code>position</code> must be
      * set for the <code>AdvancedMarkerElement</code> to display.<br> <br>
@@ -13185,7 +13195,8 @@ declare namespace google.maps.marker {
    */
   export class PinElement
     extends HTMLElement
-    implements google.maps.marker.PinElementOptions {
+    implements google.maps.marker.PinElementOptions
+  {
     /**
      * A <code>PinElement</code> represents a DOM element that consists of a
      * shape and a glyph. The shape has the same balloon style as seen in the
@@ -13582,13 +13593,13 @@ declare namespace google.maps.places {
      * as a biasing signal.
      */
     locationBias?:
-    | google.maps.LatLng
-    | google.maps.LatLngLiteral
-    | google.maps.LatLngBounds
-    | google.maps.LatLngBoundsLiteral
-    | google.maps.Circle
-    | google.maps.CircleLiteral
-    | string;
+      | google.maps.LatLng
+      | google.maps.LatLngLiteral
+      | google.maps.LatLngBounds
+      | google.maps.LatLngBoundsLiteral
+      | google.maps.Circle
+      | google.maps.CircleLiteral
+      | string;
     /**
      * Restrict results to a specified location. <br/><br/> At most one of
      * <code>locationBias</code> or <code>locationRestriction</code> should be
@@ -13597,8 +13608,8 @@ declare namespace google.maps.places {
      * as a biasing signal.
      */
     locationRestriction?:
-    | google.maps.LatLngBounds
-    | google.maps.LatLngBoundsLiteral;
+      | google.maps.LatLngBounds
+      | google.maps.LatLngBoundsLiteral;
     /**
      * The origin point from which to calculate geodesic distance to the
      * destination (returned as {@link
@@ -13691,7 +13702,7 @@ declare namespace google.maps.places {
    * google.maps.importLibrary("places")`. See
    * https://developers.google.com/maps/documentation/javascript/libraries.
    */
-  export class AutocompleteSessionToken { }
+  export class AutocompleteSessionToken {}
   /**
    * An Autocomplete suggestion result.
    *
@@ -13711,7 +13722,7 @@ declare namespace google.maps.places {
     static fetchAutocompleteSuggestions(
       this: any,
       autocompleteRequest: google.maps.places.AutocompleteRequest,
-    ): Promise<{ suggestions: google.maps.places.AutocompleteSuggestion[] }>;
+    ): Promise<{suggestions: google.maps.places.AutocompleteSuggestion[]}>;
   }
   /**
    * An Autocompletion request to be sent to {@link
@@ -13762,21 +13773,21 @@ declare namespace google.maps.places {
      * A soft boundary or hint to use when searching for places.
      */
     locationBias?:
-    | google.maps.LatLng
-    | google.maps.LatLngLiteral
-    | google.maps.LatLngBounds
-    | google.maps.LatLngBoundsLiteral
-    | google.maps.Circle
-    | google.maps.CircleLiteral
-    | string
-    | null;
+      | google.maps.LatLng
+      | google.maps.LatLngLiteral
+      | google.maps.LatLngBounds
+      | google.maps.LatLngBoundsLiteral
+      | google.maps.Circle
+      | google.maps.CircleLiteral
+      | string
+      | null;
     /**
      * Bounds to constrain search results.
      */
     locationRestriction?:
-    | google.maps.LatLngBounds
-    | google.maps.LatLngBoundsLiteral
-    | null;
+      | google.maps.LatLngBounds
+      | google.maps.LatLngBoundsLiteral
+      | null;
     /**
      * The character position in the input term at which the service uses text
      * for predictions (the position of the cursor in the input field).
@@ -14022,13 +14033,13 @@ declare namespace google.maps.places {
      * google.maps.places.LocationBias}.
      */
     locationBias?:
-    | google.maps.LatLng
-    | google.maps.LatLngLiteral
-    | google.maps.LatLngBounds
-    | google.maps.LatLngBoundsLiteral
-    | google.maps.Circle
-    | google.maps.CircleLiteral
-    | string;
+      | google.maps.LatLng
+      | google.maps.LatLngLiteral
+      | google.maps.LatLngBounds
+      | google.maps.LatLngBoundsLiteral
+      | google.maps.Circle
+      | google.maps.CircleLiteral
+      | string;
     /**
      * The phone number of the place to look up. Format must be <a
      * href="https://en.wikipedia.org/wiki/E.164">E.164</a>.
@@ -14063,13 +14074,13 @@ declare namespace google.maps.places {
      * google.maps.places.LocationBias}.
      */
     locationBias?:
-    | google.maps.LatLng
-    | google.maps.LatLngLiteral
-    | google.maps.LatLngBounds
-    | google.maps.LatLngBoundsLiteral
-    | google.maps.Circle
-    | google.maps.CircleLiteral
-    | string;
+      | google.maps.LatLng
+      | google.maps.LatLngLiteral
+      | google.maps.LatLngBounds
+      | google.maps.LatLngBoundsLiteral
+      | google.maps.Circle
+      | google.maps.CircleLiteral
+      | string;
     /**
      * The request&#39;s query. For example, the name or address of a place.
      */
@@ -14514,7 +14525,7 @@ declare namespace google.maps.places {
     evChargeOptions?: google.maps.places.EVChargeOptions | null;
     fetchFields(
       options: google.maps.places.FetchFieldsRequest,
-    ): Promise<{ place: google.maps.places.Place }>;
+    ): Promise<{place: google.maps.places.Place}>;
     /**
      * The locations’s full address.
      */
@@ -14769,14 +14780,14 @@ declare namespace google.maps.places {
     static searchByText(
       this: any,
       request: google.maps.places.SearchByTextRequest,
-    ): Promise<{ places: google.maps.places.Place[] }>;
+    ): Promise<{places: google.maps.places.Place[]}>;
     /**
      * Search for nearby places.
      */
     static searchNearby(
       this: any,
       request: google.maps.places.SearchNearbyRequest,
-    ): Promise<{ places: google.maps.places.Place[] }>;
+    ): Promise<{places: google.maps.places.Place[]}>;
   }
   /**
    * Defines information about an aspect of the place that users have reviewed.
@@ -14807,7 +14818,8 @@ declare namespace google.maps.places {
    */
   export class PlaceAutocompleteElement
     extends HTMLElement
-    implements google.maps.places.PlaceAutocompleteElementOptions {
+    implements google.maps.places.PlaceAutocompleteElementOptions
+  {
     /**
      * Available only in the v=beta channel: https://goo.gle/3oAthT3.
      *
@@ -14898,22 +14910,22 @@ declare namespace google.maps.places {
      * See {@link google.maps.places.PlaceAutocompleteElement.locationBias}
      */
     locationBias?:
-    | google.maps.LatLng
-    | google.maps.LatLngLiteral
-    | google.maps.LatLngBounds
-    | google.maps.LatLngBoundsLiteral
-    | google.maps.Circle
-    | google.maps.CircleLiteral
-    | string
-    | null;
+      | google.maps.LatLng
+      | google.maps.LatLngLiteral
+      | google.maps.LatLngBounds
+      | google.maps.LatLngBoundsLiteral
+      | google.maps.Circle
+      | google.maps.CircleLiteral
+      | string
+      | null;
     /**
      * See {@link
      * google.maps.places.PlaceAutocompleteElement.locationRestriction}
      */
     locationRestriction?:
-    | google.maps.LatLngBounds
-    | google.maps.LatLngBoundsLiteral
-    | null;
+      | google.maps.LatLngBounds
+      | google.maps.LatLngBoundsLiteral
+      | null;
     /**
      * See {@link google.maps.places.PlaceAutocompleteElement.requestedLanguage}
      */
@@ -16026,20 +16038,20 @@ declare namespace google.maps.places {
      * locationRestriction.
      */
     locationBias?:
-    | google.maps.LatLng
-    | google.maps.LatLngLiteral
-    | google.maps.LatLngBounds
-    | google.maps.LatLngBoundsLiteral
-    | google.maps.CircleLiteral
-    | google.maps.Circle;
+      | google.maps.LatLng
+      | google.maps.LatLngLiteral
+      | google.maps.LatLngBounds
+      | google.maps.LatLngBoundsLiteral
+      | google.maps.CircleLiteral
+      | google.maps.Circle;
     /**
      * The region to search. This location serves as a restriction which means
      * results outside given location will not be returned. Cannot be set along
      * with locationBias.
      */
     locationRestriction?:
-    | google.maps.LatLngBounds
-    | google.maps.LatLngBoundsLiteral;
+      | google.maps.LatLngBounds
+      | google.maps.LatLngBoundsLiteral;
     /**
      * Maximum number of results to return. It must be between 1 and 20,
      * inclusively.
@@ -16329,8 +16341,8 @@ declare namespace google.maps.visualization {
     setData(
       data:
         | google.maps.MVCArray<
-          google.maps.LatLng | google.maps.visualization.WeightedLocation
-        >
+            google.maps.LatLng | google.maps.visualization.WeightedLocation
+          >
         | (google.maps.LatLng | google.maps.visualization.WeightedLocation)[],
     ): void;
     /**
@@ -16351,11 +16363,11 @@ declare namespace google.maps.visualization {
      * The data points to display. Required.
      */
     data?:
-    | google.maps.MVCArray<
-      google.maps.LatLng | google.maps.visualization.WeightedLocation
-    >
-    | null
-    | (google.maps.LatLng | google.maps.visualization.WeightedLocation)[];
+      | google.maps.MVCArray<
+          google.maps.LatLng | google.maps.visualization.WeightedLocation
+        >
+      | null
+      | (google.maps.LatLng | google.maps.visualization.WeightedLocation)[];
     /**
      * Specifies whether heatmaps dissipate on zoom. By default, the radius of
      * influence of a data point is specified by the radius option only. When
