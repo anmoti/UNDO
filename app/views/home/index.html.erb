@@ -1,13 +1,14 @@
 <main class="main__container">
   <div class="maps__container" data-controller="maps"></div>
-  <div id="comment-box"> <!-- コメント表示用のボックス -->
-    <div id="comment-header">
-      <p id="comment-text">コメント</p>
-      <button type="button" id="comment-close" onclick="document.getElementById('comment-box').style.display='none';">×</button>
+  <div class="comments__container" data-controller="comments">
+    <div class="comments__header">
+      <p class="comments__text">コメント</p>
+      <button type="button" class="comments__btn--close" data-action="click->comments#hide">
+        ×
+      </button>
     </div>
-    <div id = "scroll-box">
-      <div class="scroll-content">
-        <!-- ここにコメントの内容が入る -->
+    <div class="comments__list">
+      <div class="comments__content">
       </div>
     </div>
   </div>

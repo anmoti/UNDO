@@ -1,5 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 import { Loader } from "@googlemaps/js-api-loader";
+import { triggerShowComments } from "controllers/comments_controller";
 
 /** @import { Context } from "@hotwired/stimulus"  */
 
@@ -271,13 +272,11 @@ export default class extends Controller {
         content.appendChild(buttons);
 
         const reviewButton = document.createElement("button");
-        reviewButton.id = "review-button";
         reviewButton.textContent = "レビューする";
         reviewButton.onclick = () => void 0;
         buttons.appendChild(reviewButton);
 
         const commentButton = document.createElement("button");
-        commentButton.id = "review-button";
         commentButton.textContent = "コメントを見る";
         commentButton.onclick = this.commentView;
         buttons.appendChild(commentButton);
@@ -289,9 +288,8 @@ export default class extends Controller {
 
     /**
      * レビューフォームを表示する関数
-     * TODO: 実装する
      */
     commentView() {
-        // document.getElementById("comment-box").style.display = "block";
+        triggerShowComments();
     }
 }

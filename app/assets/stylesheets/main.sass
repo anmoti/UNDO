@@ -126,6 +126,7 @@ footer
             color: $color-5
             padding: 3px
             border-radius: 3px
+            cursor: pointer
 
 .login
     display: flex
@@ -199,3 +200,42 @@ footer
         font-size: 1.1rem
         font-weight: 600
         cursor: pointer
+
+.comments
+    &__container
+        position: absolute
+        bottom: 60px
+        background-color: $color-5
+        z-index: 1
+        display: none
+        width: 100vw
+        height: 40vh
+        justify-content: flex-start
+
+    &__header
+        display: flex
+        justify-content: space-between
+        align-items: center
+        width: 100%
+        background-color: $color-3
+
+    &__text
+        font-size: 32px
+        bottom: 0
+        text-align: center
+        padding-bottom: 4px
+
+    &__btn--close
+        background: none
+        border: none
+        font-size: 24px
+        cursor: pointer
+        padding: 0 10px
+        color: var(--color-1)
+
+    &__list
+        overflow-y: auto
+        height: 80%
+        padding: 10px
+
+    &__content
