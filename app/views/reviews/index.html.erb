@@ -6,6 +6,8 @@
 <script defer>
   let udon_score = 5;
 
+
+  //スターの動的生成をする
   document.addEventListener('DOMContentLoaded', () => {
   const starsContainer = document.getElementById('stars');
   if (!starsContainer) return;
@@ -32,6 +34,9 @@
   }
   });
 
+/**
+ * スターがクリックされた時の処理
+*/
   function click_star(score) {
     for(let i = 1; i < 5; i ++){
       const shine_star = document.getElementById(`star_img_${i}`);
@@ -40,8 +45,11 @@
     udon_score = score;
   }
 
+/**
+ * 送信確認時のスターの動的生成
+ */
   function check_show() {
-      document.getElementById('check-ground').style.display = 'flex';
+    document.getElementById('check-ground').style.display = 'flex';
     const starsContainer = document.getElementById('check-star');
     if (!starsContainer) return;
 
@@ -62,6 +70,7 @@
     document.getElementById('comment-check').innerText = "コメント: " + document.getElementById('comment').value;
   }
 </script>
+
 <div id="reviews" style="color: black">
   <form id = "review_form" action = "/reviews" method = "post">
     <table style="text-align: left;">

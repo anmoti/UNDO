@@ -24,7 +24,6 @@
           <%= link_to "ログアウト", signout_path, class: "header__button" %>
         <% else %>
           <%= link_to "ログイン", signin_path, class: "header__button" %>
-          
         <% end %>
       </div>
     </div>
@@ -33,20 +32,32 @@
     <%= yield %>
   </main>
   <footer> <!-- 画面下部のナビゲーションバー -->
-    <% if authenticated? %>
+    <% if !authenticated? %>
+      <%= link_to signin_path do %>
+        <%= image_tag("bar_icons/bod.png", size: "60x60") %>
+      <% end %>
+    <%else%>
+      <%= link_to turbidity_to_bods_path do %>
+        <%= image_tag("bar_icons/bod.png", size: "60x60") %>
+      <% end %>
+    <% end %>
+    <% if !authenticated? %>
       <%= link_to signin_path do %>
         <%= image_tag("bar_icons/yeah.png", size: "60x60") %>
       <% end %>
     <%else%>
-      <%= link_to turbidity_to_bods_path do %>
+      <%= link_to reviews_path do %>
         <%= image_tag("bar_icons/yeah.png", size: "60x60") %>
       <% end %>
     <% end %>
-    <%= link_to reviews_path do %>
-      <%= image_tag("bar_icons/yeah.png", size: "60x60") %>
-    <% end %>
-    <%= button_to users_path do %>
-      <%= image_tag("bar_icons/yeah.png", size: "60x60") %>
+    <% if !authenticated? %>
+      <%= link_to signin_path do %>
+        <%= image_tag("bar_icons/setting.png", size: "60x60") %>
+      <% end %>
+    <%else%>
+      <%= link_to  users_path do %>
+        <%= image_tag("bar_icons/setting.png", size: "60x60") %>
+      <% end %>
     <% end %>
   </footer>
 </body>
