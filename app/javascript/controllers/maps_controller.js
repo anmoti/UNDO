@@ -1,9 +1,12 @@
 import { Controller } from "@hotwired/stimulus";
 import { Loader } from "@googlemaps/js-api-loader";
+import { triggerShowComments } from "controllers/comments_controller";
 
-// Helper to read Google Maps API key from meta tag
+/** @import { Context } from "@hotwired/stimulus"  */
+
+/** Helper to read Google Maps API key from meta tag */
 function getGoogleMapsApiKey() {
-    /** @type {HTMLMetaElement} */
+    /** @type {HTMLMetaElement | null} */
     const meta = document.querySelector('meta[name="google-maps-api-key"]');
     if (!meta) {
         console.warn("Google Maps API key meta tag not found.");
@@ -15,6 +18,7 @@ function getGoogleMapsApiKey() {
 const loader = new Loader({
     apiKey: getGoogleMapsApiKey(),
     version: "weekly",
+    libraries: ["maps", "marker"],
 });
 
 // 香川県範囲 34.2128846,134.065572,10.75z
@@ -30,6 +34,17 @@ const mapOptions = {
     disableDefaultUI: true,
 };
 
+/**
+ * @typedef {Object} Shop
+ * @property {string} name
+ * @property {number} lat
+ * @property {number} lon
+ * @property {string} openTime
+ * @property {string} address
+ * @property {boolean} [eco]
+ */
+
+/** @type {Shop[]} */
 const shops = [
     {
         name: "味庄",
@@ -121,6 +136,7 @@ const shops = [
         lon: 134.051456,
         openTime: "10:30～18:00",
         address: "香川県高松市香川町川内原1575-1",
+        eco: true,
     },
     {
         name: "本格手打ちうどん おか泉",
@@ -143,28 +159,45 @@ const shops = [
         openTime: "9:00～15:00（土日祝は16:00まで）",
         address: "香川県綾歌郡宇多津町浜三番丁36-1",
     },
+    {
+        name: "ふたばうどん",
+        lat: 35.468838,
+        lon: 133.066622,
+        openTime: "24時間営業(例)",
+        address: "島根県松江市学園南１丁目２−１",
+        eco: true,
+    },
 ];
 
 // Connects to data-controller="maps"
 /** @extends {Controller<HTMLDivElement>} */
-export default class extends Controller {
-    /** @type {google.maps.Map} */
+export default class MapsController extends Controller {
+    /** @type {Promise<google.maps.Map>} */
     map;
+
+    static values = {
+        ecoIconUrl: String,
+    };
+
+    /**
+     * @param  {Context} context
+     */
+    constructor(context) {
+        super(context);
+
+        this.map = loader.importLibrary("maps").then(async ({ Map: GMaps }) => {
+            const map = new GMaps(this.element, mapOptions);
+            console.log("Map initialized:", map);
+            return map;
+        });
+    }
 
     async connect() {
         console.log("Maps controller connected");
-        const { Map: GMaps } = await loader.importLibrary("maps");
-        this.map = new GMaps(this.element, mapOptions);
-        console.log("Map initialized:", this.map);
-
-        this.map.addListener("click", this.onMapClick.bind(this));
 
         // マーカーを作成して店舗を表示
         await this.createShopMarkers();
     }
-
-    /** @param {google.maps.MapMouseEvent} event */
-    async onMapClick(event) {}
 
     async createShopMarkers() {
         // 各店舗にマーカーを作成
@@ -181,61 +214,23 @@ export default class extends Controller {
             // マーカーを作成
             const marker = new AdvancedMarkerElement({
                 position: position,
-                map: this.map,
+                map: await this.map,
                 title: shop.name,
                 content: markerIcon,
                 gmpClickable: true,
             });
 
-            // ホバーエフェクト用のスタイル
-            const originalContent = markerIcon.innerHTML;
-
-            // ホバーイベント
-            marker.addListener("mouseover", () => {
-                // ホバー時に名前を表示するツールチップ
-                const tooltip = document.createElement("div");
-                tooltip.className = "shop-tooltip";
-                tooltip.textContent = shop.name;
-                tooltip.style.cssText = `
-                    position: absolute;
-                    background: rgba(0, 0, 0, 0.8);
-                    color: white;
-                    padding: 4px 8px;
-                    border-radius: 4px;
-                    font-size: 12px;
-                    white-space: nowrap;
-                    z-index: 1000;
-                    pointer-events: none;
-                    transform: translate(-50%, -100%);
-                    margin-top: -8px;
-                `;
-
-                markerIcon.appendChild(tooltip);
-                markerIcon.style.transform = "scale(1.1)";
-            });
-
-            marker.addListener("mouseout", () => {
-                // ツールチップを削除
-                const tooltip = markerIcon.querySelector(".shop-tooltip");
-                if (tooltip) {
-                    tooltip.remove();
-                }
-                markerIcon.style.transform = "scale(1)";
-            });
-
-            // クリックイベント
             marker.addListener("click", () => {
+                // マーカーがクリックされたときに情報ウィンドウを表示
                 this.showShopInfo(shop, marker);
             });
-
-            // マーカーを配列に保存
-            if (!this.markers) {
-                this.markers = [];
-            }
-            this.markers.push({ marker, shop });
         }
     }
 
+    /**
+     * @param {Shop} shop
+     * @param {google.maps.marker.AdvancedMarkerElement} marker
+     */
     async showShopInfo(shop, marker) {
         const { InfoWindow } = await loader.importLibrary("maps");
 
@@ -244,24 +239,60 @@ export default class extends Controller {
             this.infoWindow.close();
         }
 
-        // 新しい情報ウィンドウを作成
         this.infoWindow = new InfoWindow();
 
         // 情報ウィンドウのコンテンツを作成
-        const content = `
-            <div style="min-width: 200px; padding: 12px; font-family: Arial, sans-serif;">
-                <h3 style="margin: 0 0 8px 0; color: #333; font-size: 16px;">${shop.name}</h3>
-                <div style="margin-bottom: 6px; color: #666; font-size: 13px;">
-                    <strong>住所:</strong> ${shop.address}
-                </div>
-                <div style="color: #666; font-size: 13px;">
-                    <strong>営業時間:</strong> ${shop.openTime}
-                </div>
-            </div>
-        `;
+        const content = document.createElement("div");
+        content.className = "maps__info";
+
+        const title = document.createElement("h3");
+        title.className = "maps__info--title";
+        title.textContent = shop.name;
+        content.appendChild(title);
+
+        if (shop.eco) {
+            const ecoImg = new Image(16, 16);
+            // @ts-ignore
+            ecoImg.src = this.ecoIconUrlValue;
+            content.appendChild(ecoImg);
+
+            const ecoDesc = document.createElement("span");
+            ecoDesc.className = "maps__info--eco";
+            ecoDesc.textContent = "環境に優しいうどん店";
+            content.appendChild(ecoDesc);
+        }
+
+        const address = document.createElement("div");
+        address.textContent = `住所: ${shop.address}`;
+        content.appendChild(address);
+
+        const openTime = document.createElement("div");
+        openTime.textContent = `営業時間: ${shop.openTime}`;
+        content.appendChild(openTime);
+
+        const buttons = document.createElement("div");
+        buttons.className = "maps__info--buttons";
+        content.appendChild(buttons);
+
+        const reviewButton = document.createElement("button");
+        reviewButton.textContent = "レビューする";
+        reviewButton.onclick = () => void 0;
+        buttons.appendChild(reviewButton);
+
+        const commentButton = document.createElement("button");
+        commentButton.textContent = "コメントを見る";
+        commentButton.onclick = this.commentView.bind(this);
+        buttons.appendChild(commentButton);
 
         // 情報ウィンドウを開く
         this.infoWindow.setContent(content);
-        this.infoWindow.open(this.map, marker);
+        this.infoWindow.open(await this.map, marker);
+    }
+
+    /**
+     * レビューフォームを表示する関数
+     */
+    commentView() {
+        triggerShowComments();
     }
 }

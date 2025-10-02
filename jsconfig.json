@@ -8,6 +8,7 @@
             "DOM",
             "DOM.Iterable"
         ],
+        "strict": true,
         "checkJs": true,
         "baseUrl": ".",
         "paths": {

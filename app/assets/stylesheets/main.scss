@@ -23,6 +23,10 @@ body {
     background-color: $color-6;
 }
 
+.hidden {
+    display: none !important;
+}
+
 .header {
     &__container {
         display: flex;
@@ -287,90 +291,89 @@ footer {
 }
 
 .measures {
-    &__tutorial {
-        &--container {
-            position: absolute;
-            top: 0;
-            width: 100vw;
-            height: 100vh;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.7));
-            // display: none;
-            z-index: 9999;
-        }
+    flex: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: $color-2;
 
-        &--wrapper {
+    &__list {
+        button {
+            font-size: 18px;
+            background-color: $color-6;
+            color: $color-5;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    }
+
+    &__measure {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.7));
+
+        &--container {
             background-color: $color-5;
             border: 2px solid $color-2;
             border-radius: 10px;
             padding: 20px;
-            text-align: center;
-            width: 500px;
+            max-width: 500px;
             color: $color-6;
             font-size: 18px;
-            margin-bottom: 20px;
         }
 
         &--title {
-            color: var(--color-1);
-            font-size: 18px;
+            color: $color-1;
+            font-size: 23px;
             margin-bottom: 20px;
         }
-    }
-}
 
-.tooltip {
-    &__container {
-        position: relative;
-        /* 補足情報を親要素に基づいて配置 */
-        display: inline-block;
-        cursor: pointer;
+        &--steps {
+            list-style-type: decimal;
+            padding-left: 25px;
+            text-align: left;
 
-        /* ホバー時のスタイル */
-        &:hover .tooltip__text {
-            visibility: visible;
-            /* 表示 */
-            opacity: 1;
-            /* 不透明にする */
+            >li {
+                padding-bottom: 10px;
+            }
         }
-    }
 
-    /* 補足情報のスタイル */
-    &__text {
-        visibility: hidden;
-        /* 初期状態では非表示 */
-        background-color: #333;
-        /* 背景色 */
-        color: #fff;
-        /* 文字色 */
-        text-align: center;
-        padding: 8px;
-        border-radius: 4px;
-        position: absolute;
-        bottom: 125%;
-        /* 親要素の上に配置 */
-        left: 50%;
-        transform: translateX(-50%);
-        white-space: nowrap;
-        /* テキストを1行に収める */
-        z-index: 1;
-        opacity: 0;
-        /* 初期状態で透明 */
-        transition: opacity 0.3s;
-        /* スムーズな表示 */
+        span.careful {
+            color: red;
+        }
 
-        &::after {
-            content: '';
-            position: absolute;
-            top: 100%;
-            /* 補足情報の下に配置 */
-            left: 50%;
-            transform: translateX(-50%);
-            border-width: 5px;
-            border-style: solid;
-            border-color: #333 transparent transparent transparent;
-            /* 矢印の色 */
+        &--result {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        &--values {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        &--buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+
+            >button {
+                font-size: 18px;
+                background-color: $color-6;
+                color: $color-5;
+                padding: 10px 20px;
+                border-radius: 5px;
+                cursor: pointer;
+            }
         }
     }
 }
