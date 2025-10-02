@@ -1,6 +1,7 @@
 <p style="color: green"><%= notice %></p>
 
 <% content_for :title, "Turbidity to bods" %>
+<% stylesheet_link_tag "bod"%>
 
 <header class="header__container">
   <div class="header__title">UNDO</div>
@@ -10,13 +11,14 @@
 <div data-controller = "sokutei">
   <div id="turbidity_to_bods" style="color: black">
     <form id = "bod_form" action = "/reviews" method = "post">
-        <table style="text-align: left;">
+        <table id = "bod_table">
           <tr><th>店舗名</th><td>ふたばうどん</td></tr> 
-          <tr><th>濁度</th><td>500</td></tr> 
-          <tr><th>BOD</th><td>未測定</td></tr>
-          <tr><th>COD</th><td>未測定</td></tr>
+          <tr><th>濁度</th><td><span id = "turbidity_value">未測定</span></td></tr> 
+          <tr><th>BOD</th><td><span id = "bod_value">未測定</span></td></tr>
+          <tr><th>COD</th><td><span id = "cod_value">未測定</span></td></tr>
         </table>
 
+        <div id = "howto_box"  style = "background-color: var(--color-6); padding: 10px; margin: 0 auto; width:420px; border-radius: 10px;">
           <p id = "logout-surundana">水質の推定方法</p>
           <div id = "explains" style = "display: inline-block;">
           <div class="circle-step" >
@@ -30,14 +32,14 @@
           </div>
           </div>
           <div id = "careful_view">推定が完了するまでキットに触れないでください。</div>
-          <div id = "bod-cod-exp">茹で汁の水質は綺麗です。</div>
-          <div id = "bod-cod-show">BOD値:50[mg/L]<br>COD値:50[mg/L]</div>
+          <div id = "bod-cod-exp">すこし汚れています。</div>
           <div class = "back-root" id = "back-root">
             <button type = "button" data-action="click->sokutei#careful_show" 
             class =undo-button>推定開始</button>
             <%= link_to "戻る" , root_path, class: "undo-button"%>
           </div>
           <%= link_to "UNDOする", root_path, {class:"undo-button", id:"do_undo"}%>
+        </div>
         <!-- <div class = "back-root">
           <button type = "button" class="undo-button" id = "submit_review" data-action="click->sokutei#bod_howto">水質推定開始</button>
         </div> -->

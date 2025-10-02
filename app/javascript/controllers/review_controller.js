@@ -15,7 +15,7 @@ export default class extends Controller {
 
             const Img = document.createElement('img');
             Img.className = "star-image";
-            Img.src = "<%= asset_path('star-yellow.png')%>";
+            Img.src = "star-yellow.png";
             Img.style.width = "40px";
             Img.style.height = "auto";
             Img.id = `star_img_${i}`;
@@ -38,7 +38,7 @@ export default class extends Controller {
         for (let i = 1; i < 5; i++) {
             const shine_star = document.getElementById(`star_img_${i}`);
             if (shine_star instanceof HTMLImageElement) {
-                shine_star.src = score > i ? "<%= asset_path('star-yellow.png')%>" : "<%= asset_path('star-black.png')%>";
+                shine_star.src = score > i ? "star-yellow.png" : "star-black.png";
             }
         }
         this.udon_score = score;
@@ -62,7 +62,7 @@ export default class extends Controller {
         }
         for (let i = this.udon_score; i < 5; i++) {
             const star_img = document.createElement('img');
-            star_img.src = "star-black.png";
+            star_img.src = "star-p.png";
             star_img.style.width = "20px";
             star_img.style.height = "auto";
             star_img.id = `check-star-${i}`;
