@@ -23,7 +23,6 @@ class SessionsController < ApplicationController
     redirect_to signin_path
   end
 end
-
 # app/controllers/sessions_controller.rb
 class SessionsController < ApplicationController
   def destroy

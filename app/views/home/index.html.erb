@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <%#
 <div data-controller="hello"></div>
 %>
@@ -61,3 +62,21 @@
         document.getElementById('comment-box').style.display = 'block';
     }
 </script>
+=======
+<main class="main__container">
+  <div class="maps__container" data-controller="maps"></div>
+  <div data-controller="home">
+    <div id="comment-box" style="display:none;"> <!-- コメント表示用のボックス -->
+      <div id="comment-header">
+        <p id="comment-text">コメント</p>
+        <button type="button" id="comment-close" data-action="click->home#comment_close">×</button>
+        <!-- ここにコメントを表示する -->
+      </div>
+      <div id = "scroll-box">
+        <div class="scroll-content">
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+>>>>>>> UI_troll

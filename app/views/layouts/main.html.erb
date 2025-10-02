@@ -12,6 +12,7 @@
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
     <%= stylesheet_link_tag "main", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "map"%>
     <meta name="google-maps-api-key" content="<%= Rails.application.credentials.dig(:google_cloud, :maps_api_key) %>">
     <%= javascript_importmap_tags %>
   </head>
@@ -31,5 +32,20 @@
   <main>
     <%= yield %>
   </main>
+  <footer>
+    <%auth_prefix = authenticated? ? nil : signin_path%>
+    <% # 1. BOD/サインインリンク %>
+    <%= link_to (authenticated? ? turbidity_to_bods_path : signin_path) do %>
+      <%= image_tag("bar_icons/yeah.png", class:'bar_buttons', style:"height:60px;")%>
+    <% end %>
+    <% # 2. レビュー/サインインリンク %>
+    <%= link_to (authenticated? ? reviews_path : signin_path) do %>
+      <%= image_tag("bar_icons/yeah.png", class:'bar_buttons', size: "60x60") %>
+    <% end %>
+    <% # 3. 設定/サインインリンク %>
+    <%= link_to (authenticated? ? users_path : signin_path) do %>
+      <%= image_tag("bar_icons/yeah.png", class:'bar_buttons', size: "60x60") %>
+    <% end %>
+  </footer>
 </body>
 </html>
