@@ -181,8 +181,8 @@ const shops = [
         lon: 133.066622,
         openTime: "24時間営業(例)",
         address: "島根県松江市学園南１丁目２−１",
-        yasashi: false,
-        foodshare: true,
+        yasashi: true,
+        foodshare: false,
     },
 ];
 
@@ -267,7 +267,7 @@ export default class extends Controller {
                     <strong>営業時間:</strong> ${shop.openTime}
                 </div>
                 <div data-controller="home" class="review-comment">
-                    <link_to "レビューを見る", reviews_path + "?shop_name=" + encodeURIComponent(shop.name)%>
+                    <button id = "review_button">レビューする</button>
                     <button id = "view_comment_button" data-action="click->home#comment_view">コメントを見る</button>
                 </div>
             </div>
