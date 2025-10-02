@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   allow_unauthenticated_access
   before_action :set_user, only: %i[ show edit update destroy ]
+  layout "main", only: [ :new ]
 
   # GET /users or /users.json
   def index
@@ -66,6 +67,6 @@ class UsersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def user_params
-      params.expect(user: [ :name, :email, :is_consumer, :password_digest ])
+      params.require(:user).permit(:name, :email, :is_consumer, :password, :password_confirmation)
     end
 end

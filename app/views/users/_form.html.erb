@@ -1,4 +1,4 @@
-<%= form_with(model: user) do |form| %>
+<%= form_with(model: user, class: "form") do |form| %>
   <% if user.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h2>
@@ -11,27 +11,33 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
+  <div class="form__field">
+    <%= form.label :name, "お名前", style: "display: block", class: "form__label" %>
+    <%= form.text_field :name, class: "form__input", required: true, placeholder: "詫間太郎/詫間水産" %>
   </div>
 
-  <div>
-    <%= form.label :email, style: "display: block" %>
-    <%= form.text_field :email %>
+  <div class="form__field">
+    <%= form.label :email, "メールアドレス", style: "display: block", class: "form__label" %>
+    <%= form.text_field :email, class: "form__input", required: true, placeholder: "undo@example.com" %>
   </div>
 
-  <div>
-    <%= form.label :is_consumer, style: "display: block" %>
-    <%= form.checkbox :is_consumer %>
+  <div class="form__field tooltip__container">
+    <%= form.checkbox :is_consumer, class: "form__checkbox" %>
+    <%= form.label :is_consumer, "消費者ですか？", style: "display: inline", class: "form__label" %>
+    <div class="tooltip__text">「うどん屋」として登録する場合は<span style="color: red">チェックしないでください</span></div>
   </div>
 
-  <div>
-    <%= form.label :password_digest, style: "display: block" %>
-    <%= form.text_field :password_digest %>
+  <div class="form__field">
+    <%= form.label :password, "パスワード", style: "display: block", class: "form__label" %>
+    <%= form.password_field :password, class: "form__input", required: true, placeholder: "6文字以上" %>
   </div>
 
-  <div>
-    <%= form.submit %>
+  <div class="form__field">
+    <%= form.label :password_confirmation, "パスワード確認", style: "display: block", class: "form__label" %>
+    <%= form.password_field :password_confirmation, class: "form__input", required: true, placeholder: "6文字以上" %>
   </div>
-<% end %>
+
+  <%= form.submit "サインイン", class: "form__submit-btn" %>
+
+  <%# link_to "Back to users", users_path, class: "form__link" %>
+  <% end %>
