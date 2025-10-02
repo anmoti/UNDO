@@ -1,92 +1,7 @@
 <p style="color: green"><%= notice %></p>
 <% content_for :title, "Reviews" %>
-<header class="header__container">
-  <div class="header__title">UNDO</div>
-</header>
-<script defer>
-  let udon_score = 5;
-
-  document.addEventListener('DOMContentLoaded', () => {
-  const starsContainer = document.getElementById('stars');
-  if (!starsContainer) return;
-
-  for (let i = 0; i < 5; i++) {
-    const Button = document.createElement('button');
-    Button.className = "left-buttons";
-
-    const Img = document.createElement('img');
-    Img.className = "star-image";
-    Img.src = "<%= asset_path('star-yellow.png')%>";
-    Img.style.width = "40px";
-    Img.style.height = "auto";
-    Img.id = `star_img_${i}`;
-    Button.appendChild(Img);
-    Button.style.backgroundColor = "transparent";
-    Button.style.paddingRight = "8px";
-
-    Button.type = "button";
-
-    Button.onclick = () => click_star(i + 1);
-
-    starsContainer.appendChild(Button);
-  }
-  });
-
-  function click_star(score) {
-    for(let i = 1; i < 5; i ++){
-      const shine_star = document.getElementById(`star_img_${i}`);
-      shine_star.src = score>i?"<%= asset_path('star-yellow.png')%>":"<%= asset_path('star-black.png')%>";
-    }
-    udon_score = score;
-  }
-
-  function check_show() {
-      document.getElementById('check-ground').style.display = 'flex';
-    const starsContainer = document.getElementById('check-star');
-    if (!starsContainer) return;
-
-    for(let i = 0; i < udon_score; i++){
-      const star_img = document.createElement('img');
-      star_img.src = "star-yellow.png";
-      star_img.style.width = "20px";
-      star_img.style.height = "auto";
-      starsContainer.appendChild(star_img);
-    }
-    for(let i = udon_score; i < 5; i++){
-      const star_img = document.createElement('img');
-      star_img.src = "star-black.png";
-      star_img.style.width = "20px";
-      star_img.style.height = "auto";
-      starsContainer.appendChild(star_img);
-    }
-    document.getElementById('comment-check').innerText = "コメント: " + document.getElementById('comment').value;
-  }
-</script>
-<div id="reviews" style="color: black">
-  <form id = "review_form" action = "/reviews" method = "post">
-    <table style="text-align: left;">
-      <tr>
-        <th>店舗名</th>
-        <td>ふたばうどん</td>
-      </tr>
-      <tr>
-        <th>評価</th>
-        <td>
-          <div id = "stars"></div>
-        </td>
-      </tr>
-      <tr>
-        <th>コメント</th>
-        <td>
-          <textarea style = "font-size: 100%" id = "comment" class="textlines"></textarea>
-        </td>
-      </tr>
-    </table>
-    <div class = "back-root">
-      <button type = "button" class="undo-button" id = "submit_review" onclick = "check_show();">送信</button>
-      <%= link_to "戻る" ,root_path, class: "undo-button"%>
-    </div>
-  </form>
+<h1>Reviews</h1>
+<div id="reviews">
   <% @reviews.each do |review| %>
     <%= render review %>
     <p>
@@ -94,17 +9,4 @@
     </p>
   <% end %>
 </div>
-<div id = "check-ground">
-  <div id = "check-box">
-    <p id = "check-text">レビュー内容を確認してください。</p>
-    <p class = "check-text-main">店舗名: ふたばうどん</p>
-    <p class = "check-text-main">ユーザー名: ほげほげ(仮)</p>
-    <p class = "check-text-main">評価:<span id = "check-star"></span></p>
-    <p class = "check-text-main" id = "comment-check"></p>
-    <div class="logout-buttons">
-      <button onclick="document.getElementById('logout-background').style.display='none'; logout();" class = undo-button>投稿</button>
-      <button onclick="document.getElementById('logout-background').style.display='none';" class = undo-button>キャンセル</button>
-    </div>
-  </div>
-</div>
-<%# <%= link_to "New review", new_review_path %>
+<%= link_to "New review", new_review_path %>
