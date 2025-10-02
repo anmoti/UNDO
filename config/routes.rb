@@ -19,7 +19,7 @@ Rails.application.routes.draw do
 
   get "signin", to: "sessions#new"
   post "signin", to: "sessions#create"
-  get "signout", to: "sessions#destroy"
+  delete "signout", to: "sessions#destroy"
 
   # Defines the root path route ("/")
   root "home#index"

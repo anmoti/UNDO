@@ -15,7 +15,7 @@ const STATES = {
     CLOSED: "closed",
 };
 
-// Connects to data-controller="comments"
+// Connects to data-controller="measures"
 /** @extends {Controller<HTMLDivElement>} */
 export default class extends Controller {
     static targets = [

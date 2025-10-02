@@ -45,7 +45,7 @@ class UserAuthenticationFlowTest < ActionDispatch::IntegrationTest
     assert_select "div", text: /ログイン中: #{@user.email}/
 
     # サインアウト
-    get signout_path
+    delete signout_path
     assert_redirected_to signin_path
 
     # セッションが削除されていることを確認
@@ -108,7 +108,7 @@ class UserAuthenticationFlowTest < ActionDispatch::IntegrationTest
       session_id = Session.last.id
 
       # サインアウト
-      get signout_path
+      delete signout_path
       assert_redirected_to signin_path
 
       # セッションが削除されていることを確認
