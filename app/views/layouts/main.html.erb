@@ -27,21 +27,20 @@
           <%= link_to "ログイン", signin_path, class: "header__button" %>
         <% end %>
       </div>
-    </div>
-  </header>
-  <main>
-    <%= yield %>
-  </main>
-  <footer>
-    <%# TODO: リンクを修正 %>
-    <%= button_to "#" do %>
-      <%= image_tag "search-btn.png", height: 50, alt: "検索" %>
-    <% end %>
-    <%= button_to "#" do %>
-      <%= image_tag "estimate-btn.png", height: 50, alt: "水質推定" %>
-    <% end %>
-    <%= button_to "#" do %>
-      <%= image_tag "settings-btn.png", height: 50, alt: "設定" %>
-    </footer>
-  </body>
-</html>
+    </header>
+    <main>
+      <%= yield %>
+    </main>
+    <footer>
+      <%# TODO: リンクを修正 %>
+      <%= button_to "#" do %>
+        <%= image_tag "search-btn.png", height: 50, alt: "検索" %>
+      <% end %>
+      <%= button_to "#" do %>
+        <%= image_tag "estimate-btn.png", height: 50, alt: "水質推定" %>
+      <% end %>
+      <%= button_to "#" do %>
+        <%= image_tag "settings-btn.png", height: 50, alt: "設定" %>
+      </footer>
+    </body>
+  </html>
