@@ -15,8 +15,30 @@
           <tr><th>BOD</th><td>未測定</td></tr>
           <tr><th>COD</th><td>未測定</td></tr>
         </table>
+
+        <div id="howto-box">
+          <p id = "logout-surundana">水質の推定方法</p>
+          <div class="circle-step">
+            <span class = "circle-number">1</span><span class = "howto_exp">紙コップに茹で汁を溢れる手前くらいまで入れてください。</span>
+          </div>
+          <div class="circle-step">
+            <span class = "circle-number">2</span><span class = "howto_exp">キットに紙コップをセットしてください。</span>
+          </div>
+          <div class="circle-step">
+            <span class = "circle-number">3</span><span class = "howto_exp">下の測定開始のボタンを押すと測定が始まります。</span>
+          </div>
+          <div id = "careful_view">推定が完了するまでキットに触れないでください。</div>
+          <div id = "bod-cod-exp">茹で汁の水質は綺麗です。</div>
+          <div id = "bod-cod-show">BOD値:50[mg/L]<br>COD値:50[mg/L]</div>
+          <div class = "back-root" id = "back-root">
+            <button type = "button" data-action="click->sokutei#careful_show" 
+            class =undo-button>推定開始</button>
+            <button data-action="click->sokutei#howto_show" class = undo-button>キャンセル</button>
+          </div>
+          <%= link_to "UNDOする", root_path, {class:"undo-button", id:"do_undo"}%>
+        </div>
         <div class = "back-root">
-          <button type = "button" class="undo-button" id = "submit_review" data-action="click->sokutei#bod_howto">水質測定開始</button>
+          <button type = "button" class="undo-button" id = "submit_review" data-action="click->sokutei#bod_howto">水質推定開始</button>
           <%= link_to "戻る" , root_path, class: "undo-button"%>
         </div>
     </form>
@@ -30,27 +52,7 @@
 </div>
 
 <div id="howto-bod-background">
-  <div id="howto-box">
-    <p id = "logout-surundana">水質の推定方法</p>
-    <div class="circle-step">
-      <span class = "circle-number">1</span><span class = "howto_exp">紙コップに茹で汁を溢れる手前くらいまで入れてください。</span>
-    </div>
-    <div class="circle-step">
-      <span class = "circle-number">2</span><span class = "howto_exp">キットに紙コップをセットしてください。</span>
-    </div>
-    <div class="circle-step">
-      <span class = "circle-number">3</span><span class = "howto_exp">下の測定開始のボタンを押すと測定が始まります。</span>
-    </div>
-    <div id = "careful_view">推定が完了するまでキットに触れないでください。</div>
-    <div id = "bod-cod-exp">茹で汁の水質は綺麗です。</div>
-    <div id = "bod-cod-show">BOD値:50[mg/L]<br>COD値:50[mg/L]</div>
-    <div class = "back-root" id = "back-root">
-      <button data-action="click->sokutei#careful_show" 
-      class =undo-button>推定開始</button>
-      <button data-action="click->sokutei#howto_show" class = undo-button>キャンセル</button>
-    </div>
-    <%= link_to "UNDOする", root_path, {class:"undo-button", id:"do_undo"}%>
-  </div>
+  
 </div>
 
 <%# <%= link_to "New turbidity to bod", new_turbidity_to_bod_path %>

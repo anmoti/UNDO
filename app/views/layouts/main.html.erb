@@ -36,7 +36,7 @@
 
     <% # 1. BOD/サインインリンク %>
     <%= link_to (authenticated? ? turbidity_to_bods_path : signin_path) do %>
-      <%= image_tag("bar_icons/bod.png", class:'bar_buttons', style:"height:60px;")%>
+      <%= image_tag("bar_icons/yeah.png", class:'bar_buttons', style:"height:60px;")%>
     <% end %>
 
     <% # 2. レビュー/サインインリンク %>
@@ -46,7 +46,7 @@
 
     <% # 3. 設定/サインインリンク %>
     <%= link_to (authenticated? ? users_path : signin_path) do %>
-      <%= image_tag("bar_icons/setting.png", class:'bar_buttons', size: "60x60") %>
+      <%= image_tag("bar_icons/yeah.png", class:'bar_buttons', size: "60x60") %>
     <% end %>
 </footer>
 </body>
