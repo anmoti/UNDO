@@ -57,6 +57,7 @@ export default class extends Controller {
             star_img.src = "star-yellow.png";
             star_img.style.width = "20px";
             star_img.style.height = "auto";
+            star_img.id = `check-star-${i}`;
             starsContainer.appendChild(star_img);
         }
         for (let i = this.udon_score; i < 5; i++) {
@@ -64,6 +65,7 @@ export default class extends Controller {
             star_img.src = "star-black.png";
             star_img.style.width = "20px";
             star_img.style.height = "auto";
+            star_img.id = `check-star-${i}`;
             starsContainer.appendChild(star_img);
         }
         const commentElement = document.getElementById('comment');
@@ -86,6 +88,19 @@ export default class extends Controller {
      */
     comment_cancel() {
         document.getElementById('logout-background').style.display = 'none';
+    }
+
+    /**
+     * 送信確認画面のキャンセルボタン押下時の処理
+     */
+    cancel_comment() {
+        document.getElementById('check-ground').style.display = 'none';
+        for (let i = 0; i < 5; i++) {
+            const star_img = document.getElementById(`check-star-${i}`);
+            if (star_img) {
+                star_img.remove();
+            }
+        }
     }
 
     /**

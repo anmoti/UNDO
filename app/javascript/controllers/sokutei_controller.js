@@ -24,6 +24,6 @@ export default class extends Controller {
         document.getElementById('bod-cod-show').style.display = 'block';
         document.getElementById('bod-cod-exp').style.display = 'block';
         document.getElementById('careful_view').style.display = 'none';
-        document.getElementById('do_undo').style.display = 'block';
+        document.getElementById('do_undo').style.display = 'inline-block';
     }
 }
