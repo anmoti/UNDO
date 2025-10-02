@@ -1,13 +1,17 @@
-# <% password_digest = BCrypt::Password.create("password") %>
-
-one:
-  name: User One (Producer)
-  email: one@example.com
-  password_digest: <%= password_digest %>
-  is_consumer: false
-
-two:
-  name: User Two (Consumer)
-  email: two@example.com
-  password_digest: <%= password_digest %>
+alice:
+  name: "Alice"
+  email: "alice@example.com"
   is_consumer: true
+  password_digest: <%= BCrypt::Password.create('passwordalice') %>
+
+bob:
+  name: "Bob's Store"
+  email: "bob@example.com"
+  is_consumer: false
+  password_digest: <%= BCrypt::Password.create('passwordbob') %>
+
+carol:
+  name: "Carol"
+  email: "carol@example.com"
+  is_consumer: true
+  password_digest: <%= BCrypt::Password.create('passwordcarol') %>

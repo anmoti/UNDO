@@ -6,14 +6,13 @@ class Review < ApplicationRecord
   validates :rating, presence: true, inclusion: { in: 1.0..5.0 }
   validates :reviewer_id, uniqueness: { scope: :reviewee_id, message: "You have already reviewed this user" }
 
-  # 自分自身をレビューすることを防ぐ
-  validate :cannot_review_self
+  validate :reviewer_must_be_consumer
 
   private
 
-  def cannot_review_self
-    if reviewer_id == reviewee_id
-      errors.add(:reviewee, "You cannot review yourself")
+  def reviewer_must_be_consumer
+    unless reviewer.is_consumer || !reviewee.is_consumer
+      errors.add(:reviewee, "Customer can only review producers")
     end
   end
 end
