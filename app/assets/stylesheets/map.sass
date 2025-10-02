@@ -1,0 +1,49 @@
+@use "sass:color"
+
+#comment-box
+    // 画面全体に固定し、最前面に表示する
+    position: fixed
+    z-index: 10000
+
+    // 画面の隅を基準に、下から60px上に配置して全体を覆う
+    bottom: 60px
+
+    width: 100vw
+    height: 40vh
+
+    // デフォルトは非表示
+    display: none
+
+    // その他スタイル
+    background-color: white
+    align-items: center
+
+    // 子要素のスタイル
+    #comment-header
+        display: flex
+        justify-content: space-between
+        // justify-content: space-between
+        // align-items: center
+        // width: 100%
+
+        #comment-text
+            bold: true
+            font-size: 20px
+            // テキストスタイル
+
+        #comment-close
+
+            // ボタンのスタイル
+
+    #scroll-box
+        // スクロールエリアのスタイル
+
+        .scroll-content
+            // コンテンツエリアのスタイル
+
+#comment-close
+    position: relative
+    right: 15px
+    width: 30px
+    height: 30px
+    font-size: 30px
