@@ -1,11 +1,9 @@
-<% content_for :title, "New user" %>
+<div class="sign">
+  <div class="sign__container">
+    <% content_for :title, "サインイン" %>
 
-<h1>New user</h1>
+    <h1 class="sign__title">サインイン</h1>
 
-<%= render "form", user: @user %>
-
-<br>
-
-<div>
-  <%= link_to "Back to users", users_path %>
+    <%= render "form", user: @user %>
+  </div>
 </div>
