@@ -4,6 +4,7 @@
   <div class="header__title">UNDO</div>
 </header>
 
+<body style="background-color: var(--color-2);">
 <div data-controller="review">
   <div id="reviews" style="color: black">
     <form id = "review_form" action = "/reviews" method = "post">
@@ -27,7 +28,7 @@
       </table>
       <div class = "back-root">
         <button type = "button" class="undo-button" id = "submit_review" data-action="click->review#check_show">送信</button>
-        <%= link_to "戻る" ,root_path, class: "undo-button"%>
+        <%= link_to "戻る", root_path, class: "undo-button"%>
       </div>
     </form>
     <% @reviews.each do |review| %>
@@ -51,4 +52,5 @@
     </div>
   </div>
 </div>
+</body>
 <%# <%= link_to "New review", new_review_path %>

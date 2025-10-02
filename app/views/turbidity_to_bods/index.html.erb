@@ -6,6 +6,7 @@
   <div class="header__title">UNDO</div>
 </header>
 
+<body style="background-color: var(--color-2);">
 <div data-controller = "sokutei">
   <div id="turbidity_to_bods" style="color: black">
     <form id = "bod_form" action = "/reviews" method = "post">
@@ -16,7 +17,6 @@
           <tr><th>COD</th><td>未測定</td></tr>
         </table>
 
-        <div id="howto-box">
           <p id = "logout-surundana">水質の推定方法</p>
           <div class="circle-step">
             <span class = "circle-number">1</span><span class = "howto_exp">紙コップに茹で汁を溢れる手前くらいまで入れてください。</span>
@@ -33,14 +33,12 @@
           <div class = "back-root" id = "back-root">
             <button type = "button" data-action="click->sokutei#careful_show" 
             class =undo-button>推定開始</button>
-            <button data-action="click->sokutei#howto_show" class = undo-button>キャンセル</button>
+            <%= link_to "戻る" , root_path, class: "undo-button"%>
           </div>
           <%= link_to "UNDOする", root_path, {class:"undo-button", id:"do_undo"}%>
-        </div>
-        <div class = "back-root">
+        <!-- <div class = "back-root">
           <button type = "button" class="undo-button" id = "submit_review" data-action="click->sokutei#bod_howto">水質推定開始</button>
-          <%= link_to "戻る" , root_path, class: "undo-button"%>
-        </div>
+        </div> -->
     </form>
     <% @turbidity_to_bods.each do |turbidity_to_bod| %>
       <%= render turbidity_to_bod %>
@@ -50,9 +48,6 @@
     <% end %>
   </div>
 </div>
+</body>
 
-<div id="howto-bod-background">
-  
-</div>
-
-<%# <%= link_to "New turbidity to bod", new_turbidity_to_bod_path %>
+<%= link_to "New turbidity to bod", new_turbidity_to_bod_path %>
