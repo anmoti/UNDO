@@ -171,9 +171,13 @@ const shops = [
 
 // Connects to data-controller="maps"
 /** @extends {Controller<HTMLDivElement>} */
-export default class extends Controller {
+export default class MapsController extends Controller {
     /** @type {Promise<google.maps.Map>} */
     map;
+
+    static values = {
+        ecoIconUrl: String,
+    };
 
     /**
      * @param  {Context} context
@@ -247,10 +251,9 @@ export default class extends Controller {
         content.appendChild(title);
 
         if (shop.eco) {
-            const ecoImg = document.createElement("img");
-            ecoImg.src = "yasasii.png";
-            ecoImg.width = 16;
-            ecoImg.height = 16;
+            const ecoImg = new Image(16, 16);
+            // @ts-ignore
+            ecoImg.src = this.ecoIconUrlValue;
             content.appendChild(ecoImg);
 
             const ecoDesc = document.createElement("span");
@@ -278,7 +281,7 @@ export default class extends Controller {
 
         const commentButton = document.createElement("button");
         commentButton.textContent = "コメントを見る";
-        commentButton.onclick = this.commentView;
+        commentButton.onclick = this.commentView.bind(this);
         buttons.appendChild(commentButton);
 
         // 情報ウィンドウを開く
