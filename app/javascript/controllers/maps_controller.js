@@ -38,10 +38,7 @@ const shops = [
         openTime: "5:00～14:00 麺終了次第",
         address: "香川県高松市西の丸町5-15",
         yasashi: false,
-<<<<<<< HEAD
-=======
         foodshare: false,
->>>>>>> UI_troll
     },
     {
         name: "こだわり麺や高松店",
@@ -50,10 +47,7 @@ const shops = [
         openTime: "9:00〜20:00（土日祝6:30〜15:00）",
         address: "香川県高松市天神前5-25",
         yasashi: false,
-<<<<<<< HEAD
-=======
         foodshare: false,
->>>>>>> UI_troll
     },
     {
         name: "さか枝うどん本店",
@@ -62,10 +56,7 @@ const shops = [
         openTime: "7:00～15:00",
         address: "香川県高松市番町5-2-23",
         yasashi: false,
-<<<<<<< HEAD
-=======
         foodshare: false,
->>>>>>> UI_troll
     },
     {
         name: "めりけんや高松駅前店",
@@ -74,10 +65,7 @@ const shops = [
         openTime: "7:00〜20:00",
         address: "香川県高松市西の丸町6-20",
         yasashi: false,
-<<<<<<< HEAD
-=======
         foodshare: false,
->>>>>>> UI_troll
     },
     {
         name: "植田うどん",
@@ -86,10 +74,7 @@ const shops = [
         openTime: "9:38～14:30（麺終了次第）",
         address: "香川県高松市内町1-8",
         yasashi: false,
-<<<<<<< HEAD
-=======
         foodshare: false,
->>>>>>> UI_troll
     },
     {
         name: "うどん市場めんくい",
@@ -98,10 +83,7 @@ const shops = [
         openTime: "月～金曜 11:00～15:00, 土日祝 11:00～14:00, 麺終了次第",
         address: "香川県高松市塩屋町9-7",
         yasashi: false,
-<<<<<<< HEAD
-=======
         foodshare: false,
->>>>>>> UI_troll
     },
     {
         name: "釜揚げうどん 岡じま",
@@ -110,10 +92,7 @@ const shops = [
         openTime: "10:00～15:00",
         address: "香川県高松市寿町1-4-3 高松中央通りビル１Ｆ北側",
         yasashi: false,
-<<<<<<< HEAD
-=======
         foodshare: false,
->>>>>>> UI_troll
     },
     {
         name: "さか枝うどん 南新町店",
