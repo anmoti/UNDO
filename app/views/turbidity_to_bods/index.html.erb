@@ -4,12 +4,6 @@
   <div class="measures__list">
     <button type="button" class="" data-action="measures#open">水質測定開始</button>
     <%= link_to "戻る" , root_path, class: "undo-button"%>
-    <% @turbidity_to_bods.each do |turbidity_to_bod| %>
-      <%= render turbidity_to_bod %>
-      <p>
-        <%= link_to "Show this turbidity to bod", turbidity_to_bod %>
-      </p>
-    <% end %>
   </div>
   <div class="hidden measures__measure" data-measures-target="modal">
     <div class="measures__measure--container">
