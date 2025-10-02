@@ -21,9 +21,11 @@
       <div class="header__right">
         <% if authenticated? %>
           <div class="header__user">ログイン中: <%= Current.session.user.email %></div>
-          <%= link_to "ログアウト", signout_path, class: "header__button" %>
+          <%= button_to signout_path, class: "header__button", method: :delete do %>
+            <%= image_tag "logout-btn.png", height: 50 %>
+          <% end %>
         <% else %>
-          <%= link_to "ログイン", signin_path, class: "header__button" %>
+          <%= link_to "ログイン", signin_path, class: "header__btn--text" %>
         <% end %>
       </div>
     </div>

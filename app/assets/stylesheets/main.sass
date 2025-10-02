@@ -40,21 +40,48 @@ body
     &__user
         color: $color-6
 
+    // TODO: 垂直位置がずれているので直す
     &__button
-        display: block
+        cursor: pointer
+        background: none
+
+    &__btn--text
+        @extend .header__button
         padding: 0.5rem 1rem
+        display: block
         border-radius: 4px
         font-size: 1rem
-        cursor: pointer
-        text-decoration: none
-        text-align: center
         background-color: $color-6
         color: $color-5
+        text-decoration: none
+        text-align: center
 
 main
     display: flex
     flex: 1
     flex-direction: column
+
+// TODO: 修正
+footer
+    height: 60px
+    background-color: $color-3
+    border-bottom: 1px solid $color-2
+    display: flex
+    justify-content: space-evenly
+    align-items: center
+    z-index: 10
+    padding: 0 20px
+    box-sizing: border-box
+
+    & button
+        width: 60px
+        padding: 0
+        border: none
+        background: none
+        cursor: pointer
+        display: flex
+        align-items: center
+        justify-content: center
 
 .maps
     &__container
