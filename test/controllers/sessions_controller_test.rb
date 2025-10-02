@@ -82,7 +82,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
     # セッションが削除されるか
     assert_difference "Session.count", -1 do
-      get signout_path
+      delete signout_path
     end
 
     # セッションが存在しないか
