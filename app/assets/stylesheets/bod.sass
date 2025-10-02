@@ -1,6 +1,3 @@
-// ==============================
-// テーブルとフォーム
-// ==============================
 table
     th, td
         padding-right: 20px
@@ -11,23 +8,10 @@ form
 table
     display: inline-table
 
-// ==============================
-// #explains コンテナとステップ
-// ==============================
 #explains
-    display: block
+    display: flex
     flex-direction: column
-    margin: 0 auto
-
-.circle-step
-  // 中央寄せの強制設定
-    width: fit-content !important
-    margin-left: auto !important
-    margin-right: auto !important
-    border: 1px solid red // デバッグ用
-
-    padding-bottom: 10px
-    text-align: left
+    justify-content: center
 
   // 子要素のネスト
 .circle-number
