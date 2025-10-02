@@ -188,7 +188,7 @@ export default class extends Controller {
     }
 
     /** @param {google.maps.MapMouseEvent} event */
-    async onMapClick(event) {}
+    async onMapClick(event) { }
 
     async createShopMarkers() {
         // 各店舗にマーカーを作成
@@ -238,25 +238,22 @@ export default class extends Controller {
         // 情報ウィンドウのコンテンツを作成
         const content = `
             <div style="min-width: 200px; padding: 4px; font-family: Arial, sans-serif;">
-                <h3 style="margin: 0 0 2px 0; color: #333; font-size: 16px;">${
-                    shop.name
-                }</h3>
-                <img src="yasasii.png" width="16px" height="16px" />
-                <span style="font-size: 12px; margin: 0 0 6px 0; background-color: #0c0; font-size: 14px; display: ${
-                    shop.yasashi ? "inline" : "none"
-                };">環境に優しいうどん店</span>
-                <div style="margin-bottom: 6px; color: #666; font-size: 13px;">
+                <h3 style="margin: 0 0 2px 0; color: #333; font-size: 16px;">${shop.name
+            }</h3>
+                <img src="yasasii.png" width="16px" height="16px" style="display: ${shop.yasashi ? "inline" : "none"};"/>
+            <span style = "font-size: 12px; margin: 0 0 6px 0; background-color: #0c0; font-size: 14px; display: ${shop.yasashi ? "inline" : "none"}; "> 環境に優しいうどん店</span >
+        <div style = "margin-bottom: 6px; color: #666; font-size: 13px;">
                     <strong>住所:</strong> ${shop.address}
-                </div>
+                </div >
                 <div style="margin: 0 0 8px 0; color: #666; font-size: 13px;">
                     <strong>営業時間:</strong> ${shop.openTime}
                 </div>
-                <div class = "review-comment">
-                    <button id = "review-button" onclick="">レビューする</button>
-                    <button id = "review-button" onclick="comment_view();">コメントを見る</button>
+                <div data-controller="home" class="review-comment">
+                    <button id = "review_button">レビューする</button>
+                    <button id = "view_comment_button" data-action="click->home#comment_view">コメントを見る</button>
                 </div>
             </div>
-        `;
+            `;
 
         // 情報ウィンドウを開く
         this.infoWindow.setContent(content);
