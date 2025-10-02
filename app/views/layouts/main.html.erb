@@ -22,7 +22,7 @@
         <% if authenticated? %>
           <div class="header__user">ログイン中: <%= Current.session.user.email %></div>
           <%= button_to signout_path, class: "header__button", method: :delete do %>
-            <%= image_tag "logout-btn.png", height: 50 %>
+            <%= image_tag "logout-btn.png", height: 50, alt: "ログアウト" %>
           <% end %>
         <% else %>
           <%= link_to "ログイン", signin_path, class: "header__btn--text" %>
@@ -36,13 +36,13 @@
   <footer>
     <%# TODO: リンクを修正 %>
     <%= button_to "#" do %>
-      <%= image_tag "search-btn.png", height: 50 %>
+      <%= image_tag "search-btn.png", height: 50, alt: "検索" %>
     <% end %>
     <%= button_to "#" do %>
-      <%= image_tag "estimate-btn.png", height: 50 %>
+      <%= image_tag "estimate-btn.png", height: 50, alt: "水質推定" %>
     <% end %>
     <%= button_to "#" do %>
-      <%= image_tag "settings-btn.png", height: 50 %>
+      <%= image_tag "settings-btn.png", height: 50, alt: "設定" %>
     <% end %>
   </footer>
 </body>
