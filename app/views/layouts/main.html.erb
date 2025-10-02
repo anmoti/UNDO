@@ -21,9 +21,11 @@
       <div class="header__right">
         <% if authenticated? %>
           <div class="header__user">ログイン中: <%= Current.session.user.email %></div>
-          <%= link_to "ログアウト", signout_path, class: "header__button" %>
+          <%= button_to signout_path, class: "header__button", method: :delete do %>
+            <%= image_tag "logout-btn.png", height: 50, alt: "ログアウト" %>
+          <% end %>
         <% else %>
-          <%= link_to "ログイン", signin_path, class: "header__button" %>
+          <%= link_to "ログイン", signin_path, class: "header__btn--text" %>
         <% end %>
       </div>
     </div>
@@ -31,15 +33,16 @@
   <main>
     <%= yield %>
   </main>
-  <footer> <!-- 画面下部のナビゲーションバー -->
-    <%= button_to turbidity_to_bods_path do %>
-      <%= image_tag("bar_icons/yeah.png", size: "60x60") %>
+  <footer>
+    <%# TODO: リンクを修正 %>
+    <%= button_to "#" do %>
+      <%= image_tag "search-btn.png", height: 50, alt: "検索" %>
     <% end %>
-    <%= button_to reviews_path do %>
-      <%= image_tag("bar_icons/yeah.png", size: "60x60") %>
+    <%= button_to "#" do %>
+      <%= image_tag "estimate-btn.png", height: 50, alt: "水質推定" %>
     <% end %>
-    <%= button_to users_path do %>
-      <%= image_tag("bar_icons/yeah.png", size: "60x60") %>
+    <%= button_to "#" do %>
+      <%= image_tag "settings-btn.png", height: 50, alt: "設定" %>
     <% end %>
   </footer>
 </body>
