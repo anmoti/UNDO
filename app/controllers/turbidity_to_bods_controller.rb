@@ -1,4 +1,5 @@
 class TurbidityToBodsController < ApplicationController
+  layout "main", only: [ :index ]
   before_action :set_turbidity_to_bod, only: %i[ show edit update destroy ]
 
   # GET /turbidity_to_bods or /turbidity_to_bods.json
