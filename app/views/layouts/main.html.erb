@@ -34,8 +34,15 @@
     <%= yield %>
   </main>
   <footer>
+    <%# TODO: リンクを修正 %>
+    <%= button_to "#" do %>
+      <%= image_tag "search-btn.png", height: 50 %>
+    <% end %>
     <%= button_to "#" do %>
       <%= image_tag "estimate-btn.png", height: 50 %>
+    <% end %>
+    <%= button_to "#" do %>
+      <%= image_tag "settings-btn.png", height: 50 %>
     <% end %>
   </footer>
 </body>
