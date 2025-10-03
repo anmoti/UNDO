@@ -1,4 +1,5 @@
 <%= form_with(model: review, class: "form") do |form| %>
+
   <% if review.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(review.errors.count, "error") %> prohibited this review from being saved:</h2>
@@ -9,10 +10,12 @@
       </ul>
     </div>
   <% end %>
+
   <div class="form__field">
     <%= form.label :reviewee_id, "レビューするお店", class: "form__label" %>
     <%= form.text_field :reviewee_id, class: "form__input" %>
   </div>
+
   <div class="form__field">
     <span class="form__label">評価</span>
     <div class="form__review--stars">
@@ -24,9 +27,12 @@
       <% end %>
     </div>
   </div>
+
   <div class="form__field">
     <%= form.label :comment, "コメント", class: "form__label" %>
     <%= form.text_area :comment, class: "form__input" %>
   </div>
+
   <%= form.submit "送信", class: "form__submit-btn" %>
+
 <% end %>
