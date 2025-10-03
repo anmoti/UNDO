@@ -14,5 +14,6 @@
         "editor.formatOnSave": true,
         "editor.defaultFormatter": "rubocop.vscode-rubocop"
     },
+    "vscode-erb-beautify.keepBlankLines": 1,
     "solargraph.formatting": true,
 }
