@@ -16,4 +16,7 @@
     },
     "vscode-erb-beautify.keepBlankLines": 1,
     "solargraph.formatting": true,
+    "cssPeek.peekToExclude": [
+        "**/builds/**",
+    ],
 }

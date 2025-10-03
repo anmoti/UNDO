@@ -322,7 +322,6 @@ footer {
         background-color: map.get($palette, "dark");
         color: map.get($palette, "light");
         z-index: map.get($z-layers, "comments");
-        display: none; // .hiddenクラスで制御することを想定
         width: 100vw;
         height: 40vh;
         justify-content: flex-start;
