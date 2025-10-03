@@ -6,6 +6,7 @@ Rails.application.routes.draw do
 
   if Rails.env.production?
     resources :users, only: [ :create ]
+    resources :reviews, only: [ :new ]
   else
     resources :reviews
     resources :users
