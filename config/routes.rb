@@ -2,8 +2,6 @@ Rails.application.routes.draw do
   resources :passwords, param: :token
   resources :turbidity_to_bods
 
-
-
   if Rails.env.production?
     resources :users, only: [ :create ]
     resources :reviews, only: [ :new ]
