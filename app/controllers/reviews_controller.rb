@@ -1,4 +1,5 @@
 class ReviewsController < ApplicationController
+  layout "main", only: [ :new ]
   allow_unauthenticated_access
   before_action :set_review, only: %i[ show edit update destroy ]
 
