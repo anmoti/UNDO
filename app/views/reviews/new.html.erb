@@ -5,7 +5,10 @@
     <h1 class="form-wrapper__title">レビューを書く</h1>
     <%= render "form", review: @review %>
     <div class="form-wrapper__links">
-      <%= link_to "前のページに戻る", request.referer || root_path, class: "form-wrapper__link" %>
+      <%= link_to "前のページに戻る",
+        (request.referer&.start_with?(request.base_url) ? request.referer : root_path),
+        class: "form-wrapper__link" 
+      %>
       <%# link_to "レビュー一覧に戻る", reviews_path, class: "form-wrapper__link" %>
     </div>
   </div>
