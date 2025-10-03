@@ -251,15 +251,30 @@ export default class MapsController extends Controller {
         content.appendChild(title);
 
         if (shop.eco) {
+            const EcoOptions = document.createElement("div");
             const ecoImg = new Image(16, 16);
             // @ts-ignore
             ecoImg.src = this.ecoIconUrlValue;
-            content.appendChild(ecoImg);
+            EcoOptions.appendChild(ecoImg);
 
             const ecoDesc = document.createElement("span");
             ecoDesc.className = "maps__info--eco";
             ecoDesc.textContent = "環境に優しいうどん店";
-            content.appendChild(ecoDesc);
+            EcoOptions.appendChild(ecoDesc);
+            content.appendChild(EcoOptions);
+        }
+        else {
+            const foodshareOptions = document.createElement("div");
+            // const foodshareImg = new Image(16, 16);
+            // @ts-ignore
+            // foodshareImg.src = this.ecoIconUrlValue;
+            // foodshareOptions.appendChild(foodshareImg);
+
+            const foodshareDesc = document.createElement("span");
+            foodshareDesc.className = "maps__info--foodshare";
+            foodshareDesc.textContent = "フードシェア実施中";
+            foodshareOptions.appendChild(foodshareDesc);
+            content.appendChild(foodshareOptions);
         }
 
         const address = document.createElement("div");
