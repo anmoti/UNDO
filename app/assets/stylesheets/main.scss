@@ -144,6 +144,12 @@ footer {
             color: $color-6;
         }
 
+        &--foodshare {
+            font-size: 15px;
+            background-color: #f00;
+            color: $color-6;
+        }
+
         &--buttons {
             display: flex;
             gap: 4px;
@@ -151,7 +157,7 @@ footer {
 
         &--buttons button {
             background-color: $color-3;
-            color: $color-5;
+            color: $color-6;
             padding: 3px;
             border-radius: 3px;
             cursor: pointer;
