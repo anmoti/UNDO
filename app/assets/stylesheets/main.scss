@@ -259,6 +259,49 @@ footer {
         font-weight: 600;
         cursor: pointer;
     }
+
+    &__review {
+        &--stars {
+            display: flex;
+            margin-top: 5px;
+            flex-direction: row-reverse;
+
+            .star-radio {
+                display: none;
+
+                // チェックされている星とそれ以前の星を黄色にする
+                &:checked~.star-label svg {
+                    fill: $color-1;
+                }
+            }
+
+            .star-label {
+                flex: 1;
+                cursor: pointer;
+
+                svg {
+                    width: 100%;
+                    aspect-ratio: 1 / 1;
+                    fill: $color-6;
+                    stroke: $color-5;
+                }
+            }
+
+            &:hover {
+
+                // チェックされている星とそれ以前の星を白色にする
+                .star-radio:checked~.star-label svg {
+                    fill: $color-6;
+                }
+
+                // ホバーされた星とそれ以前の星を黄色にする
+                .star-label:hover svg,
+                .star-label:hover~.star-label svg {
+                    fill: $color-1 !important;
+                }
+            }
+        }
+    }
 }
 
 .comments {
