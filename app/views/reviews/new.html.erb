@@ -1,11 +1,15 @@
-<% content_for :title, "New review" %>
-
-<h1>New review</h1>
-
-<%= render "form", review: @review %>
-
-<br>
-
-<div>
-  <%= link_to "Back to reviews", reviews_path %>
+<% content_for :title, "レビューを書く" %>
+<%= render 'star_svg_sprites' %>
+<div class="form-wrapper">
+  <div class="form-wrapper__container">
+    <h1 class="form-wrapper__title">レビューを書く</h1>
+    <%= render "form", review: @review %>
+    <div class="form-wrapper__links">
+      <%= link_to "前のページに戻る",
+        (request.referer&.start_with?(request.base_url) ? request.referer : root_path),
+        class: "form-wrapper__link" 
+      %>
+      <%# link_to "レビュー一覧に戻る", reviews_path, class: "form-wrapper__link" %>
+    </div>
+  </div>
 </div>

@@ -1,6 +1,6 @@
-<div class="sign">
-  <div class="sign__container">
-    <h1 class="sign__title">ログイン</h1>
+<div class="form-wrapper">
+  <div class="form-wrapper__container">
+    <h1 class="form-wrapper__title">ログイン</h1>
     <%= form_with(url: signin_path, class: "form") do |form| %>
       <%= tag.div(flash[:alert], style: "color:red") if flash[:alert] %>
       <div class="form__field">
@@ -13,8 +13,8 @@
       </div>
       <%= form.submit "ログイン", class: "form__submit-btn" %>
     <% end %>
-    <div class="sign__links">
-      <%= link_to "パスワードをお忘れですか？", new_password_path, class: "sign__link" %>
-      <%= link_to "新規登録はこちら", new_user_path, class: "sign__link" %>
+    <div class="form-wrapper__links">
+      <%= link_to "パスワードをお忘れですか？", new_password_path, class: "form-wrapper__link" %>
+      <%= link_to "新規登録はこちら", new_user_path, class: "form-wrapper__link" %>
     </div>
   </div>

@@ -1,8 +1,8 @@
-<%= form_with(model: review) do |form| %>
+<%= form_with(model: review, class: "form") do |form| %>
+
   <% if review.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(review.errors.count, "error") %> prohibited this review from being saved:</h2>
-
       <ul>
         <% review.errors.each do |error| %>
           <li><%= error.full_message %></li>
@@ -11,27 +11,28 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :reviewer_id, style: "display: block" %>
-    <%= form.text_field :reviewer_id %>
+  <div class="form__field">
+    <%= form.label :reviewee_id, "レビューするお店", class: "form__label" %>
+    <%= form.text_field :reviewee_id, class: "form__input" %>
   </div>
 
-  <div>
-    <%= form.label :reviewee_id, style: "display: block" %>
-    <%= form.text_field :reviewee_id %>
+  <div class="form__field">
+    <span class="form__label">評価</span>
+    <div class="form__review--stars">
+      <% 5.downto(1) do |i| %>
+        <%= form.radio_button :rating, i, id: "star#{i}", class: "star-radio" %>
+        <%= form.label :rating, for: "star#{i}", class: "star-label" do %>
+          <svg><use href="#star"></use></svg>
+        <% end %>
+      <% end %>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :comment, style: "display: block" %>
-    <%= form.textarea :comment %>
+  <div class="form__field">
+    <%= form.label :comment, "コメント", class: "form__label" %>
+    <%= form.text_area :comment, class: "form__input" %>
   </div>
 
-  <div>
-    <%= form.label :rating, style: "display: block" %>
-    <%= form.text_field :rating %>
-  </div>
+  <%= form.submit "送信", class: "form__submit-btn" %>
 
-  <div>
-    <%= form.submit %>
-  </div>
 <% end %>
