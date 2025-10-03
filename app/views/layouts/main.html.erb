@@ -41,9 +41,9 @@
     <%= button_to turbidity_to_bods_path do %>
       <%= image_tag "estimate-btn.png", height: 50, alt: "水質推定" %>
     <% end %>
-    <%= button_to "#" do %>
-      <%= image_tag "yeah.png", height: 50, alt: "設定" %>
-    <% end %>
+    <button type = "button" onclick="console.log('フードシェア告知');">
+      <%= image_tag "foodshare_start-btn.png", height: 50, alt: "フードシェア告知", id:"foodshare_button"%>
+    </button>
     <%= button_to "#" do %>
       <%= image_tag "settings-btn.png", height: 50, alt: "設定" %>
     <% end %>
