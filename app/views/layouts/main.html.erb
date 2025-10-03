@@ -38,8 +38,11 @@
     <%= button_to "#" do %>
       <%= image_tag "search-btn.png", height: 50, alt: "検索" %>
     <% end %>
-    <%= button_to "#" do %>
+    <%= button_to turbidity_to_bods_path do %>
       <%= image_tag "estimate-btn.png", height: 50, alt: "水質推定" %>
+    <% end %>
+    <%= button_to "#" do %>
+      <%= image_tag "yeah.png", height: 50, alt: "設定" %>
     <% end %>
     <%= button_to "#" do %>
       <%= image_tag "settings-btn.png", height: 50, alt: "設定" %>
