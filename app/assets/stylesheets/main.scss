@@ -98,6 +98,15 @@ footer {
         align-items: center;
         justify-content: center;
     }
+
+    #foodshare_button {
+        padding: 0;
+        border: none;
+        background: none;
+        box-shadow: none;
+        cursor: pointer;
+        line-height: 0;
+    }
 }
 
 .maps {
