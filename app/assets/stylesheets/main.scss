@@ -268,11 +268,6 @@ footer {
 
             .star-radio {
                 display: none;
-
-                // チェックされている星とそれ以前の星を黄色にする
-                &:checked~.star-label svg {
-                    fill: $color-1;
-                }
             }
 
             .star-label {
@@ -287,18 +282,16 @@ footer {
                 }
             }
 
-            &:hover {
 
-                // チェックされている星とそれ以前の星を白色にする
-                .star-radio:checked~.star-label svg {
-                    fill: $color-6;
-                }
+            // チェックされている星とそれ以前の星を黄色にする
+            &:not(:hover) .star-radio:checked~.star-label svg {
+                fill: $color-1;
+            }
 
-                // ホバーされた星とそれ以前の星を黄色にする
-                .star-label:hover svg,
-                .star-label:hover~.star-label svg {
-                    fill: $color-1 !important;
-                }
+            // ホバーしている星とそれ以前の星を黄色にする
+            .star-label:hover svg,
+            .star-label:hover~.star-label svg {
+                fill: $color-1;
             }
         }
     }
