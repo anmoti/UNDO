@@ -48,6 +48,7 @@ $z-layers: (
 }
 
 %button-reset {
+    display: block;
     padding: 0;
     border: none;
     background: none;
@@ -130,14 +131,16 @@ main {
     }
 }
 
-footer {
-    @include flexbox($justify: space-evenly, $align: center);
-    height: $footer-height;
-    background-color: map.get($palette, "primary");
-    border-bottom: 1px solid map.get($palette, "secondary");
-    padding: 0 20px;
+.footer {
+    &__container {
+        @include flexbox($justify: space-evenly, $align: center);
+        height: $footer-height;
+        background-color: map.get($palette, "primary");
+        border-bottom: 1px solid map.get($palette, "secondary");
+        padding: 0 20px;
+    }
 
-    & button {
+    &__button {
         @extend %button-reset;
         @include flexbox($justify: center, $align: center);
         width: 60px;
