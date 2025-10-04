@@ -22,14 +22,8 @@ export default class FoodshareController extends Controller {
         //@ts-ignore
         const isActive = currentSrc.includes(activeUrlPath);
 
-        let newSrc;
-        if (isActive) {
-            //@ts-ignore
-            newSrc = this.inactiveUrlValue;
-        } else {
-            //@ts-ignore
-            newSrc = this.activeUrlValue;
-        }
+        //@ts-ignore
+        const newSrc = isActive ? this.inactiveUrlValue : this.activeUrlValue;
 
         //@ts-ignore
         this.iconTarget.src = newSrc;
