@@ -42,6 +42,7 @@ const mapOptions = {
  * @property {string} openTime
  * @property {string} address
  * @property {boolean} [eco]
+ * @property {boolean} [foodshare]
  */
 
 /** @type {Shop[]} */
@@ -166,6 +167,7 @@ const shops = [
         openTime: "24時間営業(例)",
         address: "島根県松江市学園南１丁目２−１",
         eco: true,
+        foodshare: true,
     },
 ];
 
@@ -175,8 +177,12 @@ export default class MapsController extends Controller {
     /** @type {Promise<google.maps.Map>} */
     map;
 
+    static targets = ["icon"];
     static values = {
         ecoIconUrl: String,
+        foodshareIconUrl: String,
+        activeUrl: String,
+        inactiveUrl: String,
     };
 
     /**
@@ -263,12 +269,12 @@ export default class MapsController extends Controller {
             EcoOptions.appendChild(ecoDesc);
             content.appendChild(EcoOptions);
         }
-        else {
+        if (shop.foodshare) {
             const foodshareOptions = document.createElement("div");
-            // const foodshareImg = new Image(16, 16);
-            // @ts-ignore
-            // foodshareImg.src = this.ecoIconUrlValue;
-            // foodshareOptions.appendChild(foodshareImg);
+            const foodshareImg = new Image(16, 16);
+            //@ts-ignore
+            foodshareImg.src = this.foodshareIconUrlValue;
+            foodshareOptions.appendChild(foodshareImg);
 
             const foodshareDesc = document.createElement("span");
             foodshareDesc.className = "maps__info--foodshare";
