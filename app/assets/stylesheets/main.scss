@@ -35,8 +35,9 @@ $radius-md: 8px;
 $base-padding: 1rem;
 
 $z-layers: (
-    "comments": 10,
-    "modal": 10,
+    "base": 0,
+    "dropdown": 10,
+    "modal": 20,
 );
 
 @mixin flexbox($justify: flex-start, $align: stretch, $direction: row, $gap: 0) {
@@ -72,6 +73,7 @@ body {
     min-height: 100dvh;
     @include flexbox($direction: column);
     background-color: map.get($palette, "light");
+    z-index: map.get($z-layers, "base");
 }
 
 main {
@@ -335,8 +337,8 @@ main {
         bottom: $footer-height;
         background-color: map.get($palette, "dark");
         color: map.get($palette, "light");
-        z-index: map.get($z-layers, "comments");
-        width: 100vw;
+        z-index: map.get($z-layers, "dropdown");
+        width: 100%;
         height: 40vh;
         justify-content: flex-start;
     }
