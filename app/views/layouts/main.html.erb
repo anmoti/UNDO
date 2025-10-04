@@ -15,6 +15,7 @@
     <meta name="google-maps-api-key" content="<%= Rails.application.credentials.dig(:google_cloud, :maps_api_key) %>">
     <%= javascript_importmap_tags %>
   </head>
+
   <body>
     <header class="header__container">
       <%= image_tag "logo.png", class: "header__logo", alt: "UNDO Logo" %>
@@ -28,22 +29,23 @@
           <%= link_to "ログイン", signin_path, class: "header__btn--text" %>
         <% end %>
       </div>
-    </div>
-  </header>
-  <main>
-    <%= yield %>
-  </main>
-  <footer>
-    <%# TODO: リンクを修正 %>
-    <%= button_to "#" do %>
-      <%= image_tag "search-btn.png", height: 50, alt: "検索" %>
-    <% end %>
-    <%= button_to "#" do %>
-      <%= image_tag "estimate-btn.png", height: 50, alt: "水質推定" %>
-    <% end %>
-    <%= button_to "#" do %>
-      <%= image_tag "settings-btn.png", height: 50, alt: "設定" %>
-    <% end %>
-  </footer>
-</body>
+    </header>
+
+    <main>
+      <%= yield %>
+    </main>
+
+    <footer class="footer__container">
+      <button type="button" class="footer__button">
+        <%= image_tag "search-btn.png", height: 50, alt: "検索" %>
+      </button>
+      <%# TODO: リンクを修正 %>
+      <%= link_to "#", class: "footer__button" do %>
+        <%= image_tag "estimate-btn.png", height: 50, alt: "水質推定" %>
+      <% end %>
+      <%= link_to "#", class: "footer__button" do %>
+        <%= image_tag "settings-btn.png", height: 50, alt: "設定" %>
+      <% end %>
+    </footer>
+  </body>
 </html>

@@ -24,7 +24,7 @@
   <div class="form__field tooltip__container">
     <%= form.checkbox :is_consumer, class: "form__checkbox" %>
     <%= form.label :is_consumer, "消費者ですか？", style: "display: inline", class: "form__label" %>
-    <div class="tooltip__text">「うどん屋」として登録する場合は<span style="color: red">チェックしないでください</span></div>
+    <div class="tooltip__text">「うどん屋」として登録する場合は<span class="careful">チェックしないでください</span></div>
   </div>
 
   <div class="form__field">
@@ -40,4 +40,4 @@
   <%= form.submit "サインイン", class: "form__submit-btn" %>
 
   <%# link_to "Back to users", users_path, class: "form__link" %>
-  <% end %>
+<% end %>

@@ -20,9 +20,9 @@
     <span class="form__label">評価</span>
     <div class="form__review--stars">
       <% 5.downto(1) do |i| %>
-        <%= form.radio_button :rating, i, id: "star#{i}", class: "star-radio" %>
+        <%= form.radio_button :rating, i, id: "star#{i}", class: "star-radio visually-hidden" %>
         <%= form.label :rating, for: "star#{i}", class: "star-label" do %>
-          <svg><use href="#star"></use></svg>
+          <svg alt="<%= i %>点"><use href="#star"></use></svg>
         <% end %>
       <% end %>
     </div>
