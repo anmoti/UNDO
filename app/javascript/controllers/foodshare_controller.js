@@ -18,7 +18,9 @@ export default class FoodshareController extends Controller {
         const currentSrc = iconElement.src;
 
         //@ts-ignore
-        const isActive = currentSrc.includes(this.activeUrlValue);
+        const activeUrlPath = this.activeUrlValue;
+        //@ts-ignore
+        const isActive = currentSrc.includes(activeUrlPath);
 
         let newSrc;
         if (isActive) {
