@@ -87,9 +87,10 @@ footer {
     z-index: 10;
     padding: 0 20px;
     box-sizing: border-box;
+    position: relative;
 
     & button {
-        width: 60px;
+        // height: 50px;
         padding: 0;
         border: none;
         background: none;
@@ -98,6 +99,15 @@ footer {
         align-items: center;
         justify-content: center;
     }
+
+    // #foodshare_button {
+    //     // padding: 0;
+    //     // border: none;
+    //     // background: none;
+    //     // box-shadow: none;
+    //     // cursor: pointer;
+    //     // line-height: 0;
+    // }
 }
 
 .maps {
@@ -144,6 +154,12 @@ footer {
             color: $color-6;
         }
 
+        &--foodshare {
+            font-size: 15px;
+            background-color: #f00;
+            color: $color-6;
+        }
+
         &--buttons {
             display: flex;
             gap: 4px;
@@ -151,7 +167,7 @@ footer {
 
         &--buttons button {
             background-color: $color-3;
-            color: $color-5;
+            color: $color-6;
             padding: 3px;
             border-radius: 3px;
             cursor: pointer;
