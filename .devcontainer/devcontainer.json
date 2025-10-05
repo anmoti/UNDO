@@ -33,15 +33,20 @@
                 "KoichiSasada.vscode-rdbg",
                 "kaiwood.endwise",
                 "aliariff.vscode-erb-beautify",
-                "rubocop.vscode-rubocop"
             ],
             "settings": {
                 "rubyLsp.rubyVersionManager": {
                     "identifier": "custom"
                 },
-                "rubyLsp.customRubyCommand": "bundle exec ruby-lsp",
+                "rubyLsp.customRubyCommand": "/usr/local/bin/ruby",
                 "solargraph.useBundler": true,
-                "vscode-erb-beautify.useBundler": true
+                "vscode-erb-beautify.useBundler": true,
+                "files.associations": {
+                    "*.erb": "erb"
+                },
+                "emmet.includeLanguages": {
+                    "erb": "html"
+                },
             }
         }
     },
