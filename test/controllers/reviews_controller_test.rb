@@ -3,6 +3,11 @@ require "test_helper"
 class ReviewsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @review = reviews(:one)
+    @user = users(:carol)
+    post signin_path, params: {
+      email: @user.email,
+      password: "passwordcarol"
+    }
   end
 
   test "should get index" do
