@@ -2,7 +2,7 @@ require "test_helper"
 
 class UserAuthenticationFlowTest < ActionDispatch::IntegrationTest
   setup do
-    @user = users(:one)
+    @user = users(:alice)
   end
 
   test "complete signin signout flow" do
@@ -77,7 +77,7 @@ class UserAuthenticationFlowTest < ActionDispatch::IntegrationTest
   end
 
   test "signin with producer user" do
-    producer_user = users(:one)
+    producer_user = users(:bob)
     assert_not producer_user.is_consumer  # producer
 
     post signin_path, params: {
