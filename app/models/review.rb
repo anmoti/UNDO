@@ -11,7 +11,7 @@ class Review < ApplicationRecord
   private
 
   def reviewer_must_be_consumer
-    unless reviewer.is_consumer || !reviewee.is_consumer
+    unless reviewer.is_consumer && !reviewee.is_consumer
       errors.add(:reviewee, "Customer can only review producers")
     end
   end
