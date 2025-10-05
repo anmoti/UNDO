@@ -2,7 +2,7 @@ alice:
   name: "Alice"
   email: "alice@example.com"
   is_consumer: true
-  password_digest: <%= BCrypt::Password.create('passwordalice') %>
+  password_digest: <%= BCrypt::Password.create('password') %>
 
 bob:
   name: "Bob's Store"
