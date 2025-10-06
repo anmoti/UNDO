@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
   <head>
     <title><%= content_for(:title) || "UNDO" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -15,6 +15,7 @@
     <meta name="google-maps-api-key" content="<%= Rails.application.credentials.dig(:google_cloud, :maps_api_key) %>">
     <%= javascript_importmap_tags %>
   </head>
+
   <body>
     <header class="header__container">
       <%= image_tag "logo.png", class: "header__logo", alt: "UNDO Logo" %>
@@ -33,12 +34,12 @@
   <main>
     <%= yield %>
   </main>
-  <footer>
-    <%# TODO: リンクを修正 %>
-    <%= button_to "#" do %>
+  <footer class="footer__container">
+    <button type="button" class="footer__button">
       <%= image_tag "search-btn.png", height: 50, alt: "検索" %>
-    <% end %>
-    <%= button_to turbidity_to_bods_path do %>
+    </button>
+    <%# TODO: リンクを修正 %>
+    <%= link_to "#", class: "footer__button" do %>
       <%= image_tag "estimate-btn.png", height: 50, alt: "水質推定" %>
     <% end %>
     <button type="button" 
@@ -46,11 +47,11 @@
       data-action="click->foodshare#foodshareChange"
       data-foodshare-active-url-value="<%= asset_path("foodshare_start-btn.png") %>" 
       data-foodshare-inactive-url-value="<%= asset_path("foodshare_end-btn.png") %>"
-      >
-      <%= image_tag "foodshare_start-btn.png", 
-                height: 50, 
-                data: {foodshare_target: "icon" }
-                %>
+    >
+      <%= image_tag "foodshare_start-btn.png",
+        height: 50, 
+        data: {foodshare_target: "icon" }
+      %>
     </button>
     <%= button_to "#" do %>
       <%= image_tag "settings-btn.png", height: 50, alt: "設定" %>

@@ -63,10 +63,7 @@ group :test do
 end
 
 group :development do
-  gem "ruby-lsp", require: false
-  gem "ruby-lsp-rails", require: false
   gem "rubocop", require: false
-  gem "sorbet", require: false
   gem "htmlbeautifier", require: false
   gem "solargraph", require: false
 end
