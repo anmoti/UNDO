@@ -15,12 +15,6 @@ function getGoogleMapsApiKey() {
     return meta.content;
 }
 
-const loader = new Loader({
-    apiKey: getGoogleMapsApiKey(),
-    version: "weekly",
-    libraries: ["maps", "marker"],
-});
-
 // 香川県範囲 34.2128846,134.065572,10.75z
 
 /** @type {google.maps.MapOptions} */
@@ -172,6 +166,9 @@ const shops = [
 // Connects to data-controller="maps"
 /** @extends {Controller<HTMLDivElement>} */
 export default class MapsController extends Controller {
+    /** @type {Loader} */
+    loader;
+
     /** @type {Promise<google.maps.Map>} */
     map;
 
@@ -185,11 +182,19 @@ export default class MapsController extends Controller {
     constructor(context) {
         super(context);
 
-        this.map = loader.importLibrary("maps").then(async ({ Map: GMaps }) => {
-            const map = new GMaps(this.element, mapOptions);
-            console.log("Map initialized:", map);
-            return map;
+        this.loader = new Loader({
+            apiKey: getGoogleMapsApiKey(),
+            version: "weekly",
+            libraries: ["maps", "marker"],
         });
+
+        this.map = this.loader
+            .importLibrary("maps")
+            .then(async ({ Map: GMaps }) => {
+                const map = new GMaps(this.element, mapOptions);
+                console.log("Map initialized:", map);
+                return map;
+            });
     }
 
     async connect() {
@@ -202,7 +207,7 @@ export default class MapsController extends Controller {
     async createShopMarkers() {
         // 各店舗にマーカーを作成
         for (const shop of shops) {
-            const { AdvancedMarkerElement } = await loader.importLibrary(
+            const { AdvancedMarkerElement } = await this.loader.importLibrary(
                 "marker"
             );
             const position = { lat: shop.lat, lng: shop.lon };
@@ -232,7 +237,7 @@ export default class MapsController extends Controller {
      * @param {google.maps.marker.AdvancedMarkerElement} marker
      */
     async showShopInfo(shop, marker) {
-        const { InfoWindow } = await loader.importLibrary("maps");
+        const { InfoWindow } = await this.loader.importLibrary("maps");
 
         // 既存の情報ウィンドウがあれば閉じる
         if (this.infoWindow) {

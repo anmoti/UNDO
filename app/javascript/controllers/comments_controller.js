@@ -25,11 +25,11 @@ export default class extends Controller {
     }
 
     show() {
-        this.element.style.display = "block";
+        this.element.classList.remove("hidden");
     }
 
     hide() {
-        this.element.style.display = "none";
+        this.element.classList.add("hidden");
     }
 }
 
