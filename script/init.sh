@@ -1,3 +1,3 @@
 sudo chown -R $USER:$USER vendor/bundle
-bundler install
+bundle install
 rails db:migrate
