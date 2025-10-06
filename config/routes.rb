@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   resources :passwords, param: :token
-  resources :turbidity_to_bods
+  resources :measurements
 
   if Rails.env.production?
     resources :users, only: [ :create ]

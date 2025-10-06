@@ -36,6 +36,7 @@ $ rails db:test:prepare
 # テーブル一覧
 
 ```
+rails c
 undo(dev)> ActiveRecord::Base.connection.tables
-=> ["turbidity_to_bods", "sessions", "reviews", "ar_internal_metadata", "users", "schema_migrations"]
+=> ["measurements", "sessions", "reviews", "schema_migrations", "ar_internal_metadata", "users"]
 ```
