@@ -3,6 +3,11 @@ require "test_helper"
 class ReviewsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @review = reviews(:one)
+    @user = users(:carol)
+    post signin_path, params: {
+      email: @user.email,
+      password: "passwordcarol"
+    }
   end
 
   test "should get index" do
@@ -16,8 +21,11 @@ class ReviewsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create review" do
+    reviewer = users(:carol)
+    reviewee = users(:bob)
+
     assert_difference("Review.count") do
-      post reviews_url, params: { review: { comment: @review.comment, rating: @review.rating, reviewee_id: @review.reviewee_id, reviewer_id: @review.reviewer_id } }
+      post reviews_url, params: { review: { comment: @review.comment, rating: @review.rating, reviewee_id: reviewee.id, reviewer_id: reviewer.id } }
     end
 
     assert_redirected_to review_url(Review.last)
