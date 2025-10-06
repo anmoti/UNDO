@@ -158,15 +158,6 @@ main {
         @include flexbox($justify: center, $align: center);
         width: 60px;
     }
-
-    // #foodshare_button {
-    //     // padding: 0;
-    //     // border: none;
-    //     // background: none;
-    //     // box-shadow: none;
-    //     // cursor: pointer;
-    //     // line-height: 0;
-    // }
 }
 
 .maps {
@@ -215,14 +206,14 @@ main {
 
         &--foodshare {
             font-size: 15px;
-            background-color: #f00;
-            color: $color-6;
+            background-color: map.get($palette, "accent");
+            color: map.get($palette, "light");
         }
 
         &--foodshare {
             font-size: 15px;
-            background-color: #f00;
-            color: $color-6;
+            background-color: map.get($palette, "accent");
+            color: map.get($palette, "light");
         }
 
         &--buttons {
