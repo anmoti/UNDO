@@ -22,7 +22,10 @@
       <% 5.downto(1) do |i| %>
         <%= form.radio_button :rating, i, id: "star#{i}", class: "star-radio visually-hidden" %>
         <%= form.label :rating, for: "star#{i}", class: "star-label" do %>
-          <svg alt="<%= i %>点"><use href="#star"></use></svg>
+          <svg role="img" aria-label="<%= i %>点">
+            <title><%= i %>点</title>
+            <use href="#star"></use>
+          </svg>
         <% end %>
       <% end %>
     </div>
