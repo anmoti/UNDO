@@ -204,6 +204,12 @@ main {
             color: map.get($palette, "light");
         }
 
+        &--foodshare {
+            font-size: 15px;
+            background-color: map.get($palette, "accent");
+            color: map.get($palette, "light");
+        }
+
         &--buttons {
             @include flexbox($gap: 4px);
 
