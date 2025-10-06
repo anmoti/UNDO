@@ -6,11 +6,11 @@ one:
   predicted_cod: 1.5
   actual_bod: 1.5
   actual_cod: 1.5
-  prediction_model_version: MyString
+  prediction_model_version: __version__
   status: 1
   predicted_at: 2025-09-30 09:26:35
   submitted_at: 2025-09-30 09:26:35
-  submitter: one
+  submitter: bob
 
 two:
   turbidity: 1.5
@@ -18,8 +18,8 @@ two:
   predicted_cod: 1.5
   actual_bod: 1.5
   actual_cod: 1.5
-  prediction_model_version: MyString
+  prediction_model_version: __version__
   status: 1
   predicted_at: 2025-09-30 09:26:35
   submitted_at: 2025-09-30 09:26:35
-  submitter: two
+  submitter: bob
