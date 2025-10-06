@@ -23,6 +23,15 @@ end
 $ ruby ./script/update-package.rb <package-name>
 ```
 
+## 事前
+
+```
+$ RAILS_ENV=test bin/rails assets:precompile
+```
+
+```
+$ rails db:test:prepare
+```
 
 # テーブル一覧
 
