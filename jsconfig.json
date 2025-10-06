@@ -24,6 +24,9 @@
             "@googlemaps/js-api-loader": [
                 "./vendor/javascript/@googlemaps/js-api-loader"
             ],
+            "ky": [
+                "./vendor/javascript/ky"
+            ],
             "controllers/*": [
                 "./app/javascript/controllers/*"
             ]
