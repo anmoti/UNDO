@@ -32,13 +32,9 @@
                 "castwide.solargraph",
                 "KoichiSasada.vscode-rdbg",
                 "kaiwood.endwise",
-                "aliariff.vscode-erb-beautify",
+                "aliariff.vscode-erb-beautify"
             ],
             "settings": {
-                "rubyLsp.rubyVersionManager": {
-                    "identifier": "custom"
-                },
-                "rubyLsp.customRubyCommand": "/usr/local/bin/ruby",
                 "solargraph.useBundler": true,
                 "vscode-erb-beautify.useBundler": true,
                 "files.associations": {
@@ -46,7 +42,7 @@
                 },
                 "emmet.includeLanguages": {
                     "erb": "html"
-                },
+                }
             }
         }
     },
