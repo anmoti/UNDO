@@ -38,6 +38,7 @@ $z-layers: (
     "base": 0,
     "dropdown": 10,
     "modal": 20,
+    "tooltip": 30,
 );
 
 @mixin flexbox($justify: flex-start, $align: stretch, $direction: row, $gap: 0) {
@@ -468,7 +469,7 @@ main {
             visibility: visible;
             /* 表示 */
             opacity: 1;
-            /* 不透明にする */
+            /* 不透明にする (アニメーション) */
         }
     }
 
@@ -490,9 +491,9 @@ main {
         transform: translateX(-50%);
         white-space: nowrap;
         /* テキストを1行に収める */
-        z-index: 1;
+        z-index: map.get($z-layers, "tooltip");
         opacity: 0;
-        /* 初期状態で透明 */
+        /* 初期状態で透明　(アニメーション) */
         transition: opacity 0.3s;
         /* スムーズな表示 */
 
@@ -505,6 +506,7 @@ main {
             transform: translateX(-50%);
             border-width: 5px;
             border-style: solid;
+            border-color: transparent;
             border-top-color: map.get($palette, "dark");
             /* 矢印の色 */
         }
