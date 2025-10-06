@@ -42,7 +42,11 @@
                 },
                 "emmet.includeLanguages": {
                     "erb": "html"
-                }
+                },
+                "rubyLsp.rubyVersionManager": {
+                    "identifier": "none"
+                },
+                "rubyLsp.rubyExecutablePath": "/usr/local/bin/ruby"
             }
         }
     },
