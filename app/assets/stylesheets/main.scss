@@ -455,3 +455,58 @@ main {
         }
     }
 }
+
+.tooltip {
+    &__container {
+        position: relative;
+        /* 補足情報を親要素に基づいて配置 */
+        display: inline-block;
+        cursor: pointer;
+
+        /* ホバー時のスタイル */
+        &:hover .tooltip__text {
+            visibility: visible;
+            /* 表示 */
+            opacity: 1;
+            /* 不透明にする */
+        }
+    }
+
+    /* 補足情報のスタイル */
+    &__text {
+        visibility: hidden;
+        /* 初期状態では非表示 */
+        background-color: map.get($palette, "dark");
+        /* 背景色 */
+        color: map.get($palette, "light");
+        /* 文字色 */
+        text-align: center;
+        padding: 8px;
+        border-radius: 4px;
+        position: absolute;
+        bottom: 125%;
+        /* 親要素の上に配置 */
+        left: 50%;
+        transform: translateX(-50%);
+        white-space: nowrap;
+        /* テキストを1行に収める */
+        z-index: 1;
+        opacity: 0;
+        /* 初期状態で透明 */
+        transition: opacity 0.3s;
+        /* スムーズな表示 */
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            /* 補足情報の下に配置 */
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 5px;
+            border-style: solid;
+            border-top-color: map.get($palette, "dark");
+            /* 矢印の色 */
+        }
+    }
+}
