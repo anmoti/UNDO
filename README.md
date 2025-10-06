@@ -23,10 +23,19 @@ end
 $ ruby ./script/update-package.rb <package-name>
 ```
 
+## 事前
+
+```
+$ RAILS_ENV=test bin/rails assets:precompile
+```
+
+```
+$ rails db:test:prepare
+```
 
 # テーブル一覧
 
 ```
-ActiveRecord::Base.connection.tables
-=> ["reviews", "ar_internal_metadata", "users", "schema_migrations"]
+undo(dev)> ActiveRecord::Base.connection.tables
+=> ["turbidity_to_bods", "sessions", "reviews", "ar_internal_metadata", "users", "schema_migrations"]
 ```

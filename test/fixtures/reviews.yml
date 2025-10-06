@@ -1,11 +1,11 @@
 one:
-  reviewer: one
-  reviewee: one
-  comment: MyText
-  rating: 1.5
+  comment: "テストレビュー"
+  rating: 5
+  reviewer: alice
+  reviewee: bob
 
 two:
-  reviewer: two
-  reviewee: two
+  reviewer: alice
+  reviewee: carol
   comment: MyText
   rating: 1.5

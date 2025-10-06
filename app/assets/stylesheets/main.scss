@@ -1,0 +1,457 @@
+// Sassy
+
+@use "sass:color";
+@use "sass:map";
+
+//================================================
+// 設定 (Variables, Mixins, Placeholders)
+//================================================
+
+$palette: (
+    "primary": #f28705,
+    // メインカラー (ヘッダー, フッターなど)
+    "secondary": #f29f05,
+    // サブカラー (ボーダー, リンクなど)
+    "accent": #f23030,
+    // アクセントカラー (マーカーなど)
+    "highlight": #f2cb05,
+    // 強調色 (星の評価, 背景など)
+    "dark": #301b01,
+    // 暗い色 (テキスト, 背景など)
+    "light": #ffffff,
+    // 明るい色 (テキスト, 背景など)
+    "success": #00cc00,
+    // 成功・肯定的な色
+    "danger": #ff0000,
+    // 危険・注意を促す色
+    "gray": #666666,
+    // グレー
+);
+
+$header-height: 60px;
+$footer-height: 60px;
+$radius-sm: 4px;
+$radius-md: 8px;
+$base-padding: 1rem;
+
+$z-layers: (
+    "base": 0,
+    "dropdown": 10,
+    "modal": 20,
+);
+
+@mixin flexbox($justify: flex-start, $align: stretch, $direction: row, $gap: 0) {
+    display: flex;
+    justify-content: $justify;
+    align-items: $align;
+    flex-direction: $direction;
+    gap: $gap;
+}
+
+%button-reset {
+    display: block;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-family: inherit;
+    color: inherit;
+}
+
+//================================================
+// グローバルスタイル
+//================================================
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0 solid;
+}
+
+body {
+    min-height: 100dvh;
+    @include flexbox($direction: column);
+    background-color: map.get($palette, "light");
+    z-index: map.get($z-layers, "base");
+}
+
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+.careful {
+    color: map.get($palette, "danger");
+}
+
+//================================================
+// コンポーネントごとのスタイル
+//================================================
+
+.header {
+    &__container {
+        @include flexbox($justify: space-between, $align: center);
+        height: $header-height;
+        padding: 11px;
+        background-color: map.get($palette, "primary");
+    }
+
+    &__logo {
+        height: 100%;
+    }
+
+    &__right {
+        @include flexbox($align: center, $gap: 1rem);
+    }
+
+    &__user {
+        color: map.get($palette, "light");
+    }
+
+    // TODO: 垂直位置がずれているので直す
+    &__button {
+        @extend %button-reset;
+    }
+
+    &__btn--text {
+        @extend .header__button;
+        display: block;
+        padding: 0.5rem 1rem;
+        border-radius: $radius-sm;
+        font-size: 1rem;
+        background-color: map.get($palette, "light");
+        color: map.get($palette, "dark");
+        text-decoration: none;
+        text-align: center;
+    }
+}
+
+.footer {
+    &__container {
+        @include flexbox($justify: space-evenly, $align: center);
+        height: $footer-height;
+        background-color: map.get($palette, "primary");
+        border-bottom: 1px solid map.get($palette, "secondary");
+        padding: 0 20px;
+    }
+
+    &__button {
+        @extend %button-reset;
+        @include flexbox($justify: center, $align: center);
+        width: 60px;
+    }
+}
+
+.maps {
+    &__container {
+        flex: 1;
+    }
+
+    &__marker {
+        width: 25px;
+        height: 25px;
+        cursor: pointer;
+        position: relative;
+        transition: transform 0.2s ease;
+        border-radius: 50%;
+        background-color: map.get($palette, "accent");
+        border: 2px solid map.get($palette, "light");
+
+        &::before {
+            content: "";
+            position: absolute;
+            inset: 50%;
+            width: 50%;
+            height: 50%;
+            background-color: map.get($palette, "light");
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+    }
+
+    &__info {
+        min-width: 200px;
+        font-size: 14px;
+        color: map.get($palette, "gray");
+
+        &--title {
+            color: map.get($palette, "dark");
+            font-size: 16px;
+            margin-bottom: 2px;
+        }
+
+        &--eco {
+            font-size: 15px;
+            background-color: map.get($palette, "success");
+            color: map.get($palette, "light");
+        }
+
+        &--foodshare {
+            font-size: 15px;
+            background-color: map.get($palette, "accent");
+            color: map.get($palette, "light");
+        }
+
+        &--buttons {
+            @include flexbox($gap: 4px);
+
+            button {
+                @extend %button-reset;
+                background-color: map.get($palette, "primary");
+                color: map.get($palette, "dark");
+                padding: 3px;
+                border-radius: 3px;
+            }
+        }
+    }
+}
+
+.form-wrapper {
+    @include flexbox($justify: center, $align: center);
+    flex: 1;
+    background-color: map.get($palette, "highlight");
+    padding: 40px;
+
+    &__container {
+        background-color: map.get($palette, "light");
+        padding: 2.5rem;
+        border-radius: $radius-md;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+    }
+
+    &__title {
+        margin-bottom: 1.5rem;
+        color: map.get($palette, "dark");
+        font-size: 1.8rem;
+        font-weight: 600;
+    }
+
+    &__links {
+        margin-top: 1.5rem;
+        @include flexbox($direction: column, $gap: 0.75rem);
+    }
+
+    &__link {
+        color: map.get($palette, "secondary");
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+.form {
+    @include flexbox($direction: column, $gap: 1.25rem);
+
+    &__field {
+        text-align: left;
+        color: map.get($palette, "dark");
+    }
+
+    &__label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+    }
+
+    &__input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid map.get($palette, "secondary");
+        border-radius: $radius-sm;
+        font-size: 1rem;
+        transition: border-color 0.2s, box-shadow 0.2s;
+
+        &:focus {
+            outline: none;
+            border-color: map.get($palette, "secondary");
+            box-shadow: 0 0 0 3px rgba(map.get($palette, "secondary"), 0.2);
+        }
+    }
+
+    &__submit-btn {
+        @extend %button-reset;
+        width: 100%;
+        padding: 0.8rem;
+        background-color: map.get($palette, "primary");
+        color: map.get($palette, "light");
+        border-radius: $radius-sm;
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+
+    &__review {
+        &--stars {
+            @include flexbox($direction: row-reverse);
+            margin-top: 5px;
+
+            .star-label {
+                flex: 1;
+                cursor: pointer;
+
+                svg {
+                    width: 100%;
+                    aspect-ratio: 1 / 1;
+                    fill: map.get($palette, "light");
+                    stroke: map.get($palette, "dark");
+                }
+            }
+
+            // チェックされている星とそれ以前(~)の星をハイライト色にする
+            &:not(:hover) .star-radio:checked~.star-label svg {
+                fill: map.get($palette, "highlight");
+            }
+
+            // ホバーしている星とそれ以前(~)の星をハイライト色にする
+            .star-label:hover svg,
+            .star-label:hover~.star-label svg {
+                fill: map.get($palette, "highlight");
+            }
+
+            .star-radio:focus-visible+.star-label svg {
+                stroke: map.get($palette, "accent");
+            }
+        }
+    }
+}
+
+.comments {
+    &__container {
+        position: absolute;
+        bottom: $footer-height;
+        background-color: map.get($palette, "dark");
+        color: map.get($palette, "light");
+        z-index: map.get($z-layers, "dropdown");
+        width: 100%;
+        height: 40vh;
+        justify-content: flex-start;
+    }
+
+    &__header {
+        @include flexbox($justify: space-between, $align: center);
+        width: 100%;
+        background-color: map.get($palette, "primary");
+    }
+
+    &__text {
+        font-size: 32px;
+        bottom: 0;
+        text-align: center;
+        padding-bottom: 4px;
+    }
+
+    &__btn--close {
+        @extend %button-reset;
+        font-size: 24px;
+        padding: 0 10px;
+        color: map.get($palette, "light");
+    }
+
+    &__list {
+        overflow-y: auto;
+        height: 80%;
+        padding: 10px;
+    }
+
+    // &__content
+}
+
+.measures {
+    flex: 1;
+    position: relative;
+    @include flexbox($direction: column, $align: center);
+    background-color: map.get($palette, "secondary");
+
+    // .measures__measure内のボタンと共通化
+    %measure-button {
+        @extend %button-reset;
+        font-size: 18px;
+        background-color: map.get($palette, "light");
+        color: map.get($palette, "dark");
+        padding: 10px 20px;
+        border-radius: 5px;
+    }
+
+    &__list {
+        button {
+            @extend %measure-button;
+        }
+    }
+
+    &__measure {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        @include flexbox($justify: center, $align: center);
+        text-align: center;
+        background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.7));
+
+        &--container {
+            background-color: map.get($palette, "dark");
+            border: 2px solid map.get($palette, "secondary");
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 500px;
+            color: map.get($palette, "light");
+            font-size: 18px;
+        }
+
+        &--title {
+            color: map.get($palette, "highlight");
+            font-size: 23px;
+            margin-bottom: 20px;
+        }
+
+        &--steps {
+            list-style-type: decimal;
+            padding-left: 25px;
+            text-align: left;
+
+            >li {
+                padding-bottom: 10px;
+            }
+        }
+
+        &--result {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        &--values {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        &--buttons {
+            margin-top: 20px;
+            @include flexbox($justify: center, $gap: 20px);
+
+            >button {
+                @extend %measure-button;
+            }
+        }
+    }
+}

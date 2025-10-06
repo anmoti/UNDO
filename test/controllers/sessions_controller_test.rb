@@ -2,7 +2,7 @@ require "test_helper"
 
 class SessionsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @user = users(:one)
+    @user = users(:alice)
   end
 
   test "should get signin page" do
@@ -82,7 +82,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
     # セッションが削除されるか
     assert_difference "Session.count", -1 do
-      get signout_path
+      delete signout_path
     end
 
     # セッションが存在しないか

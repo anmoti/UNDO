@@ -2,7 +2,7 @@ require "test_helper"
 
 class UserAuthenticationFlowTest < ActionDispatch::IntegrationTest
   setup do
-    @user = users(:one)
+    @user = users(:alice)
   end
 
   test "complete signin signout flow" do
@@ -45,7 +45,7 @@ class UserAuthenticationFlowTest < ActionDispatch::IntegrationTest
     assert_select "div", text: /ログイン中: #{@user.email}/
 
     # サインアウト
-    get signout_path
+    delete signout_path
     assert_redirected_to signin_path
 
     # セッションが削除されていることを確認
@@ -58,12 +58,12 @@ class UserAuthenticationFlowTest < ActionDispatch::IntegrationTest
   end
 
   test "signin with consumer user" do
-    consumer_user = users(:two)
+    consumer_user = users(:carol)  # users(:two) から変更
     assert consumer_user.is_consumer
 
     post signin_path, params: {
       email: consumer_user.email,
-      password: "password"
+      password: "passwordcarol"  # "password" から変更
     }
     assert_redirected_to root_url
 
@@ -77,12 +77,12 @@ class UserAuthenticationFlowTest < ActionDispatch::IntegrationTest
   end
 
   test "signin with producer user" do
-    producer_user = users(:one)
+    producer_user = users(:bob)
     assert_not producer_user.is_consumer  # producer
 
     post signin_path, params: {
       email: producer_user.email,
-      password: "password"
+      password: "passwordbob"
     }
     assert_redirected_to root_url
 
@@ -108,7 +108,7 @@ class UserAuthenticationFlowTest < ActionDispatch::IntegrationTest
       session_id = Session.last.id
 
       # サインアウト
-      get signout_path
+      delete signout_path
       assert_redirected_to signin_path
 
       # セッションが削除されていることを確認
