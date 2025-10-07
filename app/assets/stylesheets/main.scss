@@ -337,6 +337,64 @@ main {
     }
 }
 
+/* Flash messages */
+.flash {
+    position: fixed;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: map.get($z-layers, "modal");
+    min-width: 280px;
+    max-width: 90%;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+    border-radius: $radius-md;
+    overflow: hidden;
+
+    &__inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 0.75rem 1rem;
+    }
+
+    &__message {
+        font-size: 0.95rem;
+        color: map.get($palette, "dark");
+        margin: 0;
+    }
+
+    &__close {
+        @extend %button-reset;
+        font-size: 1.1rem;
+        line-height: 1;
+    }
+
+    &-notice {
+        background: linear-gradient(180deg,
+                map.get($palette, "success"),
+                color.scale(map.get($palette, "success"), $lightness: 6%));
+        color: map.get($palette, "light");
+    }
+
+    &-alert {
+        background: linear-gradient(180deg,
+                map.get($palette, "danger"),
+                color.scale(map.get($palette, "danger"), $lightness: -6%));
+        color: map.get($palette, "light");
+    }
+
+    &--closing {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-8px) scale(0.98);
+        transition: opacity 300ms ease, transform 300ms ease;
+    }
+
+    // default visible state transition
+    transition: opacity 300ms ease,
+    transform 300ms ease;
+}
+
 .comments {
     &__container {
         position: absolute;
