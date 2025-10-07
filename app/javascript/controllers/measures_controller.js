@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
+import ky from "ky";
 
 /**
  * @type {{
@@ -32,9 +33,21 @@ export default class extends Controller {
      */
     state = STATES.CLOSED;
 
-    connect() {
+    getCSRFToken() {
+        return document.querySelector('meta[name="csrf-token"]')?.getAttribute("content") ?? "";
+    }
+
+    async connect() {
         console.log("Measures controller connected");
         this.changeState(STATES.CLOSED);
+
+        const a = await ky.post("/measurements", {
+            credentials: "include",
+            headers: {
+                "X-CSRF-Token": this.getCSRFToken(),
+            }
+        });
+        console.log(a);
     }
 
     /**

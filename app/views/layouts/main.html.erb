@@ -42,7 +42,9 @@
       <%= link_to "#", class: "footer__button" do %>
         <%= image_tag "estimate-btn.png", height: 50, alt: "水質推定" %>
       <% end %>
-      <button type="button"
+      <button 
+      type="button"
+      class="footer__button"
       data-controller="foodshare"
       data-action="click->foodshare#foodshareChange"
         data-foodshare-active-url-value="<%= asset_path("foodshare_start-btn.png") %>"
@@ -53,7 +55,7 @@
         data: {foodshare_target: "icon" }
       %>
       </button>
-      <%= button_to "#" do %>
+      <%= link_to "#", class: "footer__button" do %>
         <%= image_tag "settings-btn.png", height: 50, alt: "設定" %>
       <% end %>
     </footer>

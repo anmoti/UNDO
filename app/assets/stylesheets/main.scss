@@ -38,6 +38,9 @@ $z-layers: (
     "base": 0,
     "dropdown": 10,
     "modal": 20,
+    "header": 30,
+    "footer": 30,
+    "tooltip": 40,
 );
 
 @mixin flexbox($justify: flex-start, $align: stretch, $direction: row, $gap: 0) {
@@ -112,6 +115,7 @@ main {
         height: $header-height;
         padding: 11px;
         background-color: map.get($palette, "primary");
+        z-index: map.get($z-layers, "header");
     }
 
     &__logo {
@@ -151,6 +155,7 @@ main {
         background-color: map.get($palette, "primary");
         border-bottom: 1px solid map.get($palette, "secondary");
         padding: 0 20px;
+        z-index: map.get($z-layers, "footer");
     }
 
     &__button {
@@ -458,58 +463,129 @@ main {
         }
     }
 
-    &__measure {
-        position: absolute;
-        top: 0;
-        width: 100%;
-        height: 100%;
+}
+
+.measure {
+    &__start-btn {
+        @extend %button-reset;
+        font-size: 18px;
+        background-color: map.get($palette, "light");
+        color: map.get($palette, "dark");
+        padding: 10px 20px;
+        border-radius: 5px;
+    }
+
+    &__modal {
         @include flexbox($justify: center, $align: center);
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100dvh;
         text-align: center;
         background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.7));
+        z-index: map.get($z-layers, "modal");
+    }
 
-        &--container {
-            background-color: map.get($palette, "dark");
-            border: 2px solid map.get($palette, "secondary");
-            border-radius: 10px;
-            padding: 20px;
-            max-width: 500px;
-            color: map.get($palette, "light");
-            font-size: 18px;
+    &__container {
+        background-color: map.get($palette, "dark");
+        border: 2px solid map.get($palette, "secondary");
+        border-radius: 10px;
+        padding: 20px;
+        max-width: 500px;
+        color: map.get($palette, "light");
+        font-size: 18px;
+    }
+
+    &__title {
+        color: map.get($palette, "highlight");
+        font-size: 23px;
+        margin-bottom: 20px;
+    }
+
+    &__steps {
+        list-style-type: decimal;
+        padding-left: 25px;
+        text-align: left;
+
+        >li {
+            padding-bottom: 10px;
         }
+    }
 
-        &--title {
-            color: map.get($palette, "highlight");
-            font-size: 23px;
-            margin-bottom: 20px;
+    &__result {
+        font-size: 28px;
+        margin-bottom: 20px;
+    }
+
+    &__values {
+        font-size: 36px;
+        margin-bottom: 20px;
+    }
+
+    &__buttons {
+        margin-top: 20px;
+        @include flexbox($justify: center, $gap: 20px);
+
+        >button {
+            @extend %measure-button;
         }
+    }
+}
 
-        &--steps {
-            list-style-type: decimal;
-            padding-left: 25px;
-            text-align: left;
 
-            >li {
-                padding-bottom: 10px;
-            }
+.tooltip {
+    &__container {
+        position: relative;
+        /* 補足情報を親要素に基づいて配置 */
+        display: inline-block;
+        cursor: pointer;
+
+        /* ホバー時のスタイル */
+        &:hover .tooltip__text {
+            visibility: visible;
+            /* 表示 */
+            opacity: 1;
+            /* 不透明にする (アニメーション) */
         }
+    }
 
-        &--result {
-            font-size: 28px;
-            margin-bottom: 20px;
-        }
+    /* 補足情報のスタイル */
+    &__text {
+        visibility: hidden;
+        /* 初期状態では非表示 */
+        background-color: map.get($palette, "dark");
+        /* 背景色 */
+        color: map.get($palette, "light");
+        /* 文字色 */
+        text-align: center;
+        padding: 8px;
+        border-radius: 4px;
+        position: absolute;
+        bottom: 125%;
+        /* 親要素の上に配置 */
+        left: 50%;
+        transform: translateX(-50%);
+        white-space: nowrap;
+        /* テキストを1行に収める */
+        z-index: map.get($z-layers, "tooltip");
+        opacity: 0;
+        /* 初期状態で透明　(アニメーション) */
+        transition: opacity 0.3s;
+        /* スムーズな表示 */
 
-        &--values {
-            font-size: 36px;
-            margin-bottom: 20px;
-        }
-
-        &--buttons {
-            margin-top: 20px;
-            @include flexbox($justify: center, $gap: 20px);
-
-            >button {
-                @extend %measure-button;
-            }
+        &::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            /* 補足情報の下に配置 */
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 5px;
+            border-style: solid;
+            border-color: transparent;
+            border-top-color: map.get($palette, "dark");
+            /* 矢印の色 */
         }
     }
 }
