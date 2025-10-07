@@ -47,6 +47,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_07_042000) do
     t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
+  create_table "stores", force: :cascade do |t|
+    t.string "name", null: false
+    t.float "lat"
+    t.float "lon"
+    t.text "open_time"
+    t.string "address"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name", "address"], name: "index_stores_on_name_and_address", unique: true
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
