@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   resources :passwords, param: :token
-  resources :measurements
+  resources :measurements do
+    get :status, on: :member
+  end
 
   if Rails.env.production?
     resources :users, only: [ :create ]
