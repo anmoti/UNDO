@@ -1,5 +1,5 @@
 <% flash.each do |key, message| %>
-  <div class="flash flash-<%= key %>" data-controller="flash" data-timeout="5000" role="status" aria-live="polite">
+  <div class="flash flash-<%= key %>" data-controller="flash" data-flash-timeout-value="5000" role="status" aria-live="polite">
     <div class="flash__inner">
       <p class="flash__message"><%= message %></p>
       <button type="button" class="flash__close" aria-label="閉じる" data-action="click->flash#close">&times;</button>

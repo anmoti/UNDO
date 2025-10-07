@@ -3,10 +3,13 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
     static values = { timeout: Number } // Keep the static values declaration
 
+    /**
+     * @type {number | undefined}
+     */
+    timeoutValue = undefined
+
     connect() {
-        // Read timeout from data attribute (data-timeout) or default to 5000ms
-        const el = /** @type {HTMLElement} */ (this.element)
-        const t = parseInt(el.dataset.timeout || '5000', 10)
+        const t = this.timeoutValue ?? 5000
         this._timer = setTimeout(() => this.fadeAndRemove(), t)
     }
 
@@ -35,7 +38,4 @@ export default class extends Controller {
         // match CSS transition duration (300ms) before removing
         setTimeout(() => el.remove(), 320)
     }
-    /**
-     * @param {HTMLElement | null} el
-     */
 }

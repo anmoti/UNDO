@@ -3,8 +3,8 @@
   <%# reviewer_idがフォームから送信されることを確認する(見つからない場合、コントローラのCurrent.userがデフォルト) %>
   <% if defined?(Current) && Current.user %>
     <%= form.hidden_field :reviewer_id, value: (review.reviewer_id || Current.user.id) %>
-  <% else %>
-    <%= form.hidden_field :reviewer_id, value: review.reviewer_id if review.reviewer_id.present? %>
+  <% elsif review.reviewer_id.present? %>
+    <%= form.hidden_field :reviewer_id, value: review.reviewer_id %>
   <% end %>
 
   <% if review.errors.any? %>
