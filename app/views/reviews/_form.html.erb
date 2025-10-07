@@ -22,8 +22,8 @@
     <%= form.label :reviewee_id, "レビューするお店", class: "form__label" %>
     <%# TODO: 地図かドロップダウンリストか %>
     <%# プロデューサー・ユーザー（is_consumer: false）が入力されたselectを使用し、フリーテキストIDを避ける。 %>
-    <%# <% producers = User.where(is_consumer: false).order(:name) rescue [] %> %>
-    <%# <%= form.collection_select :reviewee_id, producers, :id, :name, { include_blank: "選択してください" }, { class: "form__input" } %> %>
+    <%# producers = User.where(is_consumer: false).order(:name) rescue [] %>
+    <%# form.collection_select :reviewee_id, producers, :id, :name, { include_blank: "選択してください" }, { class: "form__input" } %>
 
     <%= form.text_field :reviewee_id, class: "form__input" %>
   </div>
