@@ -2,7 +2,7 @@ class ReviewsController < ApplicationController
   layout "main", only: [ :new ]
   allow_unauthenticated_access except: %i[ new ]
   before_action :set_review, only: %i[ show edit update destroy ]
-  before_action :ensure_consumer, only: %i[ new create update destroy ]
+  before_action :ensure_consumer, only: %i[ new create edit update destroy ]
 
   # GET /reviews or /reviews.json
   def index
