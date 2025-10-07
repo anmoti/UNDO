@@ -9,4 +9,6 @@
     </p>
   <% end %>
 </div>
-<%= link_to "New review", new_review_path %>
+<% if defined?(Current) && Current.user&.is_consumer %>
+  <%= link_to "New review", new_review_path %>
+<% end %>

@@ -31,6 +31,7 @@
       </div>
     </header>
     <main>
+      <%= render "shared/flash" %>
       <%= yield %>
     </main>
     <footer class="footer__container">
@@ -41,14 +42,14 @@
       <%= link_to "#", class: "footer__button" do %>
         <%= image_tag "estimate-btn.png", height: 50, alt: "水質推定" %>
       <% end %>
-      <button type="button" 
+      <button type="button"
       data-controller="foodshare"
       data-action="click->foodshare#foodshareChange"
-        data-foodshare-active-url-value="<%= asset_path("foodshare_start-btn.png") %>" 
+        data-foodshare-active-url-value="<%= asset_path("foodshare_start-btn.png") %>"
         data-foodshare-inactive-url-value="<%= asset_path("foodshare_end-btn.png") %>"
         >
         <%= image_tag "foodshare_start-btn.png",
-        height: 50, 
+        height: 50,
         data: {foodshare_target: "icon" }
       %>
       </button>

@@ -1,7 +1,14 @@
-<%= form_with(model: review, class: "form") do |form| %>
+<%= form_with(model: review, class: "form", local: true) do |form| %>
+
+  <%# reviewer_idがフォームから送信されることを確認する(見つからない場合、コントローラのCurrent.userがデフォルト) %>
+  <% if defined?(Current) && Current.user %>
+    <%= form.hidden_field :reviewer_id, value: (review.reviewer_id || Current.user.id) %>
+  <% elsif review.reviewer_id.present? %>
+    <%= form.hidden_field :reviewer_id, value: review.reviewer_id %>
+  <% end %>
 
   <% if review.errors.any? %>
-    <div style="color: red">
+    <div class="careful">
       <h2><%= pluralize(review.errors.count, "error") %> prohibited this review from being saved:</h2>
       <ul>
         <% review.errors.each do |error| %>
@@ -13,6 +20,11 @@
 
   <div class="form__field">
     <%= form.label :reviewee_id, "レビューするお店", class: "form__label" %>
+    <%# TODO: 地図かドロップダウンリストか %>
+    <%# プロデューサー・ユーザー（is_consumer: false）が入力されたselectを使用し、フリーテキストIDを避ける。 %>
+    <%# producers = User.where(is_consumer: false).order(:name) rescue [] %>
+    <%# form.collection_select :reviewee_id, producers, :id, :name, { include_blank: "選択してください" }, { class: "form__input" } %>
+
     <%= form.text_field :reviewee_id, class: "form__input" %>
   </div>
 
@@ -36,6 +48,10 @@
     <%= form.text_area :comment, class: "form__input" %>
   </div>
 
-  <%= form.submit "送信", class: "form__submit-btn" %>
+  <% if defined?(Current) && Current.user&.is_consumer %>
+    <%= form.submit "送信", class: "form__submit-btn" %>
+  <% else %>
+    <p class="notice">レビュー投稿は消費者のみ行えます。</p>
+  <% end %>
 
 <% end %>

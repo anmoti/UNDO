@@ -1,7 +1,8 @@
 class ReviewsController < ApplicationController
   layout "main", only: [ :new ]
-  allow_unauthenticated_access except: [ :new ]
+  allow_unauthenticated_access only: %i[index show]
   before_action :set_review, only: %i[ show edit update destroy ]
+  before_action :ensure_consumer, only: %i[ new create edit update destroy ]
 
   # GET /reviews or /reviews.json
   def index
@@ -31,7 +32,10 @@ class ReviewsController < ApplicationController
         format.html { redirect_to @review, notice: "Review was successfully created." }
         format.json { render :show, status: :created, location: @review }
       else
-        format.html { render :new, status: :unprocessable_entity }
+          format.html do
+            flash.now[:alert] = @review.errors.full_messages.join("\n")
+            render :new, status: :unprocessable_entity
+          end
         format.json { render json: @review.errors, status: :unprocessable_entity }
       end
     end
@@ -63,11 +67,23 @@ class ReviewsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_review
-      @review = Review.find(params.expect(:id))
+      @review = Review.find(params[:id])
     end
 
-    # Only allow a list of trusted parameters through.
+    # 消費者以外のユーザーが新しいレビューフォームにアクセスできないようにする。
+    # 現在のユーザーが消費者でない場合は、アラートでリダイレクトする。
+    def ensure_consumer
+      user = defined?(Current) ? Current.user : nil
+      unless user&.is_consumer
+        redirect_to root_path, alert: "レビューの投稿は消費者のみ行えます。"
+      end
+    end
+
+    # 信頼できるパラメーターのリストだけを通す。
     def review_params
-      params.expect(review: [ :reviewer_id, :reviewee_id, :comment, :rating ])
+      # review keyとpermit属性が必要。reviewer_idがフォームから提供されない場合、デフォルトは現在サインインしているユーザーのidとなる。
+      permitted = params.require(:review).permit(:reviewer_id, :reviewee_id, :comment, :rating)
+      permitted[:reviewer_id] = Current.user.id if permitted[:reviewer_id].blank? && defined?(Current) && Current.user
+      permitted
     end
 end
