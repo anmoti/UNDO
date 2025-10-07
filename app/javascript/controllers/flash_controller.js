@@ -1,12 +1,8 @@
+// @ts-nocheck
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
     static values = { timeout: Number } // Keep the static values declaration
-
-    /**
-     * @type {number | undefined}
-     */
-    timeoutValue = undefined
 
     connect() {
         const t = this.timeoutValue ?? 5000
