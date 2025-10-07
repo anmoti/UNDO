@@ -1,0 +1,7 @@
+one:
+  name: "Bob's Store"
+  address: "123 Example St"
+
+two:
+  name: "Carol's Market"
+  address: "456 Another Ave"

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_07_042000) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_07_153729) do
   create_table "measurements", force: :cascade do |t|
     t.float "turbidity"
     t.float "predicted_bod"
@@ -69,7 +69,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_07_042000) do
   end
 
   add_foreign_key "measurements", "users", column: "submitter_id"
-  add_foreign_key "reviews", "users", column: "reviewee_id"
+  add_foreign_key "reviews", "stores", column: "reviewee_id"
+  add_foreign_key "reviews", "stores", column: "reviewee_id"
   add_foreign_key "reviews", "users", column: "reviewer_id"
   add_foreign_key "sessions", "users"
 end

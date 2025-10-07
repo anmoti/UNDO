@@ -1,6 +1,6 @@
 class Review < ApplicationRecord
   belongs_to :reviewer, class_name: "User"
-  belongs_to :reviewee, class_name: "User"
+   belongs_to :reviewee, class_name: "Store"
 
   validates :comment, presence: true
   validates :rating, presence: true, inclusion: { in: 1.0..5.0 }
@@ -21,9 +21,9 @@ class Review < ApplicationRecord
       return
     end
 
-    # レビュアーは消費者でなければならず、レビュイーも消費者であってはならない。
-    unless reviewer.is_consumer && !reviewee.is_consumer
-      errors.add(:reviewee, "Customer can only review producers")
+     # レビュアーは消費者でなければならない。
+     unless reviewer.is_consumer
+       errors.add(:reviewer, "must be a consumer")
     end
   end
 end
