@@ -15,12 +15,21 @@ else
 end
 ```
 
-## npmパッケージのダウンロード / アップデート
+## npm パッケージのダウンロード / アップデート
 
 `./bin/importmap pin <package-name>`でもダウンロードはできるが、型定義ファイルやソースマップが含まれないため、以下のスクリプトを使用する。
 
 ```
 $ ruby ./script/update-package.rb <package-name>
+```
+
+## import udon data
+
+1. `udon_list.json`をルートに配置してね
+2. そのあとこれを叩いてね
+
+```
+$ bin/rails import:stores
 ```
 
 ## 事前

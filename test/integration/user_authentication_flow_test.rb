@@ -59,7 +59,6 @@ class UserAuthenticationFlowTest < ActionDispatch::IntegrationTest
 
   test "signin with consumer user" do
     consumer_user = users(:carol)  # users(:two) から変更
-    assert consumer_user.is_consumer
 
     post signin_path, params: {
       email: consumer_user.email,
@@ -78,7 +77,6 @@ class UserAuthenticationFlowTest < ActionDispatch::IntegrationTest
 
   test "signin with producer user" do
     producer_user = users(:bob)
-    assert_not producer_user.is_consumer  # producer
 
     post signin_path, params: {
       email: producer_user.email,

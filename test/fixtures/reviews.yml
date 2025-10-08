@@ -2,10 +2,10 @@ one:
   comment: "テストレビュー"
   rating: 5
   reviewer: alice
-  reviewee: bob
+  reviewee: one
 
 two:
   reviewer: alice
-  reviewee: carol
+  reviewee: two
   comment: MyText
   rating: 1.5
