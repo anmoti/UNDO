@@ -468,7 +468,7 @@ main {
         position: fixed;
         right: 0;
         top: $header-height;
-        width: 400px;
+        width: min(100vw, 400px);
         height: calc(100vh - $header-height);
         background-color: map.get($palette, "light");
         box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
