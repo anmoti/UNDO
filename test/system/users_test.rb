@@ -20,8 +20,7 @@ class UsersTest < ApplicationSystemTestCase
     fill_in "user_password_confirmation", with: "password"
     click_on "登録する"
 
-    assert_text "User was successfully created"
-    click_on "Back"
+    assert_text "アカウントが正常に作成されました。"
   end
 
   test "should update User" do
