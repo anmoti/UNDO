@@ -12,9 +12,8 @@
   <% end %>
 
   <div class="form__field form__account-type">
-    <span class="form__label">アカウントタイプ</span>
     <div class="form__tabs">
-      <%= form.radio_button :is_company, true,
+      <%= form.radio_button :is_company, false,
           id: "user_account",
           class: "form__tab-radio",
           checked: true,
@@ -23,7 +22,7 @@
           for: "user_account",
           class: "form__tab-label" %>
 
-      <%= form.radio_button :is_company, false,
+      <%= form.radio_button :is_company, true,
           id: "company_account",
           class: "form__tab-radio",
           data: { action: "change->signup-form#updateTitle" } %>

@@ -28,7 +28,7 @@ class ReviewsControllerTest < ActionDispatch::IntegrationTest
       post reviews_url, params: { review: { comment: @review.comment, rating: @review.rating, reviewee_id: reviewee.id, reviewer_id: reviewer.id } }
     end
 
-    assert_redirected_to review_url(Review.last)
+    assert_redirected_to root_path
   end
 
   test "should show review" do
@@ -52,5 +52,43 @@ class ReviewsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to reviews_url
+  end
+
+  test "企業アカウントはレビューを投稿できない" do
+    # 企業アカウントでログイン
+    delete signout_path
+    post signin_path, params: {
+      email: users(:bob).email,
+      password: "passwordbob"
+    }
+
+    reviewee = stores(:one)
+
+    assert_no_difference("Review.count") do
+      post reviews_url, params: {
+        review: {
+          comment: "企業からのレビュー",
+          rating: 5.0,
+          reviewee_id: reviewee.id,
+          reviewer_id: users(:bob).id
+        }
+      }
+    end
+
+    assert_redirected_to root_path
+    assert_equal "企業アカウントはレビューを投稿できません。", flash[:alert]
+  end
+
+  test "企業アカウントはレビュー作成ページにアクセスできない" do
+    # 企業アカウントでログイン
+    delete signout_path
+    post signin_path, params: {
+      email: users(:bob).email,
+      password: "passwordbob"
+    }
+
+    get new_review_url
+    assert_redirected_to root_path
+    assert_equal "企業アカウントはレビューを投稿できません。", flash[:alert]
   end
 end

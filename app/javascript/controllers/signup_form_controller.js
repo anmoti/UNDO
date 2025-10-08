@@ -10,13 +10,13 @@ export default class extends Controller {
     }
 
     updateTitle(event) {
-        const isCompany = event.target.value === "false";
+        const isCompany = event.target.value === "true";
 
         if (this.hasTitleTarget) {
             if (isCompany) {
                 this.titleTarget.textContent = "企業アカウントの登録";
             } else {
-                this.titleTarget.textContent = "サインアップ";
+                this.titleTarget.textContent = "個人アカウントの登録";
             }
         }
     }

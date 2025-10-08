@@ -66,6 +66,7 @@ export default class MapsController extends Controller {
         ecoIconUrl: String,
         foodshareIconUrl: String,
         stores: Array,
+        isCompany: Boolean,
     };
 
     /**
@@ -328,9 +329,21 @@ export default class MapsController extends Controller {
 
         const reviewButton = document.createElement("button");
         reviewButton.textContent = "レビューする";
-        reviewButton.onclick = () => {
-            window.location.href = `/reviews/new?reviewee_id=${shop.id}`;
-        };
+
+        // @ts-ignore Stimulus value accessors are defined at runtime
+        const isCompany = this.hasIsCompanyValue ? this.isCompanyValue : false;
+
+        if (isCompany) {
+            // 企業アカウントの場合、ボタンを無効化
+            reviewButton.classList.add("maps__info--button-disabled");
+            reviewButton.disabled = true;
+            reviewButton.title = "企業アカウントはレビューを投稿できません";
+        } else {
+            // 個人アカウントの場合、通常通り動作
+            reviewButton.onclick = () => {
+                window.location.href = `/reviews/new?reviewee_id=${shop.id}`;
+            };
+        }
         buttons.appendChild(reviewButton);
 
         const commentButton = document.createElement("button");

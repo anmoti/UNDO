@@ -250,6 +250,16 @@ main {
                 }
             }
         }
+
+        &--button-disabled {
+            background-color: map.get($palette, "gray") !important;
+            cursor: not-allowed !important;
+            opacity: 0.6;
+
+            &:hover {
+                background-color: map.get($palette, "gray") !important;
+            }
+        }
     }
 }
 
