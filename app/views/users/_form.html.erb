@@ -14,20 +14,20 @@
   <div class="form__field form__account-type">
     <span class="form__label">アカウントタイプ</span>
     <div class="form__tabs">
-      <%= form.radio_button :is_consumer, false,
+      <%= form.radio_button :is_company, true,
           id: "user_account",
           class: "form__tab-radio",
           checked: true,
           data: { action: "change->signup-form#updateTitle" } %>
-      <%= form.label :is_consumer, "個人",
+      <%= form.label :is_company, "個人",
           for: "user_account",
           class: "form__tab-label" %>
 
-      <%= form.radio_button :is_consumer, true,
+      <%= form.radio_button :is_company, false,
           id: "company_account",
           class: "form__tab-radio",
           data: { action: "change->signup-form#updateTitle" } %>
-      <%= form.label :is_consumer, "企業",
+      <%= form.label :is_company, "企業",
           for: "company_account",
           class: "form__tab-label" %>
     </div>

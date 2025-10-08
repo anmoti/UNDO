@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Controller } from "@hotwired/stimulus";
 
 // Connects to data-controller="signup-form"
@@ -9,7 +10,7 @@ export default class extends Controller {
     }
 
     updateTitle(event) {
-        const isCompany = event.target.value === "true";
+        const isCompany = event.target.value === "false";
 
         if (this.hasTitleTarget) {
             if (isCompany) {
