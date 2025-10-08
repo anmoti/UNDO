@@ -92,7 +92,7 @@ class ReviewsController < ApplicationController
     # 企業アカウントがレビューを投稿できないようにチェック
     def check_company_account
       if Current.user&.is_company?
-        redirect_to root_path, alert: "企業アカウントはレビューを投稿できません。"
+        redirect_to root_path, alert: "企業アカウントはレビューを投稿できません。アプリへの攻撃は解析され、通報されます。攻撃者の身元はIPアドレスの分析により特定、即座に運営者に報告されます。"
       end
     end
 
