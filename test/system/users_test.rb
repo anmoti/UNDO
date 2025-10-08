@@ -14,11 +14,11 @@ class UsersTest < ApplicationSystemTestCase
     visit users_url
     click_on "New user"
 
-    fill_in "Email", with: @user.email
-    check "Is consumer" if @user.is_consumer
-    fill_in "Name", with: @user.name
-    fill_in "Password digest", with: @user.password_digest
-    click_on "Create User"
+    fill_in "user_email", with: "new_user@example.com"
+    fill_in "user_name", with: "New User"
+    fill_in "user_password", with: "password"
+    fill_in "user_password_confirmation", with: "password"
+    click_on "サインイン"
 
     assert_text "User was successfully created"
     click_on "Back"
@@ -28,11 +28,11 @@ class UsersTest < ApplicationSystemTestCase
     visit user_url(@user)
     click_on "Edit this user", match: :first
 
-    fill_in "Email", with: @user.email
-    check "Is consumer" if @user.is_consumer
-    fill_in "Name", with: @user.name
-    fill_in "Password digest", with: @user.password_digest
-    click_on "Update User"
+  fill_in "user_email", with: "updated_#{@user.email}"
+  fill_in "user_name", with: "Updated #{@user.name}"
+  fill_in "user_password", with: "newpassword"
+  fill_in "user_password_confirmation", with: "newpassword"
+  click_on "サインイン"
 
     assert_text "User was successfully updated"
     click_on "Back"

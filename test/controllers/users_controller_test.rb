@@ -19,7 +19,6 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_difference("User.count") do
       post users_url, params: { user: {
         email: "newuser@example.com",  # 一意のメールアドレスに変更
-        is_consumer: true,
         name: "New User",
         password: "password",  # password_digest の代わりに password を使用
         password_confirmation: "password"
@@ -40,7 +39,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update user" do
-    patch user_url(@user), params: { user: { email: @user.email, is_consumer: @user.is_consumer, name: @user.name, password_digest: @user.password_digest } }
+  patch user_url(@user), params: { user: { email: @user.email, name: @user.name } }
     assert_redirected_to user_url(@user)
   end
 

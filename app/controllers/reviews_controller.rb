@@ -2,7 +2,6 @@ class ReviewsController < ApplicationController
   layout "main", only: [ :new ]
   allow_unauthenticated_access only: %i[index show]
   before_action :set_review, only: %i[ show edit update destroy ]
-  before_action :ensure_consumer, only: %i[ new create edit update destroy ]
 
   # GET /reviews or /reviews.json
   def index
@@ -68,15 +67,6 @@ class ReviewsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_review
       @review = Review.find(params[:id])
-    end
-
-    # 消費者以外のユーザーが新しいレビューフォームにアクセスできないようにする。
-    # 現在のユーザーが消費者でない場合は、アラートでリダイレクトする。
-    def ensure_consumer
-      user = defined?(Current) ? Current.user : nil
-      unless user&.is_consumer
-        redirect_to root_path, alert: "レビューの投稿は消費者のみ行えます。"
-      end
     end
 
     # 信頼できるパラメーターのリストだけを通す。

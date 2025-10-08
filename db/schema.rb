@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_07_153729) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_08_020253) do
   create_table "measurements", force: :cascade do |t|
     t.float "turbidity"
     t.float "predicted_bod"
@@ -61,7 +61,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_07_153729) do
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
-    t.boolean "is_consumer"
     t.string "password_digest"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -69,7 +68,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_07_153729) do
   end
 
   add_foreign_key "measurements", "users", column: "submitter_id"
-  add_foreign_key "reviews", "stores", column: "reviewee_id"
   add_foreign_key "reviews", "stores", column: "reviewee_id"
   add_foreign_key "reviews", "users", column: "reviewer_id"
   add_foreign_key "sessions", "users"

@@ -21,8 +21,7 @@
   <div class="form__field">
     <%= form.label :reviewee_id, "レビューするお店", class: "form__label" %>
     <%# TODO: 地図かドロップダウンリストか %>
-    <%# プロデューサー・ユーザー（is_consumer: false）が入力されたselectを使用し、フリーテキストIDを避ける。 %>
-    <%# producers = User.where(is_consumer: false).order(:name) rescue [] %>
+    <%# TODO: ストアの選択UIを改善する（現在はテキスト入力）。 %>
     <%# form.collection_select :reviewee_id, producers, :id, :name, { include_blank: "選択してください" }, { class: "form__input" } %>
 
     <%= form.text_field :reviewee_id, class: "form__input" %>
@@ -48,10 +47,10 @@
     <%= form.text_area :comment, class: "form__input" %>
   </div>
 
-  <% if defined?(Current) && Current.user&.is_consumer %>
+  <% if defined?(Current) && Current.user %>
     <%= form.submit "送信", class: "form__submit-btn" %>
   <% else %>
-    <p class="notice">レビュー投稿は消費者のみ行えます。</p>
+    <p class="notice">レビュー投稿にはサインインが必要です。</p>
   <% end %>
 
 <% end %>
