@@ -18,15 +18,22 @@
     </div>
   <% end %>
 
-  <div class="form__field">
-    <%= form.label :reviewee_id, "レビューするお店", class: "form__label" %>
-    <%# TODO: 地図かドロップダウンリストか %>
-    <%# プロデューサー・ユーザー（is_consumer: false）が入力されたselectを使用し、フリーテキストIDを避ける。 %>
-    <%# producers = User.where(is_consumer: false).order(:name) rescue [] %>
-    <%# form.collection_select :reviewee_id, producers, :id, :name, { include_blank: "選択してください" }, { class: "form__input" } %>
-
-    <%= form.text_field :reviewee_id, class: "form__input" %>
-  </div>
+  <% if review.reviewee_id.present? %>
+    <%# 店舗が指定されている場合は隠しフィールドとして送信 %>
+    <%= form.hidden_field :reviewee_id %>
+    <% if defined?(@store) && @store.present? %>
+      <div class="form__field">
+        <span class="form__label">レビューするお店</span>
+        <p class="form__input" style="border: none; padding: 0;font-size:1.5em"><%= @store.name %></p>
+      </div>
+    <% end %>
+  <% else %>
+    <%# 店舗が指定されていない場合は選択フィールドを表示 %>
+    <div class="form__field">
+      <%= form.label :reviewee_id, "レビューするお店", class: "form__label" %>
+      <%= form.collection_select :reviewee_id, Store.all, :id, :name, { prompt: "店舗を選択してください" }, class: "form__input" %>
+    </div>
+  <% end %>
 
   <div class="form__field">
     <span class="form__label">評価</span>
@@ -48,10 +55,10 @@
     <%= form.text_area :comment, class: "form__input" %>
   </div>
 
-  <% if defined?(Current) && Current.user&.is_consumer %>
+  <% if defined?(Current) && Current.user %>
     <%= form.submit "送信", class: "form__submit-btn" %>
   <% else %>
-    <p class="notice">レビュー投稿は消費者のみ行えます。</p>
+    <p class="notice">レビュー投稿にはサインインが必要です。</p>
   <% end %>
 
 <% end %>

@@ -22,7 +22,7 @@ class ReviewsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create review" do
     reviewer = users(:carol)
-    reviewee = users(:bob)
+    reviewee = stores(:one)
 
     assert_difference("Review.count") do
       post reviews_url, params: { review: { comment: @review.comment, rating: @review.rating, reviewee_id: reviewee.id, reviewer_id: reviewer.id } }

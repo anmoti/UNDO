@@ -16,7 +16,7 @@ class ReviewsTest < ApplicationSystemTestCase
 
     fill_in "Comment", with: @review.comment
     fill_in "Rating", with: @review.rating
-    fill_in "Reviewee", with: @review.reviewee_id
+    fill_in "Reviewee", with: stores(:one).id
     fill_in "Reviewer", with: @review.reviewer_id
     click_on "Create Review"
 
@@ -30,7 +30,7 @@ class ReviewsTest < ApplicationSystemTestCase
 
     fill_in "Comment", with: @review.comment
     fill_in "Rating", with: @review.rating
-    fill_in "Reviewee", with: @review.reviewee_id
+    fill_in "Reviewee", with: stores(:one).id
     fill_in "Reviewer", with: @review.reviewer_id
     click_on "Update Review"
 

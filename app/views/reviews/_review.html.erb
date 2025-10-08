@@ -6,7 +6,7 @@
 
   <p>
     <strong>Reviewee:</strong>
-    <%= review.reviewee_id %>
+    <%= review.reviewee&.name || review.reviewee_id %>
   </p>
 
   <p>
