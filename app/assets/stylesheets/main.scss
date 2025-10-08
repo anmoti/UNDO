@@ -444,8 +444,9 @@ main {
 .measures {
     flex: 1;
     position: relative;
-    @include flexbox($direction: column, $align: center);
+    @include flexbox($direction: column, $align: center, $gap: 1rem);
     background-color: map.get($palette, "secondary");
+    padding: 1rem;
 
     // .measures__measure内のボタンと共通化
     %measure-button {
@@ -463,6 +464,83 @@ main {
         }
     }
 
+        &__header {
+        width: 100%;
+        max-width: 900px;
+        margin-bottom: 0.75rem;
+        text-align: left;
+    }
+
+    &__heading {
+        color: map.get($palette, "dark");
+        font-size: 1.25rem;
+        margin-bottom: 0.25rem;
+    }
+
+    &__sub {
+        color: map.get($palette, "gray");
+        font-size: 0.9rem;
+    }
+
+    &__list {
+        width: 100%;
+        max-width: 900px;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    &__empty {
+        background-color: map.get($palette, "light");
+        padding: 1rem;
+        border-radius: $radius-md;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+        color: map.get($palette, "dark");
+    }
+
+    &__record {
+        background-color: map.get($palette, "light");
+        border-radius: $radius-md;
+        padding: 12px 16px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &__date {
+        color: map.get($palette, "gray");
+        font-size: 0.9rem;
+        min-width: 160px;
+    }
+
+    &__values {
+        display: flex;
+        gap: 18px;
+        align-items: baseline;
+    }
+
+    &__value-row {
+        display: flex;
+        gap: 8px;
+        align-items: baseline;
+    }
+
+    &__label {
+        color: map.get($palette, "gray");
+        font-size: 0.9rem;
+    }
+
+    &__value {
+        font-weight: 700;
+        color: map.get($palette, "dark");
+        font-size: 1.1rem;
+    }
+
+    &__unit {
+        color: map.get($palette, "gray");
+        font-size: 0.85rem;
+    }
 }
 
 .measure {
@@ -532,7 +610,6 @@ main {
         }
     }
 }
-
 
 .tooltip {
     &__container {

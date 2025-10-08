@@ -37,17 +37,9 @@ export default class extends Controller {
         return document.querySelector('meta[name="csrf-token"]')?.getAttribute("content") ?? "";
     }
 
-    async connect() {
+    connect() {
         console.log("Measures controller connected");
         this.changeState(STATES.CLOSED);
-
-        const a = await ky.post("/measurements", {
-            credentials: "include",
-            headers: {
-                "X-CSRF-Token": this.getCSRFToken(),
-            }
-        });
-        console.log(a);
     }
 
     /**
@@ -133,5 +125,24 @@ export default class extends Controller {
             throw new Error(`Target ${targetName} not found`);
         }
         return target;
+    }
+
+    /**
+     * 測定結果を保存する
+     * @param {number} turbidity
+     */
+    async createMeasurement(turbidity) {
+        const data = await ky.post("/measurements", {
+            credentials: "include",
+            headers: {
+                "X-CSRF-Token": this.getCSRFToken(),
+            },
+            json: {
+                measurement: { turbidity }
+            }
+        });
+        console.log(data);
+
+        return data;
     }
 }
