@@ -1,7 +1,7 @@
 <div class="form-wrapper">
-  <div class="form-wrapper__container">
+  <div class="form-wrapper__container" data-controller="signup-form">
     <% content_for :title, "サインアップ" %>
-    <h1 class="form-wrapper__title">サインアップ</h1>
+    <h1 class="form-wrapper__title" data-signup-form-target="title">アカウントの登録</h1>
     <%= render "form", user: @user %>
   </div>
 </div>

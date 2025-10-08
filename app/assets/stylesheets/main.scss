@@ -299,10 +299,17 @@ main {
         background-color: map.get($palette, "light");
         padding: 2.5rem;
         border-radius: $radius-md;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15),
+            0 2px 8px rgba(0, 0, 0, 0.08);
         width: 100%;
         max-width: 400px;
         text-align: center;
+        transition: box-shadow 0.3s ease;
+
+        &:hover {
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18),
+                0 4px 12px rgba(0, 0, 0, 0.1);
+        }
     }
 
     &__title {
@@ -310,6 +317,7 @@ main {
         color: map.get($palette, "dark");
         font-size: 1.8rem;
         font-weight: 600;
+        transition: color 0.3s ease;
     }
 
     &__links {
@@ -364,6 +372,48 @@ main {
         color: map.get($palette, "light");
         border-radius: $radius-sm;
         font-size: 1.1rem;
+        font-weight: 600;
+    }
+
+    &__account-type {
+        text-align: center;
+    }
+
+    &__tabs {
+        @include flexbox($justify: center, $gap: 0);
+        background-color: #f0f0f0;
+        border-radius: $radius-sm;
+        padding: 4px;
+        margin-top: 8px;
+    }
+
+    &__tab-radio {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    &__tab-label {
+        flex: 1;
+        padding: 0.6rem 1.5rem;
+        background-color: transparent;
+        color: map.get($palette, "gray");
+        border-radius: $radius-sm;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        text-align: center;
+        user-select: none;
+
+        &:hover {
+            color: map.get($palette, "dark");
+        }
+    }
+
+    &__tab-radio:checked + &__tab-label {
+        background-color: map.get($palette, "light");
+        color: map.get($palette, "dark");
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         font-weight: 600;
     }
 
