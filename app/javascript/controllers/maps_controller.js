@@ -29,141 +29,16 @@ const mapOptions = {
 };
 
 /**
- * @typedef {Object} Shop
+ * @typedef {Object} StoreFeature
+ * @property {number} id
  * @property {string} name
  * @property {number} lat
  * @property {number} lon
- * @property {string} openTime
- * @property {string} address
- * @property {boolean} [eco]
- * @property {boolean} [foodshare]
+ * @property {string | null | undefined} [openTime]
+ * @property {string | null | undefined} [address]
+ * @property {boolean | null | undefined} [eco]
+ * @property {boolean | null | undefined} [foodshare]
  */
-
-/** @type {Shop[]} */
-const shops = [
-    {
-        name: "味庄",
-        lat: 34.3438,
-        lon: 134.0461,
-        openTime: "5:00～14:00 麺終了次第",
-        address: "香川県高松市西の丸町5-15",
-    },
-    {
-        name: "こだわり麺や高松店",
-        lat: 34.3415,
-        lon: 134.0498,
-        openTime: "9:00〜20:00（土日祝6:30〜15:00）",
-        address: "香川県高松市天神前5-25",
-    },
-    {
-        name: "さか枝うどん本店",
-        lat: 34.3397,
-        lon: 134.0485,
-        openTime: "7:00～15:00",
-        address: "香川県高松市番町5-2-23",
-    },
-    {
-        name: "めりけんや高松駅前店",
-        lat: 34.3439,
-        lon: 134.0465,
-        openTime: "7:00〜20:00",
-        address: "香川県高松市西の丸町6-20",
-    },
-    {
-        name: "植田うどん",
-        lat: 34.3412,
-        lon: 134.0492,
-        openTime: "9:38～14:30（麺終了次第）",
-        address: "香川県高松市内町1-8",
-    },
-    {
-        name: "うどん市場めんくい",
-        lat: 34.3423,
-        lon: 134.0478,
-        openTime: "月～金曜 11:00～15:00, 土日祝 11:00～14:00, 麺終了次第",
-        address: "香川県高松市塩屋町9-7",
-    },
-    {
-        name: "釜揚げうどん 岡じま",
-        lat: 34.3428,
-        lon: 134.0482,
-        openTime: "10:00～15:00",
-        address: "香川県高松市寿町1-4-3 高松中央通りビル１Ｆ北側",
-    },
-    {
-        name: "さか枝うどん 南新町店",
-        lat: 34.3401,
-        lon: 134.0489,
-        openTime: "7:00～17:00",
-        address: "香川県高松市南新町4-6",
-    },
-    {
-        name: "松下製麺所",
-        lat: 34.335057,
-        lon: 134.044763,
-        openTime: "7時～15時頃（麺がなくなり次第終了）",
-        address: "香川県高松市中野町2-2",
-    },
-    {
-        name: "手打うどん 三徳",
-        lat: 34.292697,
-        lon: 134.069001,
-        openTime: "11時～16時（LO15時45分）",
-        address: "香川県高松市林町390-1",
-    },
-    {
-        name: "手打十段 うどんバカ一代",
-        lat: 34.336594,
-        lon: 134.058423,
-        openTime: "6時～18時",
-        address: "香川県高松市多賀町1-6-7",
-    },
-    {
-        name: "さぬき一番 一宮店",
-        lat: 34.287691,
-        lon: 134.033044,
-        openTime: "10時～21時",
-        address: "香川県高松市三名町105-2",
-    },
-    {
-        name: "本格手打ちもり家",
-        lat: 34.239623,
-        lon: 134.051456,
-        openTime: "10:30～18:00",
-        address: "香川県高松市香川町川内原1575-1",
-        eco: true,
-    },
-    {
-        name: "本格手打ちうどん おか泉",
-        lat: 34.309226,
-        lon: 133.821004,
-        openTime: "11:00（土日祝は10:45）～19:00",
-        address: "香川県綾歌郡宇多津町浜八番丁129-10",
-    },
-    {
-        name: "元祖セルフうどんの店 竹清",
-        lat: 34.338077,
-        lon: 134.042292,
-        openTime: "11:00～14:30（売り切れ次第終了）",
-        address: "香川県高松市亀岡町2-23",
-    },
-    {
-        name: "めりけんや",
-        lat: 34.313155,
-        lon: 133.814618,
-        openTime: "9:00～15:00（土日祝は16:00まで）",
-        address: "香川県綾歌郡宇多津町浜三番丁36-1",
-    },
-    {
-        name: "ふたばうどん",
-        lat: 35.468838,
-        lon: 133.066622,
-        openTime: "24時間営業(例)",
-        address: "島根県松江市学園南１丁目２−１",
-        eco: true,
-        foodshare: true,
-    },
-];
 
 // Connects to data-controller="maps"
 /** @extends {Controller<HTMLDivElement>} */
@@ -174,12 +49,14 @@ export default class MapsController extends Controller {
     /** @type {Promise<google.maps.Map>} */
     map;
 
+    /** @type {?google.maps.InfoWindow} */
+    infoWindow = null;
+
     static targets = ["icon"];
     static values = {
         ecoIconUrl: String,
         foodshareIconUrl: String,
-        activeUrl: String,
-        inactiveUrl: String,
+        stores: Array,
     };
 
     /**
@@ -211,12 +88,29 @@ export default class MapsController extends Controller {
     }
 
     async createShopMarkers() {
-        // 各店舗にマーカーを作成
-        for (const shop of shops) {
-            const { AdvancedMarkerElement } = await this.loader.importLibrary(
-                "marker"
-            );
-            const position = { lat: shop.lat, lng: shop.lon };
+        // @ts-ignore Stimulus value accessors are defined at runtime
+        const stores = this.hasStoresValue ? this.storesValue : [];
+
+        if (!stores.length) {
+            console.info("No store data provided for map markers.");
+            return;
+        }
+
+        const { AdvancedMarkerElement } = await this.loader.importLibrary(
+            "marker",
+        );
+        const map = await this.map;
+
+        for (const store of stores) {
+            const lat = Number(store.lat);
+            const lon = Number(store.lon ?? store.lng ?? store.longitude);
+
+            if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
+                console.warn("Skipping store without valid coordinates", store);
+                continue;
+            }
+
+            const position = { lat, lng: lon };
 
             // カスタムマーカーアイコンを作成
             const markerIcon = document.createElement("div");
@@ -224,22 +118,22 @@ export default class MapsController extends Controller {
 
             // マーカーを作成
             const marker = new AdvancedMarkerElement({
-                position: position,
-                map: await this.map,
-                title: shop.name,
+                position,
+                map,
+                title: store.name,
                 content: markerIcon,
                 gmpClickable: true,
             });
 
             marker.addListener("click", () => {
                 // マーカーがクリックされたときに情報ウィンドウを表示
-                this.showShopInfo(shop, marker);
+                this.showShopInfo(store, marker);
             });
         }
     }
 
     /**
-     * @param {Shop} shop
+     * @param {StoreFeature} shop
      * @param {google.maps.marker.AdvancedMarkerElement} marker
      */
     async showShopInfo(shop, marker) {
@@ -264,8 +158,11 @@ export default class MapsController extends Controller {
         if (shop.eco) {
             const EcoOptions = document.createElement("div");
             const ecoImg = new Image(16, 16);
-            // @ts-ignore
-            ecoImg.src = this.ecoIconUrlValue;
+            // @ts-ignore Stimulus value accessors are defined at runtime
+            if (this.hasEcoIconUrlValue) {
+                // @ts-ignore
+                ecoImg.src = this.ecoIconUrlValue;
+            }
             EcoOptions.appendChild(ecoImg);
 
             const ecoDesc = document.createElement("span");
@@ -277,8 +174,11 @@ export default class MapsController extends Controller {
         if (shop.foodshare) {
             const foodshareOptions = document.createElement("div");
             const foodshareImg = new Image(16, 16);
-            //@ts-ignore
-            foodshareImg.src = this.foodshareIconUrlValue;
+            // @ts-ignore Stimulus value accessors are defined at runtime
+            if (this.hasFoodshareIconUrlValue) {
+                //@ts-ignore
+                foodshareImg.src = this.foodshareIconUrlValue;
+            }
             foodshareOptions.appendChild(foodshareImg);
 
             const foodshareDesc = document.createElement("span");
@@ -289,11 +189,13 @@ export default class MapsController extends Controller {
         }
 
         const address = document.createElement("div");
-        address.textContent = `住所: ${shop.address}`;
+        const addressText = shop.address || "住所情報が登録されていません";
+        address.textContent = `住所: ${addressText}`;
         content.appendChild(address);
 
         const openTime = document.createElement("div");
-        openTime.textContent = `営業時間: ${shop.openTime}`;
+        const openTimeText = shop.openTime || "営業時間情報が登録されていません";
+        openTime.textContent = `営業時間: ${openTimeText}`;
         content.appendChild(openTime);
 
         const buttons = document.createElement("div");
