@@ -303,9 +303,10 @@ export default class MapsController extends Controller {
         buttons.className = "maps__info--buttons";
         content.appendChild(buttons);
 
-        const reviewButton = document.createElement("button");
+        const reviewButton = document.createElement("a");
         reviewButton.textContent = "レビューする";
-        reviewButton.onclick = () => void 0;
+        reviewButton.href = `/reviews/new?reviewee_id=${shop.id}`;
+        reviewButton.style.cssText = "text-decoration: none; color: inherit; display: block;";
         buttons.appendChild(reviewButton);
 
         const commentButton = document.createElement("button");

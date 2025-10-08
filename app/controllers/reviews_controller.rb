@@ -16,6 +16,12 @@ class ReviewsController < ApplicationController
   def new
     @review = Review.new
     @review.reviewer_id = Current.user.id
+
+    # URLパラメータからreviewee_idを設定
+    if params[:reviewee_id].present?
+      @review.reviewee_id = params[:reviewee_id]
+      @store = Store.find_by(id: params[:reviewee_id])
+    end
   end
 
   # GET /reviews/1/edit
@@ -28,7 +34,7 @@ class ReviewsController < ApplicationController
 
     respond_to do |format|
       if @review.save
-        format.html { redirect_to @review, notice: "Review was successfully created." }
+        format.html { redirect_to root_path, notice: "レビューを投稿しました。" }
         format.json { render :show, status: :created, location: @review }
       else
           format.html do

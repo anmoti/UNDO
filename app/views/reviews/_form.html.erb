@@ -18,14 +18,26 @@
     </div>
   <% end %>
 
-  <div class="form__field">
-    <%= form.label :reviewee_id, "レビューするお店", class: "form__label" %>
-    <%# TODO: 地図かドロップダウンリストか %>
-    <%# TODO: ストアの選択UIを改善する（現在はテキスト入力）。 %>
-    <%# form.collection_select :reviewee_id, producers, :id, :name, { include_blank: "選択してください" }, { class: "form__input" } %>
+  <% if review.reviewee_id.present? %>
+    <%# 店舗が指定されている場合は隠しフィールドとして送信 %>
+    <%= form.hidden_field :reviewee_id %>
+    <% if defined?(@store) && @store.present? %>
+      <div class="form__field">
+        <span class="form__label">レビューするお店</span>
+        <p class="form__input" style="border: none; padding: 0;"><%= @store.name %></p>
+      </div>
+    <% end %>
+  <% else %>
+    <%# 店舗が指定されていない場合は選択フィールドを表示 %>
+    <div class="form__field">
+      <%= form.label :reviewee_id, "レビューするお店", class: "form__label" %>
+      <%# TODO: 地図かドロップダウンリストか %>
+      <%# TODO: ストアの選択UIを改善する（現在はテキスト入力）。 %>
+      <%# form.collection_select :reviewee_id, producers, :id, :name, { include_blank: "選択してください" }, { class: "form__input" } %>
 
-    <%= form.text_field :reviewee_id, class: "form__input" %>
-  </div>
+      <%= form.text_field :reviewee_id, class: "form__input" %>
+    </div>
+  <% end %>
 
   <div class="form__field">
     <span class="form__label">評価</span>
