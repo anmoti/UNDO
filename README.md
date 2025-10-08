@@ -47,5 +47,5 @@ $ rails db:test:prepare
 ```
 rails c
 undo(dev)> ActiveRecord::Base.connection.tables
-=> ["measurements", "sessions", "reviews", "schema_migrations", "ar_internal_metadata", "users"]
+=> ["stores", "reviews", "measurements", "sessions", "schema_migrations", "ar_internal_metadata", "users"]
 ```
