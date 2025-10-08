@@ -483,7 +483,6 @@ main {
 
     &__header {
         @include flexbox($justify: space-between, $align: center);
-        color: map.get($palette, "light");
         width: 100%;
         padding: 16px;
         border-bottom: 1px solid #e0e0e0;
@@ -491,10 +490,10 @@ main {
     }
 
     &__text {
+        color: map.get($palette, "light");
         margin: 0;
         font-size: 18px;
         font-weight: bold;
-        color: map.get($palette, "dark");
     }
 
     &__btn--close {
