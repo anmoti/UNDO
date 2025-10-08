@@ -83,6 +83,10 @@ export default class MapsController extends Controller {
     async connect() {
         console.log("Maps controller connected");
 
+        // デバッグ用: stores値を確認
+        // @ts-ignore
+        console.log("Stores value:", this.storesValue);
+
         // マーカーを作成して店舗を表示
         await this.createShopMarkers();
     }
@@ -90,6 +94,9 @@ export default class MapsController extends Controller {
     async createShopMarkers() {
         // @ts-ignore Stimulus value accessors are defined at runtime
         const stores = this.hasStoresValue ? this.storesValue : [];
+
+        console.log("Creating markers for stores:", stores);
+        console.log("Number of stores:", stores.length);
 
         if (!stores.length) {
             console.info("No store data provided for map markers.");
@@ -104,6 +111,8 @@ export default class MapsController extends Controller {
         for (const store of stores) {
             const lat = Number(store.lat);
             const lon = Number(store.lon ?? store.lng ?? store.longitude);
+
+            console.log(`Processing store: ${store.name}, lat: ${lat}, lon: ${lon}`);
 
             if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
                 console.warn("Skipping store without valid coordinates", store);
@@ -125,11 +134,15 @@ export default class MapsController extends Controller {
                 gmpClickable: true,
             });
 
+            console.log(`Marker created for ${store.name} at`, position);
+
             marker.addListener("click", () => {
                 // マーカーがクリックされたときに情報ウィンドウを表示
                 this.showShopInfo(store, marker);
             });
         }
+
+        console.log("All markers created successfully");
     }
 
     /**

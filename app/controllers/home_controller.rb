@@ -14,7 +14,7 @@ class HomeController < ApplicationController
         address: store.address,
         eco: false,
         foodshare: false
-      }.compact
+      }
     end
   end
 end

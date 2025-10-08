@@ -3,7 +3,7 @@
   data-controller="maps"
   data-maps-eco-icon-url-value="<%= asset_path('eco-icon.png') %>"
   data-maps-foodshare-icon-url-value="<%= asset_path('gift-icon.png') %>"
-  data-maps-stores-value="<%= json_escape(@stores_for_map_json.to_json) %>"
+  data-maps-stores-value="<%= @stores_for_map_json.to_json %>"
 ></div>
 <div class="comments__container hidden" data-controller="comments">
   <div class="comments__header">
