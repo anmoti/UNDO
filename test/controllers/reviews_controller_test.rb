@@ -76,7 +76,7 @@ class ReviewsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to root_path
-    assert_equal "企業アカウントはレビューを投稿できません。", flash[:alert]
+    assert_equal "企業アカウントはレビューを投稿できません。アプリへの攻撃は解析され、通報されます。攻撃者の身元はIPアドレスの分析により特定、即座に運営者に報告されます。", flash[:alert]
   end
 
   test "企業アカウントはレビュー作成ページにアクセスできない" do
@@ -89,6 +89,6 @@ class ReviewsControllerTest < ActionDispatch::IntegrationTest
 
     get new_review_url
     assert_redirected_to root_path
-    assert_equal "企業アカウントはレビューを投稿できません。", flash[:alert]
+    assert_equal "企業アカウントはレビューを投稿できません。アプリへの攻撃は解析され、通報されます。攻撃者の身元はIPアドレスの分析により特定、即座に運営者に報告されます。", flash[:alert]
   end
 end
