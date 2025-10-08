@@ -52,6 +52,12 @@ export default class MapsController extends Controller {
     /** @type {?google.maps.InfoWindow} */
     infoWindow = null;
 
+    /** @type {Map<number, google.maps.marker.AdvancedMarkerElement>} */
+    markers = new Map();
+
+    /** @type {?number} */
+    updateMarkersTimeout = null;
+
     static targets = ["icon"];
     static values = {
         ecoIconUrl: String,
@@ -87,62 +93,144 @@ export default class MapsController extends Controller {
         // @ts-ignore
         console.log("Stores value:", this.storesValue);
 
-        // マーカーを作成して店舗を表示
-        await this.createShopMarkers();
+        const map = await this.map;
+
+        // 地図の表示領域が変更されたときにマーカーを更新
+        map.addListener("bounds_changed", () => {
+            this.scheduleUpdateMarkers();
+        });
+
+        // 初回のマーカー表示
+        await this.updateVisibleMarkers();
     }
 
-    async createShopMarkers() {
+    /**
+     * マーカー更新をスケジュール（デバウンス処理）
+     */
+    scheduleUpdateMarkers() {
+        if (this.updateMarkersTimeout) {
+            clearTimeout(this.updateMarkersTimeout);
+        }
+
+        this.updateMarkersTimeout = setTimeout(() => {
+            this.updateVisibleMarkers();
+        }, 300); // 300ms後に更新
+    }
+
+    /**
+     * 表示領域内の店舗のみマーカーを表示
+     */
+    async updateVisibleMarkers() {
         // @ts-ignore Stimulus value accessors are defined at runtime
         const stores = this.hasStoresValue ? this.storesValue : [];
-
-        console.log("Creating markers for stores:", stores);
-        console.log("Number of stores:", stores.length);
 
         if (!stores.length) {
             console.info("No store data provided for map markers.");
             return;
         }
 
-        const { AdvancedMarkerElement } = await this.loader.importLibrary(
-            "marker",
-        );
         const map = await this.map;
+        const bounds = map.getBounds();
+
+        if (!bounds) {
+            console.warn("Map bounds not available yet");
+            return;
+        }
+
+        console.log("Updating markers for current bounds");
+
+        // 表示領域内の店舗を特定
+        const visibleStoreIds = new Set();
 
         for (const store of stores) {
             const lat = Number(store.lat);
             const lon = Number(store.lon ?? store.lng ?? store.longitude);
 
-            console.log(`Processing store: ${store.name}, lat: ${lat}, lon: ${lon}`);
-
             if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
-                console.warn("Skipping store without valid coordinates", store);
                 continue;
             }
 
             const position = { lat, lng: lon };
 
-            // カスタムマーカーアイコンを作成
-            const markerIcon = document.createElement("div");
-            markerIcon.className = "maps__marker";
+            // 店舗が表示領域内にあるかチェック
+            if (bounds.contains(position)) {
+                visibleStoreIds.add(store.id);
 
-            // マーカーを作成
-            const marker = new AdvancedMarkerElement({
-                position,
-                map,
-                title: store.name,
-                content: markerIcon,
-                gmpClickable: true,
-            });
-
-            console.log(`Marker created for ${store.name} at`, position);
-
-            marker.addListener("click", () => {
-                // マーカーがクリックされたときに情報ウィンドウを表示
-                this.showShopInfo(store, marker);
-            });
+                // まだマーカーが作成されていない場合は作成（アニメーション付き）
+                if (!this.markers.has(store.id)) {
+                    // ランダムな遅延を追加して、マーカーが順次表示されるようにする
+                    const delay = Math.random() * 300;
+                    setTimeout(() => {
+                        this.createMarker(store, position);
+                    }, delay);
+                }
+            }
         }
 
-        console.log("All markers created successfully");
+        // 表示領域外のマーカーをアニメーション付きで削除
+        for (const [storeId, marker] of this.markers.entries()) {
+            if (!visibleStoreIds.has(storeId)) {
+                this.removeMarkerWithAnimation(storeId, marker);
+            }
+        }
+
+        console.log(`Visible markers: ${this.markers.size} / ${stores.length} stores`);
+    }
+
+    /**
+     * 個別のマーカーを作成
+     * @param {StoreFeature} store
+     * @param {{lat: number, lng: number}} position
+     */
+    async createMarker(store, position) {
+        const { AdvancedMarkerElement } = await this.loader.importLibrary(
+            "marker",
+        );
+        const map = await this.map;
+
+        // カスタムマーカーアイコンを作成
+        const markerIcon = document.createElement("div");
+        markerIcon.className = "maps__marker";
+
+        // マーカーを作成
+        const marker = new AdvancedMarkerElement({
+            position,
+            map,
+            title: store.name,
+            content: markerIcon,
+            gmpClickable: true,
+        });
+
+        marker.addListener("click", () => {
+            this.showShopInfo(store, marker);
+        });
+
+        this.markers.set(store.id, marker);
+        console.log(`Marker created for ${store.name}`);
+    }
+
+    /**
+     * マーカーをアニメーション付きで削除
+     * @param {number} storeId
+     * @param {google.maps.marker.AdvancedMarkerElement} marker
+     */
+    removeMarkerWithAnimation(storeId, marker) {
+        const markerElement = marker.content;
+
+        if (markerElement instanceof HTMLElement) {
+            // 消えるアニメーションを追加
+            markerElement.classList.add("maps__marker--disappear");
+
+            // アニメーション完了後にマーカーを削除
+            setTimeout(() => {
+                marker.map = null;
+                this.markers.delete(storeId);
+            }, 300); // アニメーション時間と一致
+        } else {
+            // フォールバック: 即座に削除
+            marker.map = null;
+            this.markers.delete(storeId);
+        }
     }
 
     /**
@@ -235,5 +323,20 @@ export default class MapsController extends Controller {
      */
     commentView() {
         triggerShowComments();
+    }
+
+    /**
+     * コントローラーが切断されたときのクリーンアップ
+     */
+    disconnect() {
+        // すべてのマーカーをアニメーション付きで削除
+        for (const [storeId, marker] of this.markers.entries()) {
+            this.removeMarkerWithAnimation(storeId, marker);
+        }
+
+        // タイムアウトをクリア
+        if (this.updateMarkersTimeout) {
+            clearTimeout(this.updateMarkersTimeout);
+        }
     }
 }
