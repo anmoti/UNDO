@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 import { Loader } from "@googlemaps/js-api-loader";
-import { triggerShowComments } from "controllers/comments_controller";
+import { triggerShowComments, triggerHideComments } from "controllers/comments_controller";
 
 /** @import { Context } from "@hotwired/stimulus"  */
 
@@ -247,6 +247,11 @@ export default class MapsController extends Controller {
 
         this.infoWindow = new InfoWindow();
 
+        // InfoWindowが閉じられたときにコメント欄も閉じる
+        this.infoWindow.addListener("closeclick", () => {
+            triggerHideComments();
+        });
+
         // 情報ウィンドウのコンテンツを作成
         const content = document.createElement("div");
         content.className = "maps__info";
@@ -303,27 +308,23 @@ export default class MapsController extends Controller {
         buttons.className = "maps__info--buttons";
         content.appendChild(buttons);
 
-        const reviewButton = document.createElement("a");
+        const reviewButton = document.createElement("button");
         reviewButton.textContent = "レビューする";
-        reviewButton.href = `/reviews/new?reviewee_id=${shop.id}`;
-        reviewButton.style.cssText = "text-decoration: none; color: inherit; display: block;";
+        reviewButton.onclick = () => {
+            window.location.href = `/reviews/new?reviewee_id=${shop.id}`;
+        };
         buttons.appendChild(reviewButton);
 
         const commentButton = document.createElement("button");
         commentButton.textContent = "コメントを見る";
-        commentButton.onclick = this.commentView.bind(this);
+        commentButton.onclick = () => {
+            triggerShowComments(shop.id, shop.name);
+        };
         buttons.appendChild(commentButton);
 
         // 情報ウィンドウを開く
         this.infoWindow.setContent(content);
         this.infoWindow.open(await this.map, marker);
-    }
-
-    /**
-     * レビューフォームを表示する関数
-     */
-    commentView() {
-        triggerShowComments();
     }
 
     /**

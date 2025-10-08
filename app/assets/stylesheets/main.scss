@@ -466,43 +466,118 @@ main {
 
 .comments {
     &__container {
-        position: absolute;
-        bottom: $footer-height;
-        background-color: map.get($palette, "dark");
-        color: map.get($palette, "light");
-        z-index: map.get($z-layers, "dropdown");
-        width: 100%;
-        height: 40vh;
-        justify-content: flex-start;
+        position: fixed;
+        right: 0;
+        top: $header-height;
+        width: 400px;
+        height: calc(100vh - $header-height);
+        background-color: map.get($palette, "light");
+        box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+        z-index: map.get($z-layers, "modal");
+        transition: transform 0.3s ease;
+
+        &.hidden {
+            transform: translateX(100%);
+        }
     }
 
     &__header {
         @include flexbox($justify: space-between, $align: center);
+        color: map.get($palette, "light");
         width: 100%;
+        padding: 16px;
+        border-bottom: 1px solid #e0e0e0;
         background-color: map.get($palette, "primary");
     }
 
     &__text {
-        font-size: 32px;
-        bottom: 0;
-        text-align: center;
-        padding-bottom: 4px;
+        margin: 0;
+        font-size: 18px;
+        font-weight: bold;
+        color: map.get($palette, "dark");
     }
 
     &__btn--close {
         @extend %button-reset;
         font-size: 24px;
-        padding: 0 10px;
-        color: map.get($palette, "light");
+        padding: 0;
+        width: 30px;
+        height: 30px;
+        line-height: 1;
+        color: map.get($palette, "dark");
+
+        &:hover {
+            color: map.get($palette, "accent");
+        }
     }
 
     &__list {
+        padding: 16px;
         overflow-y: auto;
-        height: 80%;
-        padding: 10px;
+        height: calc(100vh - $header-height - 60px);
     }
 
-    // &__content
+    &__content {
+        @include flexbox($direction: column, $gap: 16px);
+    }
+
+    &__loading,
+    &__error,
+    &__empty {
+        text-align: center;
+        padding: 32px 16px;
+        color: map.get($palette, "gray");
+        font-size: 14px;
+    }
+
+    &__error {
+        color: map.get($palette, "danger");
+    }
+
+    &__item {
+        padding: 16px;
+        border-radius: $radius-md;
+        background-color: #f8f9fa;
+        border-left: 4px solid map.get($palette, "primary");
+
+        &:hover {
+            background-color: #f0f1f2;
+        }
+    }
+
+    &__item-header {
+        @include flexbox($justify: space-between, $align: center);
+        margin-bottom: 8px;
+    }
+
+    &__rating {
+        @include flexbox($gap: 2px);
+
+        .star {
+            font-size: 18px;
+
+            &--filled {
+                color: map.get($palette, "highlight");
+            }
+
+            &--empty {
+                color: #ddd;
+            }
+        }
+    }
+
+    &__date {
+        font-size: 12px;
+        color: map.get($palette, "gray");
+    }
+
+    &__item-text {
+        margin: 0;
+        color: map.get($palette, "dark");
+        font-size: 14px;
+        line-height: 1.6;
+        word-wrap: break-word;
+    }
 }
 
 .measures {

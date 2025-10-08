@@ -31,10 +31,6 @@
     <%# 店舗が指定されていない場合は選択フィールドを表示 %>
     <div class="form__field">
       <%= form.label :reviewee_id, "レビューするお店", class: "form__label" %>
-      <%# TODO: 地図かドロップダウンリストか %>
-      <%# TODO: ストアの選択UIを改善する（現在はテキスト入力）。 %>
-      <%# form.collection_select :reviewee_id, producers, :id, :name, { include_blank: "選択してください" }, { class: "form__input" } %>
-
       <%= form.text_field :reviewee_id, class: "form__input" %>
     </div>
   <% end %>

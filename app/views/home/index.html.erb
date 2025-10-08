@@ -7,13 +7,13 @@
 ></div>
 <div class="comments__container hidden" data-controller="comments">
   <div class="comments__header">
-    <p class="comments__text">コメント</p>
+    <p class="comments__text" data-comments-target="title">コメント</p>
     <button type="button" class="comments__btn--close" data-action="click->comments#hide">
       ×
     </button>
   </div>
   <div class="comments__list">
-    <div class="comments__content">
+    <div class="comments__content" data-comments-target="content">
     </div>
   </div>
 </div>

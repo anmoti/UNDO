@@ -6,6 +6,16 @@ class ReviewsController < ApplicationController
   # GET /reviews or /reviews.json
   def index
     @reviews = Review.all
+
+    # reviewee_idでフィルタリング
+    if params[:reviewee_id].present?
+      @reviews = @reviews.where(reviewee_id: params[:reviewee_id])
+    end
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @reviews }
+    end
   end
 
   # GET /reviews/1 or /reviews/1.json
