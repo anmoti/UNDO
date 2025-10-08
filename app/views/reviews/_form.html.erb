@@ -24,14 +24,14 @@
     <% if defined?(@store) && @store.present? %>
       <div class="form__field">
         <span class="form__label">レビューするお店</span>
-        <p class="form__input" style="border: none; padding: 0;"><%= @store.name %></p>
+        <p class="form__input" style="border: none; padding: 0;font-size:1.5em"><%= @store.name %></p>
       </div>
     <% end %>
   <% else %>
     <%# 店舗が指定されていない場合は選択フィールドを表示 %>
     <div class="form__field">
       <%= form.label :reviewee_id, "レビューするお店", class: "form__label" %>
-      <%= form.text_field :reviewee_id, class: "form__input" %>
+      <%= form.collection_select :reviewee_id, Store.all, :id, :name, { prompt: "店舗を選択してください" }, class: "form__input" %>
     </div>
   <% end %>
 

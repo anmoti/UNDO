@@ -6,7 +6,6 @@
         "importmap",
         "javascripts"
     ],
-    "vscode-erb-beautify.keepBlankLines": 1,
     "cssPeek.peekToExclude": [
         "**/builds/**",
     ]

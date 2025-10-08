@@ -58,6 +58,9 @@ export default class MapsController extends Controller {
     /** @type {?number} */
     updateMarkersTimeout = null;
 
+    /** @type {Map<number, number>} */
+    pendingMarkerTimeouts = new Map();
+
     static targets = ["icon"];
     static values = {
         ecoIconUrl: String,
@@ -144,7 +147,7 @@ export default class MapsController extends Controller {
 
         for (const store of stores) {
             const lat = Number(store.lat);
-            const lon = Number(store.lon ?? store.lng ?? store.longitude);
+            const lon = Number(store.lon);
 
             if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
                 continue;
@@ -158,11 +161,20 @@ export default class MapsController extends Controller {
 
                 // まだマーカーが作成されていない場合は作成（アニメーション付き）
                 if (!this.markers.has(store.id)) {
+                    // 既存の保留中タイムアウトを中止
+                    if (this.pendingMarkerTimeouts.has(store.id)) {
+                        clearTimeout(this.pendingMarkerTimeouts.get(store.id));
+                    }
+
                     // ランダムな遅延を追加して、マーカーが順次表示されるようにする
                     const delay = Math.random() * 300;
-                    setTimeout(() => {
-                        this.createMarker(store, position);
+                    const timeoutId = setTimeout(() => {
+                        if (bounds.contains(position)) {
+                            this.createMarker(store, position);
+                        }
+                        this.pendingMarkerTimeouts.delete(store.id);
                     }, delay);
+                    this.pendingMarkerTimeouts.set(store.id, timeoutId);
                 }
             }
         }
@@ -170,6 +182,10 @@ export default class MapsController extends Controller {
         // 表示領域外のマーカーをアニメーション付きで削除
         for (const [storeId, marker] of this.markers.entries()) {
             if (!visibleStoreIds.has(storeId)) {
+                if (this.pendingMarkerTimeouts.has(storeId)) {
+                    clearTimeout(this.pendingMarkerTimeouts.get(storeId));
+                    this.pendingMarkerTimeouts.delete(storeId);
+                }
                 this.removeMarkerWithAnimation(storeId, marker);
             }
         }
@@ -224,7 +240,9 @@ export default class MapsController extends Controller {
             // アニメーション完了後にマーカーを削除
             setTimeout(() => {
                 marker.map = null;
-                this.markers.delete(storeId);
+                if (this.markers.has(storeId)) {
+                    this.markers.delete(storeId);
+                }
             }, 300); // アニメーション時間と一致
         } else {
             // フォールバック: 即座に削除
@@ -331,6 +349,12 @@ export default class MapsController extends Controller {
      * コントローラーが切断されたときのクリーンアップ
      */
     disconnect() {
+        // 保留中のマーカー作成タイムアウトをクリア
+        for (const timeoutId of this.pendingMarkerTimeouts.values()) {
+            clearTimeout(timeoutId);
+        }
+        this.pendingMarkerTimeouts.clear();
+
         // すべてのマーカーをアニメーション付きで削除
         for (const [storeId, marker] of this.markers.entries()) {
             this.removeMarkerWithAnimation(storeId, marker);

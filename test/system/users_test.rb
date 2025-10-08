@@ -18,7 +18,7 @@ class UsersTest < ApplicationSystemTestCase
     fill_in "user_name", with: "New User"
     fill_in "user_password", with: "password"
     fill_in "user_password_confirmation", with: "password"
-    click_on "サインイン"
+    click_on "登録する"
 
     assert_text "User was successfully created"
     click_on "Back"
@@ -32,7 +32,7 @@ class UsersTest < ApplicationSystemTestCase
   fill_in "user_name", with: "Updated #{@user.name}"
   fill_in "user_password", with: "newpassword"
   fill_in "user_password_confirmation", with: "newpassword"
-  click_on "サインイン"
+  click_on "登録する"
 
     assert_text "User was successfully updated"
     click_on "Back"

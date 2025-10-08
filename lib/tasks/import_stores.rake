@@ -10,7 +10,18 @@ namespace :import do
       next
     end
 
-    json = JSON.parse(File.read(FILE))
+    begin
+      json = JSON.parse(File.read(FILE))
+    rescue JSON::ParserError => e
+      puts "Failed to parse #{FILENAME}: #{e.message}"
+      next
+    end
+
+    unless json.is_a?(Array)
+      puts "#{FILENAME} must contain a JSON array"
+      next
+    end
+
     total = json.size
     created = 0
     skipped = 0
