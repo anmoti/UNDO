@@ -28,10 +28,7 @@ class UserAuthenticationFlowTest < ActionDispatch::IntegrationTest
     assert_equal "Try another email address or password.", flash[:alert]
 
     # 正しい認証情報でサインイン
-    post signin_path, params: {
-      email: @user.email,
-      password: "password"
-    }
+    sign_in_as(@user, password: "password")
     assert_redirected_to root_url
 
     # セッションが作成されていることを確認
@@ -45,7 +42,7 @@ class UserAuthenticationFlowTest < ActionDispatch::IntegrationTest
     assert_select "div", text: /ログイン中: #{@user.email}/
 
     # サインアウト
-    delete signout_path
+    sign_out
     assert_redirected_to signin_path
 
     # セッションが削除されていることを確認
@@ -60,10 +57,7 @@ class UserAuthenticationFlowTest < ActionDispatch::IntegrationTest
   test "signin with consumer user" do
     consumer_user = users(:carol)  # users(:two) から変更
 
-    post signin_path, params: {
-      email: consumer_user.email,
-      password: "passwordcarol"  # "password" から変更
-    }
+    sign_in_as(consumer_user, password: "passwordcarol")
     assert_redirected_to root_url
 
     # セッションが作成されていることを確認
@@ -78,10 +72,7 @@ class UserAuthenticationFlowTest < ActionDispatch::IntegrationTest
   test "signin with producer user" do
     producer_user = users(:bob)
 
-    post signin_path, params: {
-      email: producer_user.email,
-      password: "passwordbob"
-    }
+    sign_in_as(producer_user, password: "passwordbob")
     assert_redirected_to root_url
 
     # セッションが作成されていることを確認
@@ -97,16 +88,13 @@ class UserAuthenticationFlowTest < ActionDispatch::IntegrationTest
     # 複数回サインイン・サインアウトを繰り返してもエラーが起きないことを確認
     3.times do
       # サインイン
-      post signin_path, params: {
-        email: @user.email,
-        password: "password"
-      }
+      sign_in_as(@user, password: "password")
       assert_redirected_to root_url
 
       session_id = Session.last.id
 
       # サインアウト
-      delete signout_path
+      sign_out
       assert_redirected_to signin_path
 
       # セッションが削除されていることを確認

@@ -4,10 +4,7 @@ class ReviewsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @review = reviews(:one)
     @user = users(:carol)
-    post signin_path, params: {
-      email: @user.email,
-      password: "passwordcarol"
-    }
+    sign_in_as(@user, password: "passwordcarol")
   end
 
   test "should get index" do
@@ -56,11 +53,8 @@ class ReviewsControllerTest < ActionDispatch::IntegrationTest
 
   test "企業アカウントはレビューを投稿できない" do
     # 企業アカウントでログイン
-    delete signout_path
-    post signin_path, params: {
-      email: users(:bob).email,
-      password: "passwordbob"
-    }
+    sign_out
+    sign_in_as(users(:bob), password: "passwordbob")
 
     reviewee = stores(:one)
 
@@ -81,11 +75,8 @@ class ReviewsControllerTest < ActionDispatch::IntegrationTest
 
   test "企業アカウントはレビュー作成ページにアクセスできない" do
     # 企業アカウントでログイン
-    delete signout_path
-    post signin_path, params: {
-      email: users(:bob).email,
-      password: "passwordbob"
-    }
+    sign_out
+    sign_in_as(users(:bob), password: "passwordbob")
 
     get new_review_url
     assert_redirected_to root_path
