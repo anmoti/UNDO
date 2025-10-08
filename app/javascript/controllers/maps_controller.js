@@ -93,19 +93,18 @@ export default class MapsController extends Controller {
     async connect() {
         console.log("Maps controller connected");
 
-        // デバッグ用: stores値を確認
-        // @ts-ignore
-        console.log("Stores value:", this.storesValue);
-
         const map = await this.map;
 
-        // 地図がidle状態になるまで待つ
-        await new Promise((resolve) => {
-            const listener = map.addListener("idle", () => {
-                google.maps.event.removeListener(listener);
-                resolve(undefined);
-            });
-        });
+        await Promise.race([
+            new Promise((resolve) => {
+                const listener = map.addListener("idle", () => {
+                    google.maps.event.removeListener(listener);
+                    resolve(undefined);
+                });
+            }),
+            new Promise((resolve) => setTimeout(resolve, 5000)) 
+        ]);
+
 
         // 地図の表示領域が変更されたときにマーカーを更新
         map.addListener("bounds_changed", () => {
