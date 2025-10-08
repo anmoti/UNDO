@@ -9,7 +9,7 @@
 
   <% if review.errors.any? %>
     <div class="careful">
-      <h2><%= pluralize(review.errors.count, "error") %> prohibited this review from being saved:</h2>
+      <h2><%= review.errors.count %>件のエラーがあります:</h2>
       <ul>
         <% review.errors.each do |error| %>
           <li><%= error.full_message %></li>
