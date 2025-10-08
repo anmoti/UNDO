@@ -99,6 +99,14 @@ export default class MapsController extends Controller {
 
         const map = await this.map;
 
+        // 地図がidle状態になるまで待つ
+        await new Promise((resolve) => {
+            const listener = map.addListener("idle", () => {
+                google.maps.event.removeListener(listener);
+                resolve(undefined);
+            });
+        });
+
         // 地図の表示領域が変更されたときにマーカーを更新
         map.addListener("bounds_changed", () => {
             this.scheduleUpdateMarkers();
