@@ -1,6 +1,9 @@
 import { Controller } from "@hotwired/stimulus";
 import ky from "ky";
 
+const SERVICE_UUID = "0696b0a8-b883-4d89-a87c-1f5d5e78d0e9";
+const CHARACTERISTIC_UUID = "3d8828a9-e983-4235-a25a-25b741e81893";
+
 /**
  * @type {{
  *   OPEN: "open",
@@ -34,7 +37,11 @@ export default class extends Controller {
     state = STATES.CLOSED;
 
     getCSRFToken() {
-        return document.querySelector('meta[name="csrf-token"]')?.getAttribute("content") ?? "";
+        return (
+            document
+                .querySelector('meta[name="csrf-token"]')
+                ?.getAttribute("content") ?? ""
+        );
     }
 
     connect() {
@@ -79,14 +86,28 @@ export default class extends Controller {
     /**
      * 測定開始ボタンが押された
      */
-    startEstimation() {
+    async startEstimation() {
         this.changeState(STATES.IN_PROCESS);
 
-        setTimeout(() => {
-            this.setBodValue(50);
-            this.setCodValue(50);
-            this.changeState(STATES.COMPLETED);
-        }, 3000);
+        // @ts-ignore
+        const ble = await navigator.bluetooth.requestDevice({
+            filters: [{ services: [SERVICE_UUID] }],
+        });
+        const server = await ble.gatt.connect();
+        const service = await server.getPrimaryService(SERVICE_UUID);
+        const characteristic = await service.getCharacteristic(
+            CHARACTERISTIC_UUID
+        );
+        await characteristic.startNotifications();
+        characteristic.addEventListener(
+            "characteristicvaluechanged",
+            this.handleBLEData.bind(this)
+        );
+    }
+
+    async handleBLEData(event) {
+        const value = new TextDecoder().decode(event.target.value);
+        console.log("Received value:", value);
     }
 
     /**
@@ -138,8 +159,8 @@ export default class extends Controller {
                 "X-CSRF-Token": this.getCSRFToken(),
             },
             json: {
-                measurement: { turbidity }
-            }
+                measurement: { turbidity },
+            },
         });
         console.log(data);
 
