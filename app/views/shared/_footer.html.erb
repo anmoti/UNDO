@@ -1,0 +1,22 @@
+<footer class="footer__container">
+  <button type="button" class="footer__button">
+    <%= image_tag "search-btn.png", height: 50, alt: "検索" %>
+  </button>
+  <%# TODO: リンクを修正 %>
+  <%= link_to "#", class: "footer__button" do %>
+    <%= image_tag "estimate-btn.png", height: 50, alt: "水質推定" %>
+  <% end %>
+  <button
+      type="button"
+      class="footer__button"
+      data-controller="foodshare"
+      data-action="click->foodshare#foodshareChange"
+    data-foodshare-active-url-value="<%= asset_path("foodshare_start-btn.png") %>"
+    data-foodshare-inactive-url-value="<%= asset_path("foodshare_end-btn.png") %>"
+    >
+    <%= image_tag "foodshare_start-btn.png",
+        height: 50,
+        data: {foodshare_target: "icon" }
+      %>
+  </button>
+</footer>
