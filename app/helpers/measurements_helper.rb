@@ -9,7 +9,7 @@ module MeasurementsHelper
     part1 = 285.9265 * (t ** 0.49050)
 
     part2Numerator = t ** 5.0
-    part2Denominator = (23.0806 ** 5.0) + (t ** 5.0)
+    part2Denominator = (23.0836 ** 5.0) + (t ** 5.0)
 
     return part1 if part2Denominator.zero?
 
