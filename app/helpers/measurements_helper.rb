@@ -19,7 +19,7 @@ module MeasurementsHelper
   end
 
   def estimate_cod(turbidity)
-    nil unless turbidity.is_a?(Numeric) && turbidity >= 0
+    return nil unless turbidity.is_a?(Numeric) && turbidity >= 0
 
     # 493.65 * (t ** 0.2536) + 49.05
 
