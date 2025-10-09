@@ -35,7 +35,7 @@ class MeasurementsController < ApplicationController
       if @measurement.save
         format.json { render json: @measurement, status: :created }
       else
-        format.json { render status: :unprocessable_entity }
+        format.json { render json: @measurement.errors, status: :unprocessable_entity }
       end
     end
   end
