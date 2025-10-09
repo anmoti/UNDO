@@ -37,7 +37,7 @@ class ReviewsTest < ApplicationSystemTestCase
     page.execute_script("document.getElementById('star4').click()")
     click_on "送信"
 
-    assert_text "レビューを更新しました。"
+    assert_selector ".flash__message", text: "レビューを更新しました。"
   end
 
   test "should destroy Review" do
