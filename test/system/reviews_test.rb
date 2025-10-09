@@ -45,7 +45,7 @@ class ReviewsTest < ApplicationSystemTestCase
     click_on "Destroy this review", match: :first
 
     # 削除後はreviews indexページにリダイレクトされる
-    assert_current_path reviews_path
+    assert_current_path root_path
     assert_selector ".flash__message", text: I18n.t("flash.reviews.destroyed")
   end
 end
