@@ -69,6 +69,13 @@ const MeasurementSchema = v.intersect([
 ]);
 
 /**
+ * BLEで送られてくるペイロードのスキーマ
+ */
+const BLEPayloadSchema = v.object({
+    turbidity: v.number(),
+});
+
+/**
  * @typedef {v.InferOutput<typeof MeasurementSchema>} Measurement
  */
 
@@ -385,26 +392,81 @@ export default class extends Controller {
      * @param {Event} event
      */
     async handleBLEData(event) {
-        if (!event.target) {
-            throw new Error("No currentTarget in event");
-        }
-
-        // @ts-ignore
-        const value = new TextDecoder().decode(event.target.value);
-        console.log("Received value:", value);
-
         try {
-            const json = JSON.parse(value);
-            const turbidity = json.turbidity;
-            if (typeof turbidity === "number") {
-                this.turbidities.push(turbidity);
+            const possible =
+                /** @type {any} */ (event?.target)?.value ??
+                /** @type {any} */ (event?.currentTarget)?.value;
+            if (!possible) {
+                console.warn("BLEのペイロードが空です。");
+                return;
+            }
 
-                if (this.turbidities.length >= avgWindowSize) {
-                    this.completeEstimation();
+            let decoded = null;
+
+            // DataView の場合
+            if (
+                typeof DataView !== "undefined" &&
+                possible instanceof DataView
+            ) {
+                const bytes = new Uint8Array(
+                    possible.buffer,
+                    possible.byteOffset,
+                    possible.byteLength
+                );
+                decoded = new TextDecoder().decode(bytes);
+            } else if (possible instanceof ArrayBuffer) {
+                decoded = new TextDecoder().decode(new Uint8Array(possible));
+            } else if (ArrayBuffer.isView && ArrayBuffer.isView(possible)) {
+                // e.g. Uint8Array
+                const bytes = new Uint8Array(
+                    possible.buffer,
+                    possible.byteOffset,
+                    possible.byteLength
+                );
+                decoded = new TextDecoder().decode(bytes);
+            } else if (typeof possible === "string") {
+                decoded = possible;
+            } else {
+                // 最後の手段: try to coerce to string
+                try {
+                    decoded = String(possible);
+                } catch (e) {
+                    console.warn("Unable to decode BLE payload", e);
+                    return;
                 }
             }
+
+            console.log("Received value:", decoded);
+
+            let json;
+            try {
+                json = JSON.parse(decoded);
+            } catch (e) {
+                console.warn("Received non-JSON BLE payload, ignoring", e);
+                return;
+            }
+
+            let payload;
+            try {
+                payload = v.parse(BLEPayloadSchema, json);
+            } catch (e) {
+                console.warn("BLE payload validation failed, ignoring", e);
+                return;
+            }
+
+            const turbidity = payload.turbidity;
+
+            if (!Number.isFinite(turbidity)) {
+                console.warn("turbidity is not a finite number", turbidity);
+                return;
+            }
+
+            this.turbidities.push(turbidity);
+            if (this.turbidities.length >= avgWindowSize) {
+                this.completeEstimation();
+            }
         } catch (e) {
-            console.error("Error parsing JSON:", e);
+            console.error("Unhandled error in handleBLEData:", e);
         }
     }
 
