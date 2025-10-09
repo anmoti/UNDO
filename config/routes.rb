@@ -6,9 +6,9 @@ Rails.application.routes.draw do
 
   if Rails.env.production?
     resources :users, only: [ :new, :create ]
-    resources :reviews, only: [ :new, :create ]
+    resources :reviews, only: [ :index, :new, :create ]
   else
-    resources :reviews, only: [ :new, :create ]
+    resources :reviews, only: [ :index, :new, :create ]
     resources :users
   end
 

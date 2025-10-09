@@ -2,6 +2,20 @@ class ReviewsController < ApplicationController
   layout "main", only: [ :new ]
   before_action :check_company_account, only: %i[ new create ]
 
+  # GET /reviews.json
+  def index
+    @reviews = Review.all
+
+    # reviewee_idでフィルタリング
+    if params[:reviewee_id].present?
+      @reviews = @reviews.where(reviewee_id: params[:reviewee_id])
+    end
+
+    respond_to do |format|
+      format.json { render json: @reviews }
+    end
+  end
+
   # GET /reviews/new
   def new
     @review = Review.new

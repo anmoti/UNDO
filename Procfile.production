@@ -1,0 +1,2 @@
+web: FORCE_SSL=false RAILS_ENV=production bin/rails server -p 3000
+css: RAILS_ENV=production bin/rails dartsass:watch
