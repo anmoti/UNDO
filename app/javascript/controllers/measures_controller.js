@@ -41,6 +41,7 @@ export default class extends Controller {
 
     /**
      * BLE device/server/characteristic references
+     *
      * @type { BluetoothDevice | null }
      */
     device = null;
@@ -57,14 +58,36 @@ export default class extends Controller {
 
     /**
      * handleBLEDataのバインド済み関数
+     *
+     * @type {((ev: Event) => any) | null}
      */
-    /** @type {((ev: Event) => any) | null} */
     handleBLEDataBound = null;
+
+    /**
+     * gattserverdisconnected のバインド済みハンドラ
+     * 
+     * @type {((ev: Event) => any) | null}
+     */
+    handleDisconnectBound = null;
+
+    /**
+     * 意図的に切断中かどうか
+     * 
+     * @type {boolean}
+     */
+    _intentionalDisconnect = false;
 
     /**
      * @type { string }
      */
     measurementId = "";
+
+    /**
+     * ポーリング中フラグ
+     * 
+     * @type {boolean}
+     */
+    _isPolling = false;
 
     /**
      * @type {typeof STATES[keyof typeof STATES]}
@@ -148,6 +171,12 @@ export default class extends Controller {
      * キャンセルボタンが押された
      */
     cancelEstimation() {
+        // 停止フラグ
+        this._isPolling = false;
+
+        // BLE を切断
+        this.disconnectBLE();
+
         this.changeState(STATES.CLOSED);
     }
 
@@ -204,6 +233,7 @@ export default class extends Controller {
 
     /**
      * 測定結果を保存する
+     * 
      * @param {number} turbidity
      */
     async createMeasurement(turbidity) {
@@ -225,17 +255,15 @@ export default class extends Controller {
     }
 
     async checkStatus() {
-        const data = await ky.get(
-            `/measurements/${this.measurementId}/status`,
-            {
-                credentials: "include",
-                headers: {
-                    "X-CSRF-Token": this.getCSRFToken(),
-                },
-            }
-        );
-        const json = await data.json();
+        const res = await ky.get(`/measurements/${this.measurementId}/status`, {
+            credentials: "include",
+            headers: {
+                "X-CSRF-Token": this.getCSRFToken(),
+            },
+        });
+        const json = await res.json();
         console.log("Status data:", json);
+        return json;
     }
 
     async connectToBLEDevice() {
@@ -257,9 +285,11 @@ export default class extends Controller {
         this.device = ble;
 
         // 切断ハンドラをセット
-        this.device.addEventListener("gattserverdisconnected", (ev) => {
-            this.handleDisconnect(ev);
-        });
+        this.handleDisconnectBound = this.handleDisconnect.bind(this);
+        this.device.addEventListener(
+            "gattserverdisconnected",
+            this.handleDisconnectBound
+        );
 
         const server = await ble.gatt.connect();
         this.server = server;
@@ -283,14 +313,14 @@ export default class extends Controller {
 
     /**
      * BLE 切断時に呼ばれる
-     * 
+     *
      * @param {Event} _ev
      */
     handleDisconnect(_ev) {
         console.warn("BLE device disconnected during measurement");
 
         // 測定中に切断されたらユーザーに知らせてモーダルを閉じる
-        if (this.state === STATES.IN_PROCESS) {
+        if (!this._intentionalDisconnect && this.state === STATES.IN_PROCESS) {
             alert("測定中にBLEが切断されました。測定を中止します。");
         }
 
@@ -311,6 +341,21 @@ export default class extends Controller {
                 );
             }
 
+            // 意図的に切断するフラグを立てる
+            this._intentionalDisconnect = true;
+
+            // device の切断イベントリスナを削除して、disconnect 時のハンドラ呼び出しを防ぐ
+            if (this.device && this.handleDisconnectBound) {
+                try {
+                    this.device.removeEventListener(
+                        "gattserverdisconnected",
+                        this.handleDisconnectBound
+                    );
+                } catch (e) {
+                    // ignore
+                }
+            }
+
             if (this.server && this.server.connected) {
                 this.server.disconnect();
             }
@@ -321,6 +366,8 @@ export default class extends Controller {
             this.server = null;
             this.device = null;
             this.handleBLEDataBound = null;
+            this.handleDisconnectBound = null;
+            this._intentionalDisconnect = false;
         }
     }
 
@@ -343,17 +390,10 @@ export default class extends Controller {
             const turbidity = json.turbidity;
             if (typeof turbidity === "number") {
                 this.turbidities.push(turbidity);
-                console.log("Current turbidities:", this.turbidities);
-            }
 
-            this.completeEstimation();
-
-            if (this.turbidities.length >= 100) {
-                const sum = this.turbidities.reduce((a, b) => a + b, 0);
-                const avg = sum / this.turbidities.length;
-                console.log("Average turbidity:", avg);
-
-                // this.completeEstimation();
+                if (this.turbidities.length >= 100) {
+                    this.completeEstimation();
+                }
             }
         } catch (e) {
             console.error("Error parsing JSON:", e);
@@ -364,22 +404,52 @@ export default class extends Controller {
         const sum = this.turbidities.reduce((a, b) => a + b, 0);
         const avg = sum / this.turbidities.length;
         console.log("Average turbidity:", avg);
+        // 切断してからサーバーへ送信
+        await this.disconnectBLE();
 
         const data = await this.createMeasurement(avg);
         const json = await data.json();
         this.measurementId = String(json.id);
         this.changeState(STATES.WAITING);
 
-        // while (true) {
-        //     await this.checkStatus();
-        //     await new Promise((resolve) => setTimeout(resolve, 5000));
-        // }
+        // ポーリングで status が predicted になるのを待つ
+        this._isPolling = true;
+        try {
+            const maxAttempts = 60; // 最大 5 分（5s * 60）
+            let attempts = 0;
+            while (this._isPolling && attempts < maxAttempts) {
+                const statusJson = await this.checkStatus();
+                if (!statusJson) break;
 
-        this.setBodValue(0); // 仮の値
-        this.setCodValue(0); // 仮の値
-        // this.setResultMessage("茹で汁の水質が基準値を超えました。");
-        // this.setResultCareful(true);
+                const status = statusJson.status;
+                if (status !== "pending") {
+                    if (typeof statusJson.bod === "number") {
+                        this.setBodValue(statusJson.bod);
+                    }
+                    if (typeof statusJson.cod === "number") {
+                        this.setCodValue(statusJson.cod);
+                    }
+                    if (statusJson.message) {
+                        this.setResultMessage(statusJson.message);
+                    }
+                    this.setResultCareful(!!statusJson.careful);
+                    this.changeState(STATES.COMPLETED);
+                    this._isPolling = false;
+                    return;
+                }
 
-        this.changeState(STATES.COMPLETED);
+                // まだ predicted でなければ待機
+                await new Promise((resolve) => setTimeout(resolve, 5000));
+                attempts += 1;
+            }
+
+            if (this._isPolling) {
+                // タイムアウト
+                alert("結果取得がタイムアウトしました。後で確認してください。");
+                this.changeState(STATES.CLOSED);
+            }
+        } finally {
+            this._isPolling = false;
+        }
     }
 }
