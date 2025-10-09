@@ -11,6 +11,8 @@ class UserSetting < ApplicationRecord
     bt_characteristic_uuid: "3d8828a9-e983-4235-a25a-25b741e81893"
   }.freeze
 
+  READONLY_KEYS = %w[bt_service_uuid bt_characteristic_uuid].freeze
+
   after_initialize :set_default_settings, if: :new_record?
 
   # 設定の取得（デフォルト値とマージ）
