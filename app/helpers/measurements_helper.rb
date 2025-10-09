@@ -15,7 +15,9 @@ module MeasurementsHelper
 
     part2 = 1152.7511 * (part2Numerator / part2Denominator)
 
-    part1 + part2
+    result = part1 + part2
+
+    format("%.2f", result.round(2)).to_f
   end
 
   def estimate_cod(turbidity)
@@ -25,6 +27,8 @@ module MeasurementsHelper
 
     t = 730.0 - turbidity.to_f
 
-    493.65 * (t ** 0.2536) + 49.05
+    result = 493.65 * (t ** 0.2536) + 49.05
+
+    format("%.2f", result.round(2)).to_f
   end
 end
