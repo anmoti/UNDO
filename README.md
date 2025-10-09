@@ -17,10 +17,12 @@ end
 
 ## npm パッケージのダウンロード / アップデート
 
-`./bin/importmap pin <package-name>`でもダウンロードはできるが、型定義ファイルやソースマップが含まれないため、以下のスクリプトを使用する。
+`./bin/importmap pin <package-name>`でもダウンロードはできるが、型定義ファイルやソースマップが含まれないため、`npm`タスクを使用。
+
+使い方は以下を参照されたい。
 
 ```
-$ ruby ./script/update-package.rb <package-name>
+$ rake npm:help
 ```
 
 ## import udon data
