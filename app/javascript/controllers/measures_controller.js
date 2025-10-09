@@ -2,10 +2,13 @@ import { Controller } from "@hotwired/stimulus";
 import ky from "ky";
 import * as v from "valibot";
 
+const CHAR_CHANGED = "characteristicvaluechanged"; // cSpell:words characteristicvaluechanged
+const GATT_DISCONNECTED = "gattserverdisconnected"; // cSpell:words gattserverdisconnected
+
 const SERVICE_UUID = "0696b0a8-b883-4d89-a87c-1f5d5e78d0e9";
 const CHAR_UUID = "3d8828a9-e983-4235-a25a-25b741e81893";
 
-const avgWindowSize = 100;
+const avgWindowSize = 10;
 const bodThreshold = 5000;
 
 /**
@@ -206,14 +209,7 @@ export default class extends Controller {
 
         this.changeState(STATES.IN_PROCESS);
 
-        try {
-            await this.connectToBLEDevice();
-        } catch (error) {
-            console.error("Error connecting to BLE device:", error);
-            alert("BLEデバイスへの接続中にエラーが発生しました。");
-            this.changeState(STATES.CLOSED);
-            return;
-        }
+        await this.connectToBLEDevice();
     }
 
     /**
@@ -281,48 +277,49 @@ export default class extends Controller {
     }
 
     async connectToBLEDevice() {
-        if (!navigator.bluetooth) {
-            return {
-                error: "Web Bluetooth API がこのブラウザでサポートされていません。",
-            };
+        try {
+            if (!navigator.bluetooth) {
+                throw new Error("このブラウザーはサポートしていません。");
+            }
+
+            const ble = await navigator.bluetooth.requestDevice({
+                filters: [{ services: [SERVICE_UUID] }],
+            });
+
+            if (!ble.gatt) {
+                throw new Error("GATTサーバーに接続できません。");
+            }
+
+            // 保存しておく
+            this.device = ble;
+
+            // 切断ハンドラをセット
+            this.handleDisconnectBound = this.handleDisconnect.bind(this);
+            this.device.addEventListener(
+                GATT_DISCONNECTED,
+                this.handleDisconnectBound
+            );
+
+            const server = await ble.gatt.connect();
+            this.server = server;
+
+            const service = await server.getPrimaryService(SERVICE_UUID);
+            const char = await service.getCharacteristic(CHAR_UUID);
+
+            // 通知開始
+            await char.startNotifications();
+
+            // バインド済みハンドラを保存しておく
+            this.handleBLEDataBound = this.handleBLEData.bind(this);
+            char.addEventListener(CHAR_CHANGED, this.handleBLEDataBound);
+
+            // 保存
+            this.characteristic = char;
+        } catch (error) {
+            console.error("Error in connectToBLEDevice:", error);
+            this.disconnectBLE();
+            alert("BLEデバイスへの接続中にエラーが発生しました。");
         }
-
-        const ble = await navigator.bluetooth.requestDevice({
-            filters: [{ services: [SERVICE_UUID] }],
-        });
-
-        if (!ble.gatt) {
-            return { error: "GATT サーバーに接続できません。" };
-        }
-
-        // 保存しておく
-        this.device = ble;
-
-        // 切断ハンドラをセット
-        this.handleDisconnectBound = this.handleDisconnect.bind(this);
-        this.device.addEventListener(
-            "gattserverdisconnected",
-            this.handleDisconnectBound
-        );
-
-        const server = await ble.gatt.connect();
-        this.server = server;
-
-        const service = await server.getPrimaryService(SERVICE_UUID);
-        const char = await service.getCharacteristic(CHAR_UUID);
-
-        // 通知開始
-        await char.startNotifications();
-
-        // バインド済みハンドラを保存しておく
-        this.handleBLEDataBound = this.handleBLEData.bind(this);
-        char.addEventListener(
-            "characteristicvaluechanged",
-            this.handleBLEDataBound
-        );
-
-        // 保存
-        this.characteristic = char;
     }
 
     /**
@@ -349,7 +346,7 @@ export default class extends Controller {
         try {
             if (this.characteristic && this.handleBLEDataBound) {
                 this.characteristic.removeEventListener(
-                    "characteristicvaluechanged",
+                    CHAR_CHANGED,
                     this.handleBLEDataBound
                 );
             }
@@ -361,7 +358,7 @@ export default class extends Controller {
             if (this.device && this.handleDisconnectBound) {
                 try {
                     this.device.removeEventListener(
-                        "gattserverdisconnected",
+                        GATT_DISCONNECTED,
                         this.handleDisconnectBound
                     );
                 } catch (e) {
