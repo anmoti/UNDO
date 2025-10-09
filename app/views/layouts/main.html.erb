@@ -16,18 +16,11 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
+  <body data-controller="user-menu" data-action="click@window->user-menu#close">
     <header class="header__container">
       <%= image_tag "logo.png", class: "header__logo", alt: "UNDO Logo" %>
       <div class="header__right">
-        <% if authenticated? %>
-          <div class="header__user">ログイン中: <%= Current.session.user.email %></div>
-          <%= button_to signout_path, class: "header__button", method: :delete do %>
-            <%= image_tag "logout-btn.png", height: 50, alt: "ログアウト" %>
-          <% end %>
-        <% else %>
-          <%= link_to "ログイン", signin_path, class: "header__btn--text" %>
-        <% end %>
+        <%= render "shared/user_menu" %>
       </div>
     </header>
     <main>
@@ -55,9 +48,6 @@
         data: {foodshare_target: "icon" }
       %>
       </button>
-      <%= link_to "#", class: "footer__button" do %>
-        <%= image_tag "settings-btn.png", height: 50, alt: "設定" %>
-      <% end %>
     </footer>
   </body>
 </html>
