@@ -21,13 +21,14 @@ class UserSetting < ApplicationRecord
   def set(key, value)
     self.settings ||= {}
     self.settings = settings.merge(key.to_s => value)
-    save
+    save!
   end
 
   def update_settings(new_settings)
     self.settings ||= {}
-    self.settings = settings.merge(new_settings.stringify_keys)
-    save
+    filtered_settings = new_settings.stringify_keys.except(*READONLY_KEYS)
+    self.settings = settings.merge(filtered_settings)
+    save!
   end
 
   def bod_upper_limit
