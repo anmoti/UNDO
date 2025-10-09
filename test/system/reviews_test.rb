@@ -15,7 +15,7 @@ class ReviewsTest < ApplicationSystemTestCase
   test "should create review" do
     # reviews indexページではなく、直接new pageに行く
     visit new_review_path
-    
+
     # レビューするお店を選択
     select "Bob's Store", from: "review_reviewee_id"
     # 評価を選択（5つ星） - visually-hiddenなのでJavaScriptで選択
