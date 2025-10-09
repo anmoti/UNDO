@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_09_084435) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_09_221009) do
   create_table "measurements", force: :cascade do |t|
     t.float "turbidity"
     t.float "predicted_bod"
@@ -55,6 +55,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_09_084435) do
     t.string "address", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "tel"
     t.index ["name", "address"], name: "index_stores_on_name_and_address", unique: true
   end
 

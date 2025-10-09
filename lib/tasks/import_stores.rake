@@ -87,7 +87,7 @@ namespace :import do
           lon: lon.to_f
         }
         attrs[:open_time] = open_time if open_time.present?
-        # attrs[:tel] = tel if tel.present?
+        attrs[:tel] = tel if tel.present?
 
         store = Store.new(attrs)
         if store.save
