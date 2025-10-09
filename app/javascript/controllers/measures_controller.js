@@ -65,14 +65,14 @@ export default class extends Controller {
 
     /**
      * gattserverdisconnected のバインド済みハンドラ
-     * 
+     *
      * @type {((ev: Event) => any) | null}
      */
     handleDisconnectBound = null;
 
     /**
      * 意図的に切断中かどうか
-     * 
+     *
      * @type {boolean}
      */
     _intentionalDisconnect = false;
@@ -84,7 +84,7 @@ export default class extends Controller {
 
     /**
      * ポーリング中フラグ
-     * 
+     *
      * @type {boolean}
      */
     _isPolling = false;
@@ -233,7 +233,7 @@ export default class extends Controller {
 
     /**
      * 測定結果を保存する
-     * 
+     *
      * @param {number} turbidity
      */
     async createMeasurement(turbidity) {
@@ -317,10 +317,9 @@ export default class extends Controller {
      * @param {Event} _ev
      */
     handleDisconnect(_ev) {
-        console.warn("BLE device disconnected during measurement");
-
         // 測定中に切断されたらユーザーに知らせてモーダルを閉じる
         if (!this._intentionalDisconnect && this.state === STATES.IN_PROCESS) {
+            console.warn("BLE device disconnected during measurement");
             alert("測定中にBLEが切断されました。測定を中止します。");
         }
 
