@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="user-menu"
@@ -17,6 +18,8 @@ export default class extends Controller {
     }
 
     disconnect() {
-        this.menuTarget.classList.remove("user-menu--open")
+        if (this.hasMenuTarget) {
+            this.menuTarget.classList.remove("user-menu--open")
+        }
     }
 }

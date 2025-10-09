@@ -21,7 +21,7 @@
               <% if Current.session.user.is_company? %>
                 🏢
               <% else %>
-                <%= Current.session.user.name.first %>
+                <%= Current.session.user.name&.first || "?" %>
               <% end %>
             </div>
             <div class="user-menu__details">
