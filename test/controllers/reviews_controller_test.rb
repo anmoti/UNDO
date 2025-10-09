@@ -70,7 +70,7 @@ class ReviewsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to root_path
-    assert_equal "企業アカウントはレビューを投稿できません。", flash[:alert]
+    assert_equal I18n.t("flash.reviews.company_restriction"), flash[:alert]
   end
 
   test "企業アカウントはレビュー作成ページにアクセスできない" do
@@ -80,6 +80,6 @@ class ReviewsControllerTest < ActionDispatch::IntegrationTest
 
     get new_review_url
     assert_redirected_to root_path
-    assert_equal "企業アカウントはレビューを投稿できません。", flash[:alert]
+    assert_equal I18n.t("flash.reviews.company_restriction"), flash[:alert]
   end
 end

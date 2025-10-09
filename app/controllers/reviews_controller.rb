@@ -41,20 +41,15 @@ class ReviewsController < ApplicationController
 
   # POST /reviews or /reviews.json
   def create
-    @review = Review.new(review_params)
+    @review = Current.user.written_reviews.build(review_params)
 
     respond_to do |format|
       if @review.save
-        format.html { redirect_to root_path, notice: "レビューを投稿しました。" }
+        format.html { redirect_to root_path, notice: t("flash.reviews.created") }
         format.json { render :show, status: :created, location: @review }
       else
-        format.html do
-          # エラーがある場合、reviewee_idから店舗情報を取得して表示
-          if @review.reviewee_id.present?
-            @store = Store.find_by(id: @review.reviewee_id)
-          end
-          render :new, status: :unprocessable_entity
-        end
+        @store = Store.find(params[:review][:reviewee_id])
+        format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @review.errors, status: :unprocessable_entity }
       end
     end
@@ -64,7 +59,7 @@ class ReviewsController < ApplicationController
   def update
     respond_to do |format|
       if @review.update(review_params)
-        format.html { redirect_to @review, notice: "レビューを更新しました。" }
+        format.html { redirect_to @review, notice: t("flash.reviews.updated") }
         format.json { render :show, status: :ok, location: @review }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -78,7 +73,7 @@ class ReviewsController < ApplicationController
     @review.destroy!
 
     respond_to do |format|
-      format.html { redirect_to reviews_path, status: :see_other, notice: "レビューを削除しました。" }
+      format.html { redirect_to reviews_path, status: :see_other, notice: t("flash.reviews.destroyed") }
       format.json { head :no_content }
     end
   end
@@ -89,13 +84,12 @@ class ReviewsController < ApplicationController
       @review = Review.find(params[:id])
     end
 
-    # 企業アカウントがレビューを投稿できないようにチェック
-    def check_company_account
-      if Current.user&.is_company?
-        redirect_to root_path, alert: "企業アカウントはレビューを投稿できません。"
-      end
+  # 企業アカウントがレビューを投稿できないようにチェック
+  def check_company_account
+    if Current.user&.is_company?
+      redirect_to root_path, alert: t("flash.reviews.company_restriction")
     end
-
+  end
     # Strong parametersで許可するパラメーターを定義
     def review_params
       permitted = params.require(:review).permit(:reviewer_id, :reviewee_id, :comment, :rating)

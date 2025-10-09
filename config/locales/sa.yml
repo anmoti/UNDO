@@ -1,0 +1,42 @@
+sa:
+    flash:
+        users:
+            created: "तव खाता: सफलतया निर्मितम्।"
+            updated: "योजकस्य सूचना: अद्यतनम्।"
+            destroyed: "योजकः अपसारितः।"
+        reviews:
+            created: "समीक्षा प्रकाशितम्।"
+            updated: "समीक्षा अद्यतनम्।"
+            destroyed: "समीक्षा अपसारितम्।"
+            company_restriction: "संस्थाखाता: समीक्षा प्रकाशितुं न शक्नोति।"
+        sessions:
+            signed_in: "सफलतया प्रविष्टम्।"
+            signed_out: "सफलतया निर्गतम्।"
+            invalid_credentials: "ईमेल वा गुप्तशब्दः सम्यक् नास्ति।"
+        errors:
+            generic: "त्रुटिः अभवत्।"
+            not_found: "निर्दिष्टं साधनं न लब्धम्।"
+            unauthorized: "एतत् कर्तुं तव अधिकारः नास्ति।"
+
+    activerecord:
+        models:
+            user: "योजकः"
+            review: "समीक्षा"
+            store: "भण्डारः"
+            session: "सत्रम्"
+        attributes:
+            user:
+                name: "नाम"
+                email: "ईमेल"
+                password: "गुप्तशब्दः"
+                password_confirmation: "गुप्तशब्दस्य पुष्टि"
+                is_company: "संस्थाखाता:"
+            review:
+                rating: "मूल्याङ्कनम्"
+                comment: "टिप्पणी"
+                reviewer: "समीक्षकः"
+                reviewee: "समीक्ष्य भण्डारः"
+            store:
+                name: "भण्डारनाम"
+                latitude: "अक्षांशः"
+                longitude: "देशांशः"

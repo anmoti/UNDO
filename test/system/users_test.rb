@@ -20,7 +20,7 @@ class UsersTest < ApplicationSystemTestCase
     fill_in "user_password_confirmation", with: "password"
     click_on "登録する"
 
-    assert_text "アカウントが正常に作成されました。"
+    assert_text I18n.t("flash.users.created")
   end
 
   test "should update User" do
@@ -33,7 +33,7 @@ class UsersTest < ApplicationSystemTestCase
   fill_in "user_password_confirmation", with: "newpassword"
   click_on "登録する"
 
-    assert_text "ユーザー情報を更新しました。"
+    assert_text I18n.t("flash.users.updated")
     click_on "Back"
   end
 
@@ -41,6 +41,6 @@ class UsersTest < ApplicationSystemTestCase
     visit user_url(@user)
     click_on "Destroy this user", match: :first
 
-    assert_text "ユーザーを削除しました。"
+    assert_text I18n.t("flash.users.destroyed")
   end
 end

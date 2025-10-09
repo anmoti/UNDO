@@ -25,7 +25,7 @@ class UserAuthenticationFlowTest < ActionDispatch::IntegrationTest
     # エラーメッセージが表示されることを確認
     follow_redirect!
     assert_response :success
-    assert_equal "Try another email address or password.", flash[:alert]
+    assert_equal I18n.t("flash.sessions.invalid_credentials"), flash[:alert]
 
     # 正しい認証情報でサインイン
     sign_in_as(@user, password: "password")

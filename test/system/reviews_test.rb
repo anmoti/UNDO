@@ -24,7 +24,7 @@ class ReviewsTest < ApplicationSystemTestCase
     fill_in "review_comment", with: @review.comment
     click_on "送信"
 
-    assert_text "レビューを投稿しました。"
+    assert_selector ".flash__message", text: I18n.t("flash.reviews.created")
   end
 
   test "should update Review" do
@@ -37,13 +37,13 @@ class ReviewsTest < ApplicationSystemTestCase
     page.execute_script("document.getElementById('star4').click()")
     click_on "送信"
 
-    assert_selector ".flash__message", text: "レビューを更新しました。"
+    assert_selector ".flash__message", text: I18n.t("flash.reviews.updated")
   end
 
   test "should destroy Review" do
     visit review_url(@review)
     click_on "Destroy this review", match: :first
 
-    assert_text "レビューを削除しました。"
+    assert_text I18n.t("flash.reviews.destroyed")
   end
 end

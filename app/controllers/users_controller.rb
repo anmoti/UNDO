@@ -27,7 +27,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
-        format.html { redirect_to signin_path, notice: "アカウントが正常に作成されました。" }
+        format.html { redirect_to signin_path, notice: t("flash.users.created") }
         format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -40,7 +40,7 @@ class UsersController < ApplicationController
   def update
     respond_to do |format|
       if @user.update(user_params)
-        format.html { redirect_to @user, notice: "ユーザー情報を更新しました。" }
+        format.html { redirect_to @user, notice: t("flash.users.updated") }
         format.json { render :show, status: :ok, location: @user }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -54,7 +54,7 @@ class UsersController < ApplicationController
     @user.destroy!
 
     respond_to do |format|
-      format.html { redirect_to users_path, status: :see_other, notice: "ユーザーを削除しました。" }
+      format.html { redirect_to users_path, status: :see_other, notice: t("flash.users.destroyed") }
       format.json { head :no_content }
     end
   end
