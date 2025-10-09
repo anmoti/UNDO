@@ -1,8 +1,12 @@
 import { Controller } from "@hotwired/stimulus";
 import ky from "ky";
+import * as v from "valibot";
 
 const SERVICE_UUID = "0696b0a8-b883-4d89-a87c-1f5d5e78d0e9";
 const CHAR_UUID = "3d8828a9-e983-4235-a25a-25b741e81893";
+
+const avgWindowSize = 100;
+const bodThreshold = 5000;
 
 /**
  * @type {{
@@ -20,6 +24,59 @@ const STATES = {
     COMPLETED: "completed",
     CLOSED: "closed",
 };
+
+const StatesSchema = v.enum(STATES);
+
+/**
+ * @type {{
+ *   PENDING: "pending",
+ *   PREDICTED: "predicted",
+ *   VALIDATED: "validated",
+ *   ANOMALY: "anomaly"
+ * }}
+ */
+const STATUS = {
+    PENDING: "pending",
+    PREDICTED: "predicted",
+    VALIDATED: "validated",
+    ANOMALY: "anomaly",
+};
+
+const StatusSchema = v.enum(STATUS);
+
+/**
+ * @typedef {v.InferOutput<typeof StatusSchema>} Status
+ */
+
+const MeasurementSchema = v.intersect([
+    v.object({
+        id: v.number(),
+        turbidity: v.number(),
+    }),
+    v.union([
+        v.object({
+            status: v.literal(STATUS.PENDING),
+        }),
+        v.object({
+            predicted_bod: v.number(),
+            predicted_cod: v.number(),
+            status: v.literal(STATUS.PREDICTED),
+        }),
+    ]),
+]);
+
+/**
+ * @typedef {v.InferOutput<typeof MeasurementSchema>} Measurement
+ */
+
+const MeasurementStatusSchema = v.object({
+    id: v.number(),
+    status: StatusSchema,
+});
+
+/**
+ * @typedef {v.InferOutput<typeof MeasurementStatusSchema>} MeasurementStatus
+ */
 
 // Connects to data-controller="measures"
 /** @extends {Controller<HTMLDivElement>} */
@@ -78,9 +135,9 @@ export default class extends Controller {
     _intentionalDisconnect = false;
 
     /**
-     * @type { string }
+     * @type { number }
      */
-    measurementId = "";
+    measurementId = 0;
 
     /**
      * ポーリング中フラグ
@@ -93,14 +150,6 @@ export default class extends Controller {
      * @type {typeof STATES[keyof typeof STATES]}
      */
     state = STATES.CLOSED;
-
-    getCSRFToken() {
-        return (
-            document
-                .querySelector('meta[name="csrf-token"]')
-                ?.getAttribute("content") ?? ""
-        );
-    }
 
     connect() {
         console.log("Measures controller connected");
@@ -153,7 +202,7 @@ export default class extends Controller {
     async startEstimation() {
         // 測定毎にリセット
         this.turbidities = [];
-        this.measurementId = "";
+        this.measurementId = 0;
 
         this.changeState(STATES.IN_PROCESS);
 
@@ -229,41 +278,6 @@ export default class extends Controller {
             throw new Error(`Target ${targetName} not found`);
         }
         return target;
-    }
-
-    /**
-     * 測定結果を保存する
-     *
-     * @param {number} turbidity
-     */
-    async createMeasurement(turbidity) {
-        const data =
-            await /** @type {import("ky").ResponsePromise<{ id: string }>} */ (
-                ky.post("/measurements", {
-                    credentials: "include",
-                    headers: {
-                        "X-CSRF-Token": this.getCSRFToken(),
-                    },
-                    json: {
-                        measurement: { turbidity },
-                    },
-                })
-            );
-        console.log(data);
-
-        return data;
-    }
-
-    async checkStatus() {
-        const res = await ky.get(`/measurements/${this.measurementId}/status`, {
-            credentials: "include",
-            headers: {
-                "X-CSRF-Token": this.getCSRFToken(),
-            },
-        });
-        const json = await res.json();
-        console.log("Status data:", json);
-        return json;
     }
 
     async connectToBLEDevice() {
@@ -378,8 +392,6 @@ export default class extends Controller {
             throw new Error("No currentTarget in event");
         }
 
-        console.log(event.target);
-
         // @ts-ignore
         const value = new TextDecoder().decode(event.target.value);
         console.log("Received value:", value);
@@ -390,7 +402,7 @@ export default class extends Controller {
             if (typeof turbidity === "number") {
                 this.turbidities.push(turbidity);
 
-                if (this.turbidities.length >= 100) {
+                if (this.turbidities.length >= avgWindowSize) {
                     this.completeEstimation();
                 }
             }
@@ -406,44 +418,46 @@ export default class extends Controller {
         // 切断してからサーバーへ送信
         await this.disconnectBLE();
 
-        const data = await this.createMeasurement(avg);
-        const json = await data.json();
-        this.measurementId = String(json.id);
-        this.changeState(STATES.WAITING);
-
-        // ポーリングで status が predicted になるのを待つ
-        this._isPolling = true;
         try {
-            const maxAttempts = 60; // 最大 5 分（5s * 60）
+            await createMeasurement(avg).then((measurement) => {
+                this.measurementId = measurement.id;
+            });
+            this.changeState(STATES.WAITING);
+
+            this._isPolling = true;
+
+            const maxAttempts = 12;
             let attempts = 0;
             while (this._isPolling && attempts < maxAttempts) {
-                const statusJson = await this.checkStatus();
-                if (!statusJson) break;
+                await new Promise((resolve) => setTimeout(resolve, 5000));
 
-                const status = statusJson.status;
-                if (status !== "pending") {
-                    if (typeof statusJson.bod === "number") {
-                        this.setBodValue(statusJson.bod);
-                    }
-                    if (typeof statusJson.cod === "number") {
-                        this.setCodValue(statusJson.cod);
-                    }
-                    if (statusJson.message) {
-                        this.setResultMessage(statusJson.message);
-                    }
-                    this.setResultCareful(!!statusJson.careful);
-                    this.changeState(STATES.COMPLETED);
-                    this._isPolling = false;
-                    return;
+                const status = await getStatus(this.measurementId);
+
+                if (status === STATUS.PENDING) {
+                    attempts += 1;
+                    continue;
                 }
 
-                // まだ predicted でなければ待機
-                await new Promise((resolve) => setTimeout(resolve, 5000));
-                attempts += 1;
+                const measurement = await getMeasurement(this.measurementId);
+                if (measurement.status === STATUS.PENDING) continue;
+
+                this.setBodValue(measurement.predicted_bod);
+                this.setCodValue(measurement.predicted_cod);
+
+                if (measurement.predicted_bod > bodThreshold) {
+                    this.setResultMessage("茹で汁の水質が基準値を超えました。");
+                    this.setResultCareful(true);
+                } else {
+                    this.setResultMessage("茹で汁の水質は綺麗です。");
+                    this.setResultCareful(false);
+                }
+
+                this.changeState(STATES.COMPLETED);
+                this._isPolling = false;
+                return;
             }
 
             if (this._isPolling) {
-                // タイムアウト
                 alert("結果取得がタイムアウトしました。後で確認してください。");
                 this.changeState(STATES.CLOSED);
             }
@@ -451,4 +465,69 @@ export default class extends Controller {
             this._isPolling = false;
         }
     }
+}
+
+/**
+ * CSRFトークンを取得する
+ *
+ * @returns {string}
+ */
+function getCSRFToken() {
+    return (
+        document
+            .querySelector('meta[name="csrf-token"]')
+            ?.getAttribute("content") ?? ""
+    );
+}
+
+/**
+ * 測定結果を保存する
+ *
+ * @param {number} turbidity
+ * @returns {Promise<Measurement>}
+ */
+async function createMeasurement(turbidity) {
+    const data = await ky.post("/measurements", {
+        credentials: "include",
+        headers: { "X-CSRF-Token": getCSRFToken() },
+        json: { measurement: { turbidity } },
+    });
+
+    const json = await data.json();
+    const parsed = v.parse(MeasurementSchema, json);
+
+    return parsed;
+}
+
+/**
+ *
+ * @param {number} measurementId
+ * @returns {Promise<Measurement>}
+ */
+async function getMeasurement(measurementId) {
+    const res = await ky.get(`/measurements/${measurementId}`, {
+        credentials: "include",
+        headers: { "X-CSRF-Token": getCSRFToken() },
+    });
+    const json = await res.json();
+    const parsed = v.parse(MeasurementSchema, json);
+
+    return parsed;
+}
+
+/**
+ * 測定結果のステータスを確認する
+ *
+ * @param {number} measurementId
+ * @returns {Promise<Status>}
+ */
+async function getStatus(measurementId) {
+    const res = await ky.get(`/measurements/${measurementId}/status`, {
+        credentials: "include",
+        headers: { "X-CSRF-Token": getCSRFToken() },
+    });
+    const json = await res.json();
+    const parsed = v.parse(MeasurementStatusSchema, json);
+
+    return parsed.status;
 }
