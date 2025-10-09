@@ -5,10 +5,10 @@ Rails.application.routes.draw do
   end
 
   if Rails.env.production?
-    resources :users, only: [ :create ]
-    resources :reviews, only: [ :new ]
+    resources :users, only: [ :new, :create ]
+    resources :reviews, only: [ :index, :new, :create ]
   else
-    resources :reviews
+    resources :reviews, only: [ :index, :new, :create ]
     resources :users
   end
 

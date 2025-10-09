@@ -7,9 +7,21 @@ class ReviewsControllerTest < ActionDispatch::IntegrationTest
     sign_in_as(@user, password: "passwordcarol")
   end
 
-  test "should get index" do
-    get reviews_url
+  test "should get index as json" do
+    get reviews_url(format: :json)
     assert_response :success
+    assert_equal "application/json; charset=utf-8", @response.content_type
+  end
+
+  test "should filter reviews by reviewee_id" do
+    reviewee = stores(:one)
+    get reviews_url(format: :json, reviewee_id: reviewee.id)
+    assert_response :success
+
+    reviews = JSON.parse(@response.body)
+    reviews.each do |review|
+      assert_equal reviewee.id, review["reviewee_id"]
+    end
   end
 
   test "should get new" do
@@ -26,29 +38,6 @@ class ReviewsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to root_path
-  end
-
-  test "should show review" do
-    get review_url(@review)
-    assert_response :success
-  end
-
-  test "should get edit" do
-    get edit_review_url(@review)
-    assert_response :success
-  end
-
-  test "should update review" do
-    patch review_url(@review), params: { review: { comment: @review.comment, rating: @review.rating, reviewee_id: @review.reviewee_id, reviewer_id: @review.reviewer_id } }
-    assert_redirected_to review_url(@review)
-  end
-
-  test "should destroy review" do
-    assert_difference("Review.count", -1) do
-      delete review_url(@review)
-    end
-
-    assert_redirected_to reviews_url
   end
 
   test "企業アカウントはレビューを投稿できない" do
