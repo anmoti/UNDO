@@ -38,8 +38,9 @@ class UserAuthenticationFlowTest < ActionDispatch::IntegrationTest
     # ホームページにリダイレクト後、認証済み状態を確認
     follow_redirect!
     assert_response :success
-    # main layoutには認証状態が表示される
-    assert_select "div", text: /ログイン中: #{@user.email}/
+    # main layoutにはユーザーメニューが表示される
+    assert_select "div.user-menu"
+    assert_select "span.user-menu__email", text: @user.email
 
     # サインアウト
     sign_out
@@ -66,7 +67,8 @@ class UserAuthenticationFlowTest < ActionDispatch::IntegrationTest
 
     follow_redirect!
     assert_response :success
-    assert_select "div", text: /ログイン中: #{consumer_user.email}/
+    assert_select "div.user-menu"
+    assert_select "span.user-menu__email", text: consumer_user.email
   end
 
   test "signin with producer user" do
@@ -81,7 +83,8 @@ class UserAuthenticationFlowTest < ActionDispatch::IntegrationTest
 
     follow_redirect!
     assert_response :success
-    assert_select "div", text: /ログイン中: #{producer_user.email}/
+    assert_select "div.user-menu"
+    assert_select "span.user-menu__email", text: producer_user.email
   end
 
   test "multiple signin signout cycles" do

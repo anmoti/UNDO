@@ -16,48 +16,12 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <header class="header__container">
-      <%= image_tag "logo.png", class: "header__logo", alt: "UNDO Logo" %>
-      <div class="header__right">
-        <% if authenticated? %>
-          <div class="header__user">ログイン中: <%= Current.session.user.email %></div>
-          <%= button_to signout_path, class: "header__button", method: :delete do %>
-            <%= image_tag "logout-btn.png", height: 50, alt: "ログアウト" %>
-          <% end %>
-        <% else %>
-          <%= link_to "ログイン", signin_path, class: "header__btn--text" %>
-        <% end %>
-      </div>
-    </header>
+  <body data-controller="user-menu" data-action="click@window->user-menu#close">
+    <%= render "shared/header" %>
     <main>
       <%= render "shared/flash" %>
       <%= yield %>
     </main>
-    <footer class="footer__container">
-      <button type="button" class="footer__button">
-        <%= image_tag "search-btn.png", height: 50, alt: "検索" %>
-      </button>
-      <%# TODO: リンクを修正 %>
-      <%= link_to "#", class: "footer__button" do %>
-        <%= image_tag "estimate-btn.png", height: 50, alt: "水質推定" %>
-      <% end %>
-      <button
-      type="button"
-      class="footer__button"
-      data-controller="foodshare"
-      data-action="click->foodshare#foodshareChange"
-        data-foodshare-active-url-value="<%= asset_path("foodshare_start-btn.png") %>"
-        data-foodshare-inactive-url-value="<%= asset_path("foodshare_end-btn.png") %>"
-        >
-        <%= image_tag "foodshare_start-btn.png",
-        height: 50,
-        data: {foodshare_target: "icon" }
-      %>
-      </button>
-      <%= link_to "#", class: "footer__button" do %>
-        <%= image_tag "settings-btn.png", height: 50, alt: "設定" %>
-      <% end %>
-    </footer>
+    <%= render "shared/footer" %>
   </body>
 </html>

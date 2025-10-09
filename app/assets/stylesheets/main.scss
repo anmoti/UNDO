@@ -154,6 +154,210 @@ main {
     }
 }
 
+.user-menu {
+    position: relative;
+
+    // 企業アカウント用のスタイル
+    &[data-user-type="company"] {
+        .user-menu__trigger {
+            border: 2px solid map.get($palette, "secondary");
+            background: linear-gradient(
+                to bottom,
+                map.get($palette, "light"),
+                color.scale(map.get($palette, "secondary"), $lightness: 90%)
+            );
+        }
+
+        .user-menu__header {
+            background: linear-gradient(to right, #fef3c7, #fde68a);
+            border-bottom-color: #f59e0b;
+        }
+    }
+
+    &__trigger {
+        @extend %button-reset;
+        @include flexbox($align: center, $gap: 0.75rem);
+        padding: 0.5rem 1rem;
+        border-radius: $radius-sm;
+        background-color: map.get($palette, "light");
+        color: map.get($palette, "dark");
+        cursor: pointer;
+        transition: background-color 0.2s;
+
+        &:hover {
+            background-color: color.scale(
+                map.get($palette, "light"),
+                $lightness: -10%
+            );
+        }
+    }
+
+    &__info {
+        @include flexbox($direction: column, $align: flex-start, $gap: 0.1rem);
+        text-align: left;
+    }
+
+    &__name {
+        font-size: 0.95rem;
+        font-weight: 600;
+        line-height: 1.2;
+        @include flexbox($align: center, $gap: 0.4rem);
+    }
+
+    &__badge {
+        display: inline-block;
+        padding: 0.1rem 0.4rem;
+        border-radius: 3px;
+        font-size: 0.65rem;
+        font-weight: 600;
+        line-height: 1;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+
+        &--company {
+            background-color: map.get($palette, "secondary");
+            color: map.get($palette, "dark");
+            border: 1px solid
+                color.scale(map.get($palette, "secondary"), $lightness: -20%);
+        }
+    }
+
+    &__email {
+        font-size: 0.75rem;
+        font-weight: 400;
+        opacity: 0.7;
+        line-height: 1.2;
+    }
+
+    &__arrow {
+        font-size: 0.7rem;
+        transition: transform 0.2s;
+        margin-left: auto;
+    }
+
+    &__dropdown {
+        position: absolute;
+        top: calc(100% + 0.5rem);
+        right: 0;
+        min-width: 280px;
+        background-color: map.get($palette, "light");
+        border-radius: $radius-sm;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: all 0.2s ease;
+        z-index: map.get($z-layers, "dropdown");
+    }
+
+    &__dropdown.user-menu--open {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    &__header {
+        @include flexbox($align: center, $gap: 1rem);
+        padding: 1rem;
+        border-bottom: 2px solid
+            color.scale(map.get($palette, "secondary"), $lightness: 70%);
+        background-color: color.scale(
+            map.get($palette, "secondary"),
+            $lightness: 95%
+        );
+    }
+
+    &__avatar {
+        @include flexbox($justify: center, $align: center);
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: linear-gradient(
+            135deg,
+            map.get($palette, "primary"),
+            map.get($palette, "secondary")
+        );
+        color: map.get($palette, "light");
+        font-size: 1.5rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        flex-shrink: 0;
+
+        &--company {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            font-size: 1.8rem;
+        }
+    }
+
+    &__details {
+        @include flexbox($direction: column, $gap: 0.25rem);
+        overflow: hidden;
+    }
+
+    &__name--large {
+        font-size: 1rem;
+        font-weight: 600;
+        color: map.get($palette, "dark");
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        @include flexbox($align: center, $gap: 0.5rem);
+    }
+
+    &__email--small {
+        font-size: 0.85rem;
+        color: color.scale(map.get($palette, "dark"), $lightness: 40%);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    &__list {
+        list-style: none;
+        padding: 0.5rem 0;
+        margin: 0;
+    }
+
+    &__item {
+        border-bottom: 1px solid
+            color.scale(map.get($palette, "secondary"), $lightness: 80%);
+
+        &:last-child {
+            border-bottom: none;
+        }
+    }
+
+    &__link {
+        @extend %button-reset;
+        @include flexbox($align: center, $gap: 0.75rem);
+        width: 100%;
+        padding: 0.75rem 1rem;
+        text-decoration: none;
+        color: map.get($palette, "dark");
+        background-color: transparent;
+        transition: background-color 0.2s;
+        cursor: pointer;
+        text-align: left;
+
+        &:hover {
+            background-color: color.scale(
+                map.get($palette, "secondary"),
+                $lightness: 85%
+            );
+        }
+
+        &--logout {
+            color: map.get($palette, "danger");
+        }
+    }
+
+    &__icon {
+        font-size: 1.2rem;
+        width: 1.5rem;
+        text-align: center;
+    }
+}
+
 .footer {
     &__container {
         @include flexbox($justify: space-evenly, $align: center);

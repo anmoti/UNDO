@@ -21,7 +21,8 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     fill_in "メールアドレス", with: user.email
     fill_in "パスワード", with: password
     click_button "ログイン"
-    # ログインが成功してリダイレクトされるまで待つ
-    assert_text "ログイン中: #{user.email}"
+    # ログインが成功してユーザーメニューが表示されるまで待つ
+    assert_selector ".user-menu"
+    assert_text user.email
   end
 end
