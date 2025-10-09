@@ -10,7 +10,7 @@ class Review < ApplicationRecord
 
   def reviewer_cannot_be_company
     if reviewer&.is_company?
-      errors.add(:reviewer, "企業アカウントはレビューを投稿できません")
+      errors.add(:reviewer, I18n.t("errors.reviews.company_restriction"))
     end
   end
 end

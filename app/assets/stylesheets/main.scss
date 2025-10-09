@@ -135,9 +135,10 @@ main {
         color: map.get($palette, "light");
     }
 
-    // TODO: 垂直位置がずれているので直す
     &__button {
         @extend %button-reset;
+        display: flex;
+        align-items: center;
     }
 
     &__btn--text {
