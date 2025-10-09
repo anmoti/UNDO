@@ -38,6 +38,7 @@ const mapOptions = {
  * @property {string | null | undefined} [address]
  * @property {boolean | null | undefined} [eco]
  * @property {boolean | null | undefined} [foodshare]
+ * @property {string | null | undefined} [tel]
  */
 
 // Connects to data-controller="maps"
@@ -325,6 +326,12 @@ export default class MapsController extends Controller {
         const addressText = shop.address || "住所情報が登録されていません";
         address.textContent = `住所: ${addressText}`;
         content.appendChild(address);
+        
+        // 電話番号の表示
+        const phone = document.createElement("div");
+        const phoneText = shop.tel || "電話番号情報が登録されていません";
+        phone.textContent = `電話: ${phoneText}`;
+        content.appendChild(phone);
 
         const openTime = document.createElement("div");
         const openTimeText = shop.openTime || "営業時間情報が登録されていません";

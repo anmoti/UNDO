@@ -13,6 +13,7 @@ class HomeController < ApplicationController
         lon: store.lon,
         openTime: store.open_time,
         address: store.address,
+        tel: store.tel,
         eco: false,
         foodshare: false
       }
