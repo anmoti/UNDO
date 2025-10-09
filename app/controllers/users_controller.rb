@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   allow_unauthenticated_access
   before_action :set_user, only: %i[ show edit update destroy ]
+  before_action :redirect_if_authenticated, only: %i[ new create ]
   layout "main", only: [ :new ]
 
   # GET /users or /users.json
@@ -60,6 +61,13 @@ class UsersController < ApplicationController
   end
 
   private
+    # ログイン済みユーザーを新規登録ページから排除
+    def redirect_if_authenticated
+      if authenticated?
+        redirect_to root_path, alert: t("flash.users.already_logged_in")
+      end
+    end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_user
       @user = User.find(params.expect(:id))

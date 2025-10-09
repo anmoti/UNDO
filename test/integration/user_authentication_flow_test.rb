@@ -121,4 +121,42 @@ class UserAuthenticationFlowTest < ActionDispatch::IntegrationTest
     # サブミットボタンが存在することを確認
     assert_select "input[type='submit']"
   end
+
+  test "authenticated user cannot access signup page" do
+    # ログインする
+    sign_in_as(@user, password: "password")
+    assert_redirected_to root_url
+
+    # 新規登録ページにアクセスを試みる
+    get new_user_path
+
+    # rootにリダイレクトされることを確認
+    assert_redirected_to root_path
+
+    # フラッシュメッセージを確認
+    follow_redirect!
+    assert_equal I18n.t("flash.users.already_logged_in"), flash[:alert]
+  end
+
+  test "authenticated user cannot create new user" do
+    # ログインする
+    sign_in_as(@user, password: "password")
+    assert_redirected_to root_url
+
+    # 新しいユーザーを作成しようとする
+    assert_no_difference "User.count" do
+      post users_path, params: {
+        user: {
+          name: "New User",
+          email: "newuser@example.com",
+          password: "password",
+          password_confirmation: "password",
+          is_company: false
+        }
+      }
+    end
+
+    # rootにリダイレクトされることを確認
+    assert_redirected_to root_path
+  end
 end

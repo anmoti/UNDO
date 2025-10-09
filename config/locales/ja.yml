@@ -4,6 +4,7 @@ ja:
             created: "アカウントが正常に作成されました。"
             updated: "ユーザー情報を更新しました。"
             destroyed: "ユーザーを削除しました。"
+            already_logged_in: "既にログインしています。"
         reviews:
             created: "レビューを投稿しました。"
             updated: "レビューを更新しました。"
