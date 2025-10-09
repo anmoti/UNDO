@@ -228,12 +228,12 @@ export default class extends Controller {
     /**
      * キャンセルボタンが押された
      */
-    cancelEstimation() {
+    async cancelEstimation() {
         // 停止フラグ
         this._isPolling = false;
 
         // BLE を切断
-        this.disconnectBLE();
+        await this.disconnectBLE();
 
         this.changeState(STATES.CLOSED);
     }
@@ -330,8 +330,9 @@ export default class extends Controller {
             this.characteristic = char;
         } catch (error) {
             console.error("Error in connectToBLEDevice:", error);
-            this.disconnectBLE();
+            await this.disconnectBLE();
             alert("BLEデバイスへの接続中にエラーが発生しました。");
+            this.changeState(STATES.CLOSED);
         }
     }
 
