@@ -44,7 +44,7 @@ bin/kamal setup
 bin/kamal deploy
 ```
 
-詳細は[デプロイガイド](./DEPLOY.md)を参照してください。
+詳細は[デプロイガイド](../../DEPLOY.md)を参照してください。
 
 ## 開発メモ
 
@@ -52,20 +52,20 @@ bin/kamal deploy
 
 開発サーバーを立ち上げるには、以下のコマンドを実行します：
 
-```
+```bash
 $ bin/dev
 ```
 
 本番環境での動作確認を行う場合は、以下のコマンドを使用します：
 
-```
+```bash
 $ RAILS_ENV=production bin/rails assets:precompile
 $ RAILS_ENV=production bin/rails server
 ```
 
 ## ログイン時のパスワード検証
 
-```
+```ruby
 user = User.find_by(email: params[:email])
 if user && user.authenticate(params[:password])
   # 認証成功
@@ -80,7 +80,7 @@ end
 
 使い方は以下を参照されたい。
 
-```
+```bash
 $ rake npm:help
 ```
 
@@ -89,23 +89,23 @@ $ rake npm:help
 1. `udon_list.json`をルートに配置してね
 2. そのあとこれを叩いてね
 
-```
+```bash
 $ bin/rails import:stores
 ```
 
-## 事前
+## テスト環境のセットアップ
 
-```
+```bash
 $ RAILS_ENV=test bin/rails assets:precompile
 ```
 
-```
+```bash
 $ rails db:test:prepare
 ```
 
 # テーブル一覧
 
-```
+```ruby
 rails c
 undo(dev)> ActiveRecord::Base.connection.tables
 => ["stores", "reviews", "measurements", "sessions", "schema_migrations", "ar_internal_metadata", "users"]

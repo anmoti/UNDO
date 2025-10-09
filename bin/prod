@@ -3,6 +3,10 @@
 if ! gem list foreman -i --silent; then
   echo "Installing foreman..."
   gem install foreman
+  if ! gem install foreman; then
+    echo "Error: Failed to install foreman. Please install it manually or check permissions." >&2
+    exit 1
+  fi
 fi
 
 exec foreman start -f Procfile.production "$@"
