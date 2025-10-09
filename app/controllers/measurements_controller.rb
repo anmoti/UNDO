@@ -16,6 +16,10 @@ class MeasurementsController < ApplicationController
     )
     @measurement.submitter = Current.user
 
+    @measurement.predicted_bod = helpers.estimate_bod(@measurement.turbidity)
+    @measurement.predicted_cod = helpers.estimate_cod(@measurement.turbidity)
+    @measurement.status = :predicted
+
     respond_to do |format|
       if @measurement.save
         format.json { render json: @measurement, status: :created }
