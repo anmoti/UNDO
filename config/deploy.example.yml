@@ -1,0 +1,137 @@
+# デプロイ設定例
+# このファイルは config/deploy.yml の設定例です。
+# 実際のデプロイ時は config/deploy.yml を直接編集してください。
+
+# アプリケーション名
+service: undo
+
+# Dockerイメージ名（自分のDockerレジストリユーザー名に変更）
+# 例: ghcr.io/your-github-username/undo
+# 例: your-dockerhub-username/undo
+image: your-user/undo
+
+# デプロイ先サーバーの設定
+servers:
+  web:
+    - 192.168.0.1  # ← 本番サーバーのIPアドレスに変更してください
+
+  # ジョブサーバーを別に設定する場合（オプション）
+  # job:
+  #   hosts:
+  #     - 192.168.0.2
+  #   cmd: bin/jobs
+
+# SSLとプロキシの設定
+# Let's Encryptを使用して自動的にSSL証明書を取得します
+proxy:
+  ssl: true
+  host: app.example.com  # ← 実際のドメイン名に変更してください
+  # 複数のドメインを設定する場合
+  # host: app.example.com,www.example.com
+
+# Dockerレジストリの認証情報
+registry:
+  # Docker Hub以外を使用する場合はサーバーを指定
+  # server: ghcr.io  # GitHub Container Registry
+  # server: registry.digitalocean.com  # DigitalOcean Container Registry
+  
+  username: your-user  # ← レジストリのユーザー名に変更
+  
+  # パスワードは .kamal/secrets から取得されます
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+# 環境変数の設定
+env:
+  # シークレット（.kamal/secrets から取得）
+  secret:
+    - RAILS_MASTER_KEY
+    # 他のシークレットを追加する場合
+    # - DATABASE_PASSWORD
+    # - SECRET_KEY_BASE
+  
+  # 公開情報（直接設定）
+  clear:
+    # Solid Queueをウェブサーバー内で実行
+    # サーバーを増やす場合は、ジョブ処理を専用サーバーに分離することを推奨
+    SOLID_QUEUE_IN_PUMA: true
+    
+    # Solid Queueのプロセス数（デフォルト: 1）
+    # JOB_CONCURRENCY: 3
+    
+    # ウェブサーバーのワーカー数（デフォルト: 1）
+    # サーバーのCPUコア数に応じて調整
+    # WEB_CONCURRENCY: 2
+    
+    # 外部データベースを使用する場合
+    # DB_HOST: 192.168.0.2
+    
+    # ログレベルの設定（デバッグ時のみdebugに変更）
+    # RAILS_LOG_LEVEL: info
+
+# エイリアスコマンド
+# 使用例: bin/kamal console
+aliases:
+  console: app exec --interactive --reuse "bin/rails console"
+  shell: app exec --interactive --reuse "bash"
+  logs: app logs -f
+  dbc: app exec --interactive --reuse "bin/rails dbconsole"
+
+# 永続ボリュームの設定
+# SQLiteデータベースやActive Storageファイル用
+volumes:
+  - "undo_storage:/rails/storage"
+
+# アセットパスの設定
+# バージョン間でアセットを橋渡しし、404エラーを防ぐ
+asset_path: /rails/public/assets
+
+# イメージビルダーの設定
+builder:
+  # アーキテクチャの指定
+  arch: amd64
+  
+  # リモートビルダーを使用する場合（ARM MacでAMDイメージをビルドする場合等）
+  # remote: ssh://docker@docker-builder-server
+  
+  # ビルド引数とシークレット
+  # args:
+  #   RUBY_VERSION: ruby-3.4.4
+  # secrets:
+  #   - GITHUB_TOKEN
+  #   - RAILS_MASTER_KEY
+
+# SSHユーザーの設定（rootユーザー以外を使用する場合）
+# ssh:
+#   user: app
+
+# アクセサリーサービス（データベース、Redis等）
+# 本番環境では外部のマネージドサービス使用を推奨
+# accessories:
+#   # PostgreSQLの例
+#   # db:
+#   #   image: postgres:15
+#   #   host: 192.168.0.2
+#   #   port: "127.0.0.1:5432:5432"
+#   #   env:
+#   #     clear:
+#   #       POSTGRES_DB: undo_production
+#   #     secret:
+#   #       - POSTGRES_PASSWORD
+#   #   directories:
+#   #     - data:/var/lib/postgresql/data
+#   
+#   # Redisの例
+#   # redis:
+#   #   image: redis:7.0
+#   #   host: 192.168.0.2
+#   #   port: 6379
+#   #   directories:
+#   #     - data:/data
+
+# ヘルスチェックの設定（オプション）
+# healthcheck:
+#   path: /up
+#   port: 80
+#   max_attempts: 7
+#   interval: 20s
