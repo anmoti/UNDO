@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_08_141529) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_09_084435) do
   create_table "measurements", force: :cascade do |t|
     t.float "turbidity"
     t.float "predicted_bod"
@@ -58,6 +58,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_08_141529) do
     t.index ["name", "address"], name: "index_stores_on_name_and_address", unique: true
   end
 
+  create_table "user_settings", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.text "settings", default: "{}", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_user_settings_on_user_id", unique: true
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -72,4 +80,5 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_08_141529) do
   add_foreign_key "reviews", "stores", column: "reviewee_id"
   add_foreign_key "reviews", "users", column: "reviewer_id"
   add_foreign_key "sessions", "users"
+  add_foreign_key "user_settings", "users"
 end
