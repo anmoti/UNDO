@@ -60,7 +60,7 @@ $ bin/dev
 
 ```bash
 $ RAILS_ENV=production bin/rails assets:precompile
-$ RAILS_ENV=production bin/rails server
+$ bin/prod
 ```
 
 ## ログイン時のパスワード検証
