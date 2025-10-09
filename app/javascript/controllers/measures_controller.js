@@ -13,11 +13,11 @@ const bodThreshold = 5000;
 
 /**
  * @type {{
- *   OPEN: "open",
- *   IN_PROCESS: "in_process",
- *   WAITING: "waiting",
- *   COMPLETED: "completed",
- *   CLOSED: "closed"
+ * OPEN: "open",
+ * IN_PROCESS: "in_process",
+ * WAITING: "waiting",
+ * COMPLETED: "completed",
+ * CLOSED: "closed"
  * }}
  */
 const STATES = {
@@ -32,10 +32,10 @@ const StatesSchema = v.enum(STATES);
 
 /**
  * @type {{
- *   PENDING: "pending",
- *   PREDICTED: "predicted",
- *   VALIDATED: "validated",
- *   ANOMALY: "anomaly"
+ * PENDING: "pending",
+ * PREDICTED: "predicted",
+ * VALIDATED: "validated",
+ * ANOMALY: "anomaly"
  * }}
  */
 const STATUS = {
@@ -126,25 +126,9 @@ export default class extends Controller {
     characteristic = null;
 
     /**
-     * handleBLEDataのバインド済み関数
-     *
-     * @type {((ev: Event) => any) | null}
+     * @type {AbortController | null}
      */
-    handleBLEDataBound = null;
-
-    /**
-     * gattserverdisconnected のバインド済みハンドラ
-     *
-     * @type {((ev: Event) => any) | null}
-     */
-    handleDisconnectBound = null;
-
-    /**
-     * 意図的に切断中かどうか
-     *
-     * @type {boolean}
-     */
-    _intentionalDisconnect = false;
+    bleAbortController = null;
 
     /**
      * @type { number }
@@ -303,6 +287,9 @@ export default class extends Controller {
                 throw new Error("このブラウザーはサポートしていません。");
             }
 
+            this.bleAbortController = new AbortController();
+            const { signal } = this.bleAbortController;
+
             const ble = await navigator.bluetooth.requestDevice({
                 filters: [{ services: [SERVICE_UUID] }],
             });
@@ -315,10 +302,10 @@ export default class extends Controller {
             this.device = ble;
 
             // 切断ハンドラをセット
-            this.handleDisconnectBound = this.handleDisconnect.bind(this);
             this.device.addEventListener(
                 GATT_DISCONNECTED,
-                this.handleDisconnectBound
+                this.handleDisconnect.bind(this),
+                { signal } // AbortControllerのsignalを渡す
             );
 
             const server = await ble.gatt.connect();
@@ -330,9 +317,9 @@ export default class extends Controller {
             // 通知開始
             await char.startNotifications();
 
-            // バインド済みハンドラを保存しておく
-            this.handleBLEDataBound = this.handleBLEData.bind(this);
-            char.addEventListener(CHAR_CHANGED, this.handleBLEDataBound);
+            char.addEventListener(CHAR_CHANGED, this.handleBLEData.bind(this), {
+                signal,
+            });
 
             // 保存
             this.characteristic = char;
@@ -350,8 +337,8 @@ export default class extends Controller {
      * @param {Event} _ev
      */
     handleDisconnect(_ev) {
-        // 既に意図的に切断中、または切断処理が進行中なら無視
-        if (this._intentionalDisconnect || this._isDisconnecting) {
+        // 切断処理が進行中なら無視
+        if (this._isDisconnecting) {
             return;
         }
 
@@ -362,7 +349,6 @@ export default class extends Controller {
         }
 
         // クリーンアップしてモーダルを閉じる
-        // 非同期で処理するが、handleDisconnect 内では再入を防ぐ
         this.disconnectBLE();
         this.changeState(STATES.CLOSED);
     }
@@ -375,43 +361,13 @@ export default class extends Controller {
         if (this._isDisconnecting) return;
         this._isDisconnecting = true;
 
-        // 意図的に切断するフラグを立てる
-        this._intentionalDisconnect = true;
-
         try {
-            // まず通知停止を試みる
-            if (this.characteristic) {
-                if (this.handleBLEDataBound) {
-                    try {
-                        this.characteristic.removeEventListener(
-                            CHAR_CHANGED,
-                            this.handleBLEDataBound
-                        );
-                    } catch (e) {
-                        console.warn("removeEventListener failed:", e);
-                    }
-                }
-            }
-
-            // device の切断イベントリスナを削除して、disconnect 時のハンドラ呼び出しを防ぐ
-            if (this.device && this.handleDisconnectBound) {
-                try {
-                    this.device.removeEventListener(
-                        GATT_DISCONNECTED,
-                        this.handleDisconnectBound
-                    );
-                } catch (e) {
-                    console.warn("removeEventListener (device) failed:", e);
-                }
-            }
+            // AbortControllerでイベントリスナーを一括解除
+            this.bleAbortController?.abort();
 
             // server の切断
             if (this.server && this.server.connected) {
-                try {
-                    this.server.disconnect();
-                } catch (e) {
-                    console.warn("server.disconnect failed:", e);
-                }
+                this.server.disconnect();
             }
         } catch (e) {
             console.error("Error during BLE disconnect:", e);
@@ -420,10 +376,8 @@ export default class extends Controller {
             this.characteristic = null;
             this.server = null;
             this.device = null;
-            this.handleBLEDataBound = null;
-            this.handleDisconnectBound = null;
+            this.bleAbortController = null;
             // 切断処理完了後にフラグを戻す
-            this._intentionalDisconnect = false;
             this._isDisconnecting = false;
         }
     }
