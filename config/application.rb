@@ -27,6 +27,6 @@ module Undo
     # デフォルトロケールを日本語に設定
     config.i18n.default_locale = :ja
     # 利用可能なロケール
-    config.i18n.available_locales = [ :ja, :en ]
+    config.i18n.available_locales = [ :ja, :en, :sa ]
   end
 end
