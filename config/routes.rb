@@ -27,6 +27,8 @@ Rails.application.routes.draw do
   post "signin", to: "sessions#create"
   delete "signout", to: "sessions#destroy"
 
+  get '/user/new', to: redirect('/signup')
+
   # Defines the root path route ("/")
   root "home#index"
 end
