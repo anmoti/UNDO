@@ -157,6 +157,12 @@ export default class extends Controller {
     _isPolling = false;
 
     /**
+     * 切断処理中フラグ（再入防止）
+     * @type {boolean}
+     */
+    _isDisconnecting = false;
+
+    /**
      * @type {typeof STATES[keyof typeof STATES]}
      */
     state = STATES.CLOSED;
@@ -335,13 +341,19 @@ export default class extends Controller {
      * @param {Event} _ev
      */
     handleDisconnect(_ev) {
+        // 既に意図的に切断中、または切断処理が進行中なら無視
+        if (this._intentionalDisconnect || this._isDisconnecting) {
+            return;
+        }
+
         // 測定中に切断されたらユーザーに知らせてモーダルを閉じる
-        if (!this._intentionalDisconnect && this.state === STATES.IN_PROCESS) {
+        if (this.state === STATES.IN_PROCESS) {
             console.warn("BLE device disconnected during measurement");
             alert("測定中にBLEが切断されました。測定を中止します。");
         }
 
         // クリーンアップしてモーダルを閉じる
+        // 非同期で処理するが、handleDisconnect 内では再入を防ぐ
         this.disconnectBLE();
         this.changeState(STATES.CLOSED);
     }
@@ -350,16 +362,27 @@ export default class extends Controller {
      * BLE の通知解除と切断を行う
      */
     async disconnectBLE() {
-        try {
-            if (this.characteristic && this.handleBLEDataBound) {
-                this.characteristic.removeEventListener(
-                    CHAR_CHANGED,
-                    this.handleBLEDataBound
-                );
-            }
+        // 再入防止
+        if (this._isDisconnecting) return;
+        this._isDisconnecting = true;
 
-            // 意図的に切断するフラグを立てる
-            this._intentionalDisconnect = true;
+        // 意図的に切断するフラグを立てる
+        this._intentionalDisconnect = true;
+
+        try {
+            // まず通知停止を試みる
+            if (this.characteristic) {
+                if (this.handleBLEDataBound) {
+                    try {
+                        this.characteristic.removeEventListener(
+                            CHAR_CHANGED,
+                            this.handleBLEDataBound
+                        );
+                    } catch (e) {
+                        console.warn("removeEventListener failed:", e);
+                    }
+                }
+            }
 
             // device の切断イベントリスナを削除して、disconnect 時のハンドラ呼び出しを防ぐ
             if (this.device && this.handleDisconnectBound) {
@@ -369,22 +392,30 @@ export default class extends Controller {
                         this.handleDisconnectBound
                     );
                 } catch (e) {
-                    // ignore
+                    console.warn("removeEventListener (device) failed:", e);
                 }
             }
 
+            // server の切断
             if (this.server && this.server.connected) {
-                this.server.disconnect();
+                try {
+                    this.server.disconnect();
+                } catch (e) {
+                    console.warn("server.disconnect failed:", e);
+                }
             }
         } catch (e) {
             console.error("Error during BLE disconnect:", e);
         } finally {
+            // クリーンアップ: オブジェクト参照を解放
             this.characteristic = null;
             this.server = null;
             this.device = null;
             this.handleBLEDataBound = null;
             this.handleDisconnectBound = null;
+            // 切断処理完了後にフラグを戻す
             this._intentionalDisconnect = false;
+            this._isDisconnecting = false;
         }
     }
 
