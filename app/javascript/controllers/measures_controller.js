@@ -58,6 +58,7 @@ export default class extends Controller {
     /**
      * handleBLEDataのバインド済み関数
      */
+    /** @type {((ev: Event) => any) | null} */
     handleBLEDataBound = null;
 
     /**
@@ -252,15 +253,75 @@ export default class extends Controller {
             return { error: "GATT サーバーに接続できません。" };
         }
 
+        // 保存しておく
+        this.device = ble;
+
+        // 切断ハンドラをセット
+        this.device.addEventListener("gattserverdisconnected", (ev) => {
+            this.handleDisconnect(ev);
+        });
+
         const server = await ble.gatt.connect();
+        this.server = server;
+
         const service = await server.getPrimaryService(SERVICE_UUID);
-        const char = await service
-            .getCharacteristic(CHAR_UUID)
-            .then((c) => c.startNotifications());
+        const char = await service.getCharacteristic(CHAR_UUID);
+
+        // 通知開始
+        await char.startNotifications();
+
+        // バインド済みハンドラを保存しておく
+        this.handleBLEDataBound = this.handleBLEData.bind(this);
         char.addEventListener(
             "characteristicvaluechanged",
-            this.handleBLEData.bind(this)
+            this.handleBLEDataBound
         );
+
+        // 保存
+        this.characteristic = char;
+    }
+
+    /**
+     * BLE 切断時に呼ばれる
+     * 
+     * @param {Event} _ev
+     */
+    handleDisconnect(_ev) {
+        console.warn("BLE device disconnected during measurement");
+
+        // 測定中に切断されたらユーザーに知らせてモーダルを閉じる
+        if (this.state === STATES.IN_PROCESS) {
+            alert("測定中にBLEが切断されました。測定を中止します。");
+        }
+
+        // クリーンアップしてモーダルを閉じる
+        this.disconnectBLE();
+        this.changeState(STATES.CLOSED);
+    }
+
+    /**
+     * BLE の通知解除と切断を行う
+     */
+    async disconnectBLE() {
+        try {
+            if (this.characteristic && this.handleBLEDataBound) {
+                this.characteristic.removeEventListener(
+                    "characteristicvaluechanged",
+                    this.handleBLEDataBound
+                );
+            }
+
+            if (this.server && this.server.connected) {
+                this.server.disconnect();
+            }
+        } catch (e) {
+            console.error("Error during BLE disconnect:", e);
+        } finally {
+            this.characteristic = null;
+            this.server = null;
+            this.device = null;
+            this.handleBLEDataBound = null;
+        }
     }
 
     /**
