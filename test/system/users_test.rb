@@ -33,7 +33,7 @@ class UsersTest < ApplicationSystemTestCase
   fill_in "user_password_confirmation", with: "newpassword"
   click_on "登録する"
 
-    assert_text "User was successfully updated"
+    assert_text "ユーザー情報を更新しました。"
     click_on "Back"
   end
 
@@ -41,6 +41,6 @@ class UsersTest < ApplicationSystemTestCase
     visit user_url(@user)
     click_on "Destroy this user", match: :first
 
-    assert_text "User was successfully destroyed"
+    assert_text "ユーザーを削除しました。"
   end
 end

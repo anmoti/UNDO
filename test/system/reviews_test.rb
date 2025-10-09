@@ -37,13 +37,13 @@ class ReviewsTest < ApplicationSystemTestCase
     page.execute_script("document.getElementById('star4').click()")
     click_on "送信"
 
-    assert_text "Review was successfully updated"
+    assert_text "レビューを更新しました。"
   end
 
   test "should destroy Review" do
     visit review_url(@review)
     click_on "Destroy this review", match: :first
 
-    assert_text "Review was successfully destroyed"
+    assert_text "レビューを削除しました。"
   end
 end
