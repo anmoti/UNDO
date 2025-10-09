@@ -11,6 +11,13 @@
       </ol>
       <div class="hidden" data-measures-target="in-process">
         <span class="careful">推定が完了するまでキットに触れないでください。</span>
+
+        <div class="measure__progress-wrapper" aria-hidden="false">
+          <div class="measure__progress-track">
+            <div class="measure__progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" data-measures-target="progress"></div>
+          </div>
+          <div class="measure__progress-label" data-measures-target="progressLabel">0 / 10</div>
+        </div>
       </div>
       <div class="hidden" data-measures-target="waiting">
         <span>サーバーからの応答を待機しています。</span>

@@ -99,6 +99,8 @@ export default class extends Controller {
         "result",
         "bod",
         "cod",
+        "progress",
+        "progressLabel",
     ];
 
     /**
@@ -188,6 +190,12 @@ export default class extends Controller {
 
         if (this.state === STATES.IN_PROCESS) {
             this.getTarget("in-process").classList.remove("hidden");
+
+            const prog = this.getTarget("progress");
+            const label = this.getTarget("progressLabel");
+            prog.style.width = "0%";
+            prog.setAttribute("aria-valuenow", "0");
+            label.textContent = `0 / ${avgWindowSize}`;
         } else {
             this.getTarget("in-process").classList.add("hidden");
         }
@@ -494,8 +502,23 @@ export default class extends Controller {
             }
 
             this.turbidities.push(turbidity);
+
+            const prog = this.getTarget("progress");
+            const label = this.getTarget("progressLabel");
+
+            const count = Math.min(this.turbidities.length, avgWindowSize);
+            const pct = Math.round((count / avgWindowSize) * 100);
+
+            prog.style.width = `${pct}%`;
+            prog.setAttribute("aria-valuenow", String(pct));
+            label.textContent = `${count} / ${avgWindowSize}`;
+
             if (this.turbidities.length >= avgWindowSize) {
-                this.completeEstimation();
+                prog.style.width = `100%`;
+                prog.setAttribute("aria-valuenow", "100");
+                label.textContent = `${avgWindowSize} / ${avgWindowSize}`;
+
+                setTimeout(() => this.completeEstimation(), 350);
             }
         } catch (e) {
             console.error("Unhandled error in handleBLEData:", e);
