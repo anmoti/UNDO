@@ -64,7 +64,7 @@ class ReviewsController < ApplicationController
   def update
     respond_to do |format|
       if @review.update(review_params)
-        format.html { redirect_to @review, notice: "Review was successfully updated." }
+        format.html { redirect_to @review, notice: "レビューを更新しました。" }
         format.json { render :show, status: :ok, location: @review }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -78,7 +78,7 @@ class ReviewsController < ApplicationController
     @review.destroy!
 
     respond_to do |format|
-      format.html { redirect_to reviews_path, status: :see_other, notice: "Review was successfully destroyed." }
+      format.html { redirect_to reviews_path, status: :see_other, notice: "レビューを削除しました。" }
       format.json { head :no_content }
     end
   end
@@ -92,15 +92,15 @@ class ReviewsController < ApplicationController
     # 企業アカウントがレビューを投稿できないようにチェック
     def check_company_account
       if Current.user&.is_company?
-        redirect_to root_path, alert: "企業アカウントはレビューを投稿できません。アプリへの攻撃は解析され、通報されます。攻撃者の身元はIPアドレスの分析により特定、即座に運営者に報告されます。"
+        redirect_to root_path, alert: "企業アカウントはレビューを投稿できません。"
       end
     end
 
-    # 信頼できるパラメーターのリストだけを通す。
+    # Strong parametersで許可するパラメーターを定義
     def review_params
-      # review keyとpermit属性が必要。reviewer_idがフォームから提供されない場合、デフォルトは現在サインインしているユーザーのidとなる。
       permitted = params.require(:review).permit(:reviewer_id, :reviewee_id, :comment, :rating)
-      permitted[:reviewer_id] = Current.user.id if permitted[:reviewer_id].blank? && defined?(Current) && Current.user
+      # reviewer_idが提供されない場合、現在ログインしているユーザーをデフォルトとして設定
+      permitted[:reviewer_id] = Current.user.id if permitted[:reviewer_id].blank? && Current.user
       permitted
     end
 end
