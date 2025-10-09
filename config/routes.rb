@@ -5,8 +5,8 @@ Rails.application.routes.draw do
   end
 
   if Rails.env.production?
-    resources :users, only: [ :create ]
-    resources :reviews, only: [ :new ]
+    resources :users, only: [ :new, :create ]
+    resources :reviews, only: [ :index, :new, :create ]
   else
     resources :reviews
     resources :users
@@ -26,8 +26,6 @@ Rails.application.routes.draw do
   get "signin", to: "sessions#new"
   post "signin", to: "sessions#create"
   delete "signout", to: "sessions#destroy"
-
-  get '/user/new', to: redirect('/signup')
 
   # Defines the root path route ("/")
   root "home#index"

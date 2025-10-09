@@ -73,7 +73,7 @@ class ReviewsController < ApplicationController
     @review.destroy!
 
     respond_to do |format|
-      format.html { redirect_to reviews_path, status: :see_other, notice: t("flash.reviews.destroyed") }
+      format.html { redirect_to root_path, status: :see_other, notice: t("flash.reviews.destroyed") }
       format.json { head :no_content }
     end
   end
