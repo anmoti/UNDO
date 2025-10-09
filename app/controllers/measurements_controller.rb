@@ -5,6 +5,17 @@ class MeasurementsController < ApplicationController
     @measurements = Measurement.where(submitter_id: Current.user.id)
   end
 
+  def show
+    @measurement = Measurement.find_by(id: params[:id], submitter_id: Current.user.id)
+
+    if @measurement
+      render json: @measurement
+    else
+      # 他のユーザーのデータにアクセスしようとした場合や、データが存在しない場合
+      render json: { error: "Not Found" }, status: :not_found
+    end
+  end
+
   def status
     @measurement = Measurement.find(params[:id])
     render json: { id: @measurement.id, status: @measurement.status }
