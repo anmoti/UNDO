@@ -4,10 +4,7 @@ class ReviewsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @review = reviews(:one)
     @user = users(:carol)
-    post signin_path, params: {
-      email: @user.email,
-      password: "passwordcarol"
-    }
+    sign_in_as(@user, password: "passwordcarol")
   end
 
   test "should get index" do
@@ -28,7 +25,7 @@ class ReviewsControllerTest < ActionDispatch::IntegrationTest
       post reviews_url, params: { review: { comment: @review.comment, rating: @review.rating, reviewee_id: reviewee.id, reviewer_id: reviewer.id } }
     end
 
-    assert_redirected_to review_url(Review.last)
+    assert_redirected_to root_path
   end
 
   test "should show review" do
@@ -52,5 +49,37 @@ class ReviewsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to reviews_url
+  end
+
+  test "企業アカウントはレビューを投稿できない" do
+    # 企業アカウントでログイン
+    sign_out
+    sign_in_as(users(:bob), password: "passwordbob")
+
+    reviewee = stores(:one)
+
+    assert_no_difference("Review.count") do
+      post reviews_url, params: {
+        review: {
+          comment: "企業からのレビュー",
+          rating: 5.0,
+          reviewee_id: reviewee.id,
+          reviewer_id: users(:bob).id
+        }
+      }
+    end
+
+    assert_redirected_to root_path
+    assert_equal "企業アカウントはレビューを投稿できません。アプリへの攻撃は解析され、通報されます。攻撃者の身元はIPアドレスの分析により特定、即座に運営者に報告されます。", flash[:alert]
+  end
+
+  test "企業アカウントはレビュー作成ページにアクセスできない" do
+    # 企業アカウントでログイン
+    sign_out
+    sign_in_as(users(:bob), password: "passwordbob")
+
+    get new_review_url
+    assert_redirected_to root_path
+    assert_equal "企業アカウントはレビューを投稿できません。アプリへの攻撃は解析され、通報されます。攻撃者の身元はIPアドレスの分析により特定、即座に運営者に報告されます。", flash[:alert]
   end
 end

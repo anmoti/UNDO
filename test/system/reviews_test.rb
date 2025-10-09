@@ -3,6 +3,8 @@ require "application_system_test_case"
 class ReviewsTest < ApplicationSystemTestCase
   setup do
     @review = reviews(:one)
+    @user = users(:alice)
+    sign_in_as(@user)
   end
 
   test "visiting the index" do
@@ -11,31 +13,31 @@ class ReviewsTest < ApplicationSystemTestCase
   end
 
   test "should create review" do
-    visit reviews_url
-    click_on "New review"
+    # reviews indexページではなく、直接new pageに行く
+    visit new_review_path
 
-    fill_in "Comment", with: @review.comment
-    fill_in "Rating", with: @review.rating
-    fill_in "Reviewee", with: stores(:one).id
-    fill_in "Reviewer", with: @review.reviewer_id
-    click_on "Create Review"
+    # レビューするお店を選択
+    select "Bob's Store", from: "review_reviewee_id"
+    # 評価を選択（5つ星） - visually-hiddenなのでJavaScriptで選択
+    page.execute_script("document.getElementById('star5').click()")
+    # コメントを入力
+    fill_in "review_comment", with: @review.comment
+    click_on "送信"
 
-    assert_text "Review was successfully created"
-    click_on "Back"
+    assert_text "レビューを投稿しました。"
   end
 
   test "should update Review" do
     visit review_url(@review)
     click_on "Edit this review", match: :first
 
-    fill_in "Comment", with: @review.comment
-    fill_in "Rating", with: @review.rating
-    fill_in "Reviewee", with: stores(:one).id
-    fill_in "Reviewer", with: @review.reviewer_id
-    click_on "Update Review"
+    # コメントを更新
+    fill_in "review_comment", with: "更新されたコメント"
+    # 評価を選択（4つ星） - visually-hiddenなのでJavaScriptで選択
+    page.execute_script("document.getElementById('star4').click()")
+    click_on "送信"
 
     assert_text "Review was successfully updated"
-    click_on "Back"
   end
 
   test "should destroy Review" do

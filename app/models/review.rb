@@ -4,4 +4,13 @@ class Review < ApplicationRecord
 
   validates :comment, presence: true
   validates :rating, presence: true, inclusion: { in: 1.0..5.0 }
+  validate :reviewer_cannot_be_company
+
+  private
+
+  def reviewer_cannot_be_company
+    if reviewer&.is_company?
+      errors.add(:reviewer, "企業アカウントはレビューを投稿できません")
+    end
+  end
 end

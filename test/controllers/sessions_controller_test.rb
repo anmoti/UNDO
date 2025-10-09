@@ -73,7 +73,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
   test "should signout" do
     # サインインする
-    post signin_path, params: { email: @user.email, password: "password" }
+    sign_in_as(@user, password: "password")
     assert_redirected_to root_url
 
     # セッションが作成されたか
@@ -82,7 +82,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
     # セッションが削除されるか
     assert_difference "Session.count", -1 do
-      delete signout_path
+      sign_out
     end
 
     # セッションが存在しないか

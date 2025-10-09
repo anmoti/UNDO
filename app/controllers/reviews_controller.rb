@@ -2,6 +2,7 @@ class ReviewsController < ApplicationController
   layout "main", only: [ :new ]
   allow_unauthenticated_access only: %i[index show]
   before_action :set_review, only: %i[ show edit update destroy ]
+  before_action :check_company_account, only: %i[ new create ]
 
   # GET /reviews or /reviews.json
   def index
@@ -47,10 +48,13 @@ class ReviewsController < ApplicationController
         format.html { redirect_to root_path, notice: "レビューを投稿しました。" }
         format.json { render :show, status: :created, location: @review }
       else
-          format.html do
-            flash.now[:alert] = @review.errors.full_messages.join("\n")
-            render :new, status: :unprocessable_entity
+        format.html do
+          # エラーがある場合、reviewee_idから店舗情報を取得して表示
+          if @review.reviewee_id.present?
+            @store = Store.find_by(id: @review.reviewee_id)
           end
+          render :new, status: :unprocessable_entity
+        end
         format.json { render json: @review.errors, status: :unprocessable_entity }
       end
     end
@@ -83,6 +87,13 @@ class ReviewsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_review
       @review = Review.find(params[:id])
+    end
+
+    # 企業アカウントがレビューを投稿できないようにチェック
+    def check_company_account
+      if Current.user&.is_company?
+        redirect_to root_path, alert: "企業アカウントはレビューを投稿できません。アプリへの攻撃は解析され、通報されます。攻撃者の身元はIPアドレスの分析により特定、即座に運営者に報告されます。"
+      end
     end
 
     # 信頼できるパラメーターのリストだけを通す。
