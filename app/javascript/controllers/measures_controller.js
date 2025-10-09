@@ -40,6 +40,27 @@ export default class extends Controller {
     turbidities = [];
 
     /**
+     * BLE device/server/characteristic references
+     * @type { BluetoothDevice | null }
+     */
+    device = null;
+
+    /**
+     * @type { BluetoothRemoteGATTServer | null }
+     */
+    server = null;
+
+    /**
+     * @type { BluetoothRemoteGATTCharacteristic | null }
+     */
+    characteristic = null;
+
+    /**
+     * handleBLEDataのバインド済み関数
+     */
+    handleBLEDataBound = null;
+
+    /**
      * @type { string }
      */
     measurementId = "";
@@ -106,6 +127,10 @@ export default class extends Controller {
      * 測定開始ボタンが押された
      */
     async startEstimation() {
+        // 測定毎にリセット
+        this.turbidities = [];
+        this.measurementId = "";
+
         this.changeState(STATES.IN_PROCESS);
 
         try {
@@ -166,7 +191,10 @@ export default class extends Controller {
      * @param {string} targetName
      */
     getTarget(targetName) {
-        const target = this.targets.find(targetName);
+        const accessor = `${targetName}Target`;
+
+        // @ts-ignore
+        const target = /** @type {HTMLElement} */ (this[accessor]);
         if (!target) {
             throw new Error(`Target ${targetName} not found`);
         }
