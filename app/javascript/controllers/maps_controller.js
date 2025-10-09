@@ -346,7 +346,10 @@ export default class MapsController extends Controller {
             reviewButton.classList.add("maps__info--button-disabled");
             reviewButton.disabled = true;
             // @ts-ignore Stimulus value accessors are defined at runtime
-            const message = this.hasCompanyRestrictionMessageValue 
+            const message = this.hasCompanyRestrictionMessageValue
+                // @ts-ignore
+                ? this.companyRestrictionMessageValue
+                : "";
             reviewButton.title = message;
         } else {
             // 個人アカウントの場合、通常通り動作
