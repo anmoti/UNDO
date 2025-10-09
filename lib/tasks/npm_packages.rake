@@ -196,6 +196,7 @@ namespace :npm do
   end
 
   def install_files(source_dir, destination_dir)
+    FileUtils.rm_rf(destination_dir)
     FileUtils.mkdir_p(destination_dir)
     Dir.glob(source_dir.join("*")).each do |file|
       FileUtils.mv(file, destination_dir, force: true)
