@@ -1,9 +1,11 @@
 import ky from "ky";
-import * as v from "valibot"
+import * as v from "valibot";
 import { Controller } from "@hotwired/stimulus";
 import { Loader } from "@googlemaps/js-api-loader";
-import { triggerShowComments, triggerHideComments } from "controllers/comments_controller";
-
+import {
+    triggerShowComments,
+    triggerHideComments,
+} from "controllers/comments_controller";
 
 /** @import { Context } from "@hotwired/stimulus"  */
 
@@ -36,15 +38,23 @@ const StoreSchema = v.object({
     name: v.string(),
     lat: v.number(),
     lon: v.number(),
-    open_time: v.array(v.object({
-        title: v.string(),
-        texts: v.array(v.string()),
-    })),
+    open_time: v.nullable(
+        v.pipe(
+            v.string(),
+            v.parseJson(),
+            v.array(
+                v.object({
+                    title: v.string(),
+                    texts: v.array(v.string()),
+                })
+            )
+        )
+    ),
     address: v.string(),
     eco: v.boolean(),
     foodshare: v.boolean(),
-    tel: v.optional(v.string()),
-})
+    tel: v.nullable(v.string()),
+});
 
 /**
  * @typedef {v.InferOutput<typeof StoreSchema>} Store
@@ -112,9 +122,8 @@ export default class MapsController extends Controller {
                     resolve(undefined);
                 });
             }),
-            new Promise((resolve) => setTimeout(resolve, 5000))
+            new Promise((resolve) => setTimeout(resolve, 5000)),
         ]);
-
 
         // 地図の表示領域が変更されたときにマーカーを更新
         map.addListener("bounds_changed", () => {
@@ -142,7 +151,7 @@ export default class MapsController extends Controller {
      * 表示領域内の店舗のみマーカーを表示
      */
     async updateVisibleMarkers() {
-        const json = await ky.get('/stores').json();
+        const json = await ky.get("/stores").json();
 
         const stores = v.parse(v.array(StoreSchema), json);
 
@@ -202,7 +211,9 @@ export default class MapsController extends Controller {
             }
         }
 
-        console.log(`Visible markers: ${this.markers.size} / ${stores.length} stores`);
+        console.log(
+            `Visible markers: ${this.markers.size} / ${stores.length} stores`
+        );
     }
 
     /**
@@ -212,7 +223,7 @@ export default class MapsController extends Controller {
      */
     async createMarker(store, position) {
         const { AdvancedMarkerElement } = await this.loader.importLibrary(
-            "marker",
+            "marker"
         );
         const map = await this.map;
 
@@ -327,7 +338,7 @@ export default class MapsController extends Controller {
         const address = document.createElement("div");
         address.textContent = `住所: ${shop.address}`;
         content.appendChild(address);
-        
+
         const phone = document.createElement("div");
         const phoneText = shop.tel || "電話番号情報が登録されていません";
         phone.textContent = `電話: ${phoneText}`;
@@ -335,10 +346,6 @@ export default class MapsController extends Controller {
 
         const openTime = document.createElement("div");
         if (shop.open_time && shop.open_time.length > 0) {
-            const openTimeTitle = document.createElement("div");
-            openTimeTitle.textContent = "営業時間:";
-            openTime.appendChild(openTimeTitle);
-
             const ul = document.createElement("ul");
             for (const timeInfo of shop.open_time) {
                 const li = document.createElement("li");
@@ -375,8 +382,8 @@ export default class MapsController extends Controller {
             reviewButton.disabled = true;
             // @ts-ignore Stimulus value accessors are defined at runtime
             const message = this.hasCompanyRestrictionMessageValue
-                // @ts-ignore
-                ? this.companyRestrictionMessageValue
+                ? // @ts-ignore
+                  this.companyRestrictionMessageValue
                 : "";
             reviewButton.title = message;
         } else {
