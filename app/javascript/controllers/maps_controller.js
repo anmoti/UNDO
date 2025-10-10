@@ -29,6 +29,14 @@ const mapOptions = {
 };
 
 /**
+ * @typedef {Object} ShareInfo
+ * @property {string} itemName
+ * @property {string} description
+ * @property {string} takeDownTime
+ * @property {string} photoUrl
+ */
+
+/**
  * @typedef {Object} StoreFeature
  * @property {number} id
  * @property {string} name
@@ -38,6 +46,7 @@ const mapOptions = {
  * @property {string | null | undefined} [address]
  * @property {boolean | null | undefined} [eco]
  * @property {boolean | null | undefined} [foodshare]
+ * @property {ShareInfo | null | undefined} [shareInfo]
  */
 
 // Connects to data-controller="maps"
@@ -319,6 +328,30 @@ export default class MapsController extends Controller {
             foodshareDesc.textContent = "フードシェア実施中";
             foodshareOptions.appendChild(foodshareDesc);
             content.appendChild(foodshareOptions);
+
+            // シェア詳細情報を追加
+            if (shop.shareInfo) {
+                const shareDetail = document.createElement("div");
+                shareDetail.className = "maps__info--share-detail";
+                shareDetail.style.marginTop = "8px";
+                shareDetail.style.padding = "8px";
+                shareDetail.style.backgroundColor = "#f0fdf4";
+                shareDetail.style.borderRadius = "4px";
+
+                const shareItem = document.createElement("div");
+                shareItem.innerHTML = `<strong>シェア中:</strong> ${shop.shareInfo.itemName}`;
+                shareDetail.appendChild(shareItem);
+
+                const shareDesc = document.createElement("div");
+                shareDesc.innerHTML = `<strong>内容:</strong> ${shop.shareInfo.description}`;
+                shareDetail.appendChild(shareDesc);
+
+                const shareTakeDown = document.createElement("div");
+                shareTakeDown.innerHTML = `<strong>取り下げ時間:</strong> ${shop.shareInfo.takeDownTime}`;
+                shareDetail.appendChild(shareTakeDown);
+
+                content.appendChild(shareDetail);
+            }
         }
 
         const address = document.createElement("div");
