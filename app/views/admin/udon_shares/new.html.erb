@@ -9,7 +9,8 @@
   <%= form_with model: @udon_share, url: admin_store_udon_shares_path(@store) do |f| %>
     <% if @udon_share.errors.any? %>
       <div class="admin__errors">
-        <h2 class="admin__errors-title"><%= pluralize(@udon_share.errors.count, "個のエラー") %>があります</h2>
+        <h2 class="admin__errors-title"><%= @udon_share.errors.count %>個のエラーがあります</h2>
+
         <ul class="admin__errors-list">
           <% @udon_share.errors.full_messages.each do |message| %>
             <li class="admin__errors-item"><%= message %></li>
