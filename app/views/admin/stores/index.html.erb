@@ -16,7 +16,8 @@
           </div>
 
           <% if store.is_share %>
-            <% if active_share = store.active_udon_share %>
+            <% active_share = store.active_udon_share %>
+            <% if active_share %>
               <div class="admin__share-box">
                 <p class="admin__share-title">シェア中: <%= active_share.item_name %></p>
                 <p class="admin__share-description"><%= active_share.description %></p>
