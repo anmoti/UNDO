@@ -54,8 +54,19 @@ class UserSettingTest < ActiveSupport::TestCase
   test "settings should be accessible via user shortcut method" do
     new_user = User.create!(name: "Test User 2", email: "test2@example.com", password: "password")
 
-    assert_equal 5000, new_user.setting(:bod_upper_limit)
-    assert_nil new_user.setting(:location)
+    # settingメソッドは設定オブジェクトを返す
+    assert_instance_of UserSetting, new_user.setting
+    assert_equal 5000, new_user.setting.bod_upper_limit
+    assert_nil new_user.setting.location
+  end
+
+  test "get method returns default values" do
+    setting = @user.user_setting || @user.create_user_setting
+
+    # デフォルト値が返される
+    assert_equal 5000, setting.get(:bod_upper_limit)
+    assert_nil setting.get(:location)
+    assert_nil setting.get(:average_estimated_value)
   end
 
   test "one user setting per user" do
