@@ -13,9 +13,30 @@ class User < ApplicationRecord
   # ユーザー作成時に設定を自動生成
   after_create :create_default_settings
 
-  # 設定へのショートカットメソッド
-  def setting(key)
-    user_setting&.get(key) || UserSetting::DEFAULT_SETTINGS[key.to_sym]
+  # 設定オブジェクトを取得（なければ作成）
+  def setting
+    user_setting || create_user_setting
+  end
+
+  # 設定値へのショートカット
+  def bod_upper_limit
+    setting.bod_upper_limit
+  end
+
+  def location
+    setting.location
+  end
+
+  def average_estimated_value
+    setting.average_estimated_value
+  end
+
+  def bt_service_uuid
+    setting.bt_service_uuid
+  end
+
+  def bt_characteristic_uuid
+    setting.bt_characteristic_uuid
   end
 
   private
