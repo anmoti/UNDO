@@ -4,6 +4,11 @@ class StoresController < ApplicationController
   def index
     @stores = Store.all
 
-    render json: @stores, only: %i[id name lat lon open_time address tel eco foodshare]
+    data = @stores.map do |store|
+      store.as_json(only: %i[id name lat lon open_time address tel])
+           .merge(eco: false, foodshare: false)
+    end
+
+    render json: data
   end
 end

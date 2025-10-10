@@ -1,6 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 import { Loader } from "@googlemaps/js-api-loader";
 import { triggerShowComments, triggerHideComments } from "controllers/comments_controller";
+import ky from "ky";
 
 /** @import { Context } from "@hotwired/stimulus"  */
 
@@ -66,7 +67,6 @@ export default class MapsController extends Controller {
     static values = {
         ecoIconUrl: String,
         foodshareIconUrl: String,
-        stores: Array,
         isCompany: Boolean,
         companyRestrictionMessage: String,
     };
@@ -134,8 +134,7 @@ export default class MapsController extends Controller {
      * 表示領域内の店舗のみマーカーを表示
      */
     async updateVisibleMarkers() {
-        // @ts-ignore Stimulus value accessors are defined at runtime
-        const stores = this.hasStoresValue ? this.storesValue : [];
+        const stores = await ky.get('/stores').json();
 
         if (!stores.length) {
             console.info("No store data provided for map markers.");
