@@ -1,0 +1,46 @@
+<div
+  data-controller="measures"
+  data-measures-service-uuid-value="<%= Current.user.bt_service_uuid if authenticated? %>"
+  data-measures-char-uuid-value="<%= Current.user.bt_characteristic_uuid if authenticated? %>"
+  data-measures-bod-upper-limit-value="<%= Current.user.bod_upper_limit if authenticated? %>"
+>
+  <button type="button" class="measure__start-btn" data-action="measures#open">水質測定開始</button>
+
+  <div class="hidden measure__modal" data-measures-target="modal">
+    <div class="measure__container">
+      <h3 class="measure__title">水質の推定方法</h3>
+      <ol class="measure__steps">
+        <li>紙コップに茹で汁を溢れる手前くらいまで入れてください。</li>
+        <li>キットに紙コップをセットしてください。</li>
+        <li>下の測定開始のボタンを押すと測定が始まります。</li>
+      </ol>
+      <div class="hidden" data-measures-target="in-process">
+        <span class="careful">推定が完了するまでキットに触れないでください。</span>
+
+        <div class="measure__progress-wrapper" aria-hidden="false">
+          <div class="measure__progress-track">
+            <div class="measure__progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" data-measures-target="progress"></div>
+          </div>
+          <div class="measure__progress-label" data-measures-target="progressLabel">0 / 10</div>
+        </div>
+      </div>
+      <div class="hidden" data-measures-target="waiting">
+        <span>サーバーからの応答を待機しています。</span>
+      </div>
+      <div class="hidden" data-measures-target="completed">
+        <div class="measure__result" data-measures-target="result">
+          茹で汁の水質は綺麗です。
+        </div>
+        <div class="measure__values">
+          <div>BOD値:<span data-measures-target="bod">0</span>[mg/L]</div>
+          <div>COD値:<span data-measures-target="cod">0</span>[mg/L]</div>
+        </div>
+      </div>
+      <div class="measure__buttons" id="back-root">
+        <button type="button" data-action="measures#startEstimation">推定開始</button>
+        <button type="button" data-action="measures#cancelEstimation">キャンセル</button>
+      </div>
+    </div>
+  </div>
+
+</div>

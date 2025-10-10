@@ -1,70 +1,61 @@
 class ReviewsController < ApplicationController
-  before_action :set_review, only: %i[ show edit update destroy ]
+  layout "main", only: [ :new ]
+  before_action :check_company_account, only: %i[ new create ]
 
-  # GET /reviews or /reviews.json
+  # GET /reviews.json
   def index
     @reviews = Review.all
-  end
 
-  # GET /reviews/1 or /reviews/1.json
-  def show
+    # reviewee_idでフィルタリング
+    if params[:reviewee_id].present?
+      @reviews = @reviews.where(reviewee_id: params[:reviewee_id])
+    end
+
+    respond_to do |format|
+      format.json { render json: @reviews }
+    end
   end
 
   # GET /reviews/new
   def new
     @review = Review.new
-  end
+    @review.reviewer_id = Current.user.id
 
-  # GET /reviews/1/edit
-  def edit
+    # URLパラメータからreviewee_idを設定
+    if params[:reviewee_id].present?
+      @review.reviewee_id = params[:reviewee_id]
+      @store = Store.find_by(id: params[:reviewee_id])
+    end
   end
 
   # POST /reviews or /reviews.json
   def create
-    @review = Review.new(review_params)
+    @review = Current.user.written_reviews.build(review_params)
 
     respond_to do |format|
       if @review.save
-        format.html { redirect_to @review, notice: "Review was successfully created." }
+        format.html { redirect_to root_path, notice: t("flash.reviews.created") }
         format.json { render :show, status: :created, location: @review }
       else
+        @store = Store.find(params[:review][:reviewee_id])
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @review.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # PATCH/PUT /reviews/1 or /reviews/1.json
-  def update
-    respond_to do |format|
-      if @review.update(review_params)
-        format.html { redirect_to @review, notice: "Review was successfully updated." }
-        format.json { render :show, status: :ok, location: @review }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @review.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # DELETE /reviews/1 or /reviews/1.json
-  def destroy
-    @review.destroy!
-
-    respond_to do |format|
-      format.html { redirect_to reviews_path, status: :see_other, notice: "Review was successfully destroyed." }
-      format.json { head :no_content }
-    end
-  end
-
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_review
-      @review = Review.find(params.expect(:id))
+  # 企業アカウントがレビューを投稿できないようにチェック
+  def check_company_account
+    if Current.user&.is_company?
+      redirect_to root_path, alert: t("flash.reviews.company_restriction")
     end
-
-    # Only allow a list of trusted parameters through.
+  end
+    # Strong parametersで許可するパラメーターを定義
     def review_params
-      params.expect(review: [ :reviewer_id, :reviewee_id, :comment, :rating ])
+      permitted = params.require(:review).permit(:reviewer_id, :reviewee_id, :comment, :rating)
+      # reviewer_idが提供されない場合、現在ログインしているユーザーをデフォルトとして設定
+      permitted[:reviewer_id] = Current.user.id if permitted[:reviewer_id].blank? && Current.user
+      permitted
     end
 end

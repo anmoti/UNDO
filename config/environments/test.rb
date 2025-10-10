@@ -50,4 +50,9 @@ Rails.application.configure do
 
   # Raise error when a before_action's only/except options reference missing actions.
   config.action_controller.raise_on_missing_callback_actions = true
+
+  # Serve assets from app/assets/builds in test environment
+  config.assets.compile = false
+  config.assets.prefix = "/assets"
+  config.public_file_server.enabled = true
 end

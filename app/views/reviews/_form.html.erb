@@ -1,8 +1,15 @@
-<%= form_with(model: review) do |form| %>
-  <% if review.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(review.errors.count, "error") %> prohibited this review from being saved:</h2>
+<%= form_with(model: review, class: "form", local: true) do |form| %>
 
+  <%# reviewer_idがフォームから送信されることを確認する(見つからない場合、コントローラのCurrent.userがデフォルト) %>
+  <% if defined?(Current) && Current.user %>
+    <%= form.hidden_field :reviewer_id, value: (review.reviewer_id || Current.user.id) %>
+  <% elsif review.reviewer_id.present? %>
+    <%= form.hidden_field :reviewer_id, value: review.reviewer_id %>
+  <% end %>
+
+  <% if review.errors.any? %>
+    <div class="careful">
+      <h2><%= review.errors.count %>件のエラーがあります:</h2>
       <ul>
         <% review.errors.each do |error| %>
           <li><%= error.full_message %></li>
@@ -11,27 +18,47 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :reviewer_id, style: "display: block" %>
-    <%= form.text_field :reviewer_id %>
+  <% if review.reviewee_id.present? %>
+    <%# 店舗が指定されている場合は隠しフィールドとして送信 %>
+    <%= form.hidden_field :reviewee_id %>
+    <% if defined?(@store) && @store.present? %>
+      <div class="form__field">
+        <span class="form__label">レビューするお店</span>
+        <p class="form__input" style="border: none; padding: 0;font-size:1.5em"><%= @store.name %></p>
+      </div>
+    <% end %>
+  <% else %>
+    <%# 店舗が指定されていない場合は選択フィールドを表示 %>
+    <div class="form__field">
+      <%= form.label :reviewee_id, "レビューするお店", class: "form__label" %>
+      <%= form.collection_select :reviewee_id, Store.all, :id, :name, { prompt: "店舗を選択してください" }, class: "form__input" %>
+    </div>
+  <% end %>
+
+  <div class="form__field">
+    <span class="form__label">評価</span>
+    <div class="form__review--stars">
+      <% 5.downto(1) do |i| %>
+        <%= form.radio_button :rating, i, id: "star#{i}", class: "star-radio visually-hidden" %>
+        <%= form.label :rating, for: "star#{i}", class: "star-label" do %>
+          <svg role="img" aria-label="<%= i %>点">
+            <title><%= i %>点</title>
+            <use href="#star"></use>
+          </svg>
+        <% end %>
+      <% end %>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :reviewee_id, style: "display: block" %>
-    <%= form.text_field :reviewee_id %>
+  <div class="form__field">
+    <%= form.label :comment, "コメント", class: "form__label" %>
+    <%= form.text_area :comment, class: "form__input" %>
   </div>
 
-  <div>
-    <%= form.label :comment, style: "display: block" %>
-    <%= form.textarea :comment %>
-  </div>
+  <% if defined?(Current) && Current.user %>
+    <%= form.submit "送信", class: "form__submit-btn" %>
+  <% else %>
+    <p class="notice">レビュー投稿にはサインインが必要です。</p>
+  <% end %>
 
-  <div>
-    <%= form.label :rating, style: "display: block" %>
-    <%= form.text_field :rating %>
-  </div>
-
-  <div>
-    <%= form.submit %>
-  </div>
 <% end %>

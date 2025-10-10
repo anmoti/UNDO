@@ -8,6 +8,7 @@
             "DOM",
             "DOM.Iterable"
         ],
+        "strict": true,
         "checkJs": true,
         "baseUrl": ".",
         "paths": {
@@ -22,6 +23,12 @@
             ],
             "@googlemaps/js-api-loader": [
                 "./vendor/javascript/@googlemaps/js-api-loader"
+            ],
+            "ky": [
+                "./vendor/javascript/ky"
+            ],
+            "valibot": [
+                "./vendor/javascript/valibot"
             ],
             "controllers/*": [
                 "./app/javascript/controllers/*"

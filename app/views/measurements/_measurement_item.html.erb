@@ -1,0 +1,15 @@
+<article class="measures__record" aria-labelledby="measurement-<%= measurement.id %>-date">
+  <div class="measures__date" id="measurement-<%= measurement.id %>-date"><%= measurement.created_at.strftime("%Y/%m/%d %H:%M") %></div>
+  <div class="measures__values" role="group" aria-label="測定値">
+    <div class="measures__value-row">
+      <span class="measures__label">BOD値</span>
+      <span class="measures__value"><%= measurement.predicted_bod %></span>
+      <span class="measures__unit">mg/L</span>
+    </div>
+    <div class="measures__value-row">
+      <span class="measures__label">COD値</span>
+      <span class="measures__value"><%= measurement.predicted_cod %></span>
+      <span class="measures__unit">mg/L</span>
+    </div>
+  </div>
+</article>

@@ -1,0 +1,72 @@
+<header class="header__container">
+  <%= link_to image_tag("logo.png", alt: "UNDO Logo"), root_path, class: "header__logo" %>
+  <div class="header__right">
+    <% if authenticated? %>
+      <div class="user-menu" data-user-type="<%= Current.session.user.is_company? ? 'company' : 'personal' %>">
+        <button type="button" class="user-menu__trigger" data-action="click->user-menu#toggle">
+          <div class="user-menu__info">
+            <span class="user-menu__name">
+              <%= Current.session.user.name %>
+              <% if Current.session.user.is_company? %>
+                <span class="user-menu__badge user-menu__badge--company">企業</span>
+              <% end %>
+            </span>
+            <span class="user-menu__email"><%= Current.session.user.email %></span>
+          </div>
+          <span class="user-menu__arrow">▼</span>
+        </button>
+        <nav class="user-menu__dropdown" data-user-menu-target="menu">
+          <div class="user-menu__header">
+            <div class="user-menu__avatar <%= 'user-menu__avatar--company' if Current.session.user.is_company? %>">
+              <% if Current.session.user.is_company? %>
+                🏢
+              <% else %>
+                <%= Current.session.user.name&.first || "?" %>
+              <% end %>
+            </div>
+            <div class="user-menu__details">
+              <div class="user-menu__name--large">
+                <%= Current.session.user.name %>
+                <% if Current.session.user.is_company? %>
+                  <span class="user-menu__badge user-menu__badge--company">企業アカウント</span>
+                <% end %>
+              </div>
+              <div class="user-menu__email--small"><%= Current.session.user.email %></div>
+            </div>
+          </div>
+          <ul class="user-menu__list">
+            <% if Current.session.user.is_company? %>
+              <li class="user-menu__item">
+                <%= link_to admin_stores_path, class: "user-menu__link" do %>
+                  <span class="user-menu__icon">🏪</span>
+                  <span>店舗管理</span>
+                <% end %>
+              </li>
+            <% end %>
+            <li class="user-menu__item">
+              <%= link_to "#", class: "user-menu__link" do %>
+                <span class="user-menu__icon">📝</span>
+                <span>自分の投稿</span>
+              <% end %>
+            </li>
+            <li class="user-menu__item">
+              <%= link_to "#", class: "user-menu__link" do %>
+                <span class="user-menu__icon">⚙️</span>
+                <span>設定</span>
+              <% end %>
+            </li>
+            <li class="user-menu__item">
+              <%= link_to signout_path, class: "user-menu__link user-menu__link--logout", data: { turbo_method: :delete } do %>
+                <span class="user-menu__icon">🚪</span>
+                <span>ログアウト</span>
+              <% end %>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    <% else %>
+      <%= link_to "ログイン", signin_path, class: "header__btn--text" %>
+    <% end %>
+
+  </div>
+</header>

@@ -31,15 +31,23 @@
                 "Shopify.ruby-extensions-pack",
                 "castwide.solargraph",
                 "KoichiSasada.vscode-rdbg",
-                "kaiwood.endwise"
+                "kaiwood.endwise",
+                "aliariff.vscode-erb-beautify"
             ],
             "settings": {
-                "rubyLsp.rubyVersionManager": {
-                    "identifier": "custom"
+                "solargraph.useBundler": true,
+                "vscode-erb-beautify.useBundler": true,
+                "files.associations": {
+                    "*.erb": "erb"
                 },
-                "rubyLsp.customRubyCommand": "/usr/local/bin/ruby",
-                "solargraph.commandPath": "/usr/local/bin/ruby",
-                "solargraph.useBundler": true
+                "emmet.includeLanguages": {
+                    "erb": "html"
+                },
+                "rubyLsp.rubyVersionManager": {
+                    "identifier": "none"
+                },
+                "rubyLsp.rubyExecutablePath": "/usr/local/bin/ruby",
+                "rubyLsp.formatter": "rubocop"
             }
         }
     },

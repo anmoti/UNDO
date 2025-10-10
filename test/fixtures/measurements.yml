@@ -1,0 +1,40 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+    turbidity: 1.5
+    predicted_bod: 1.5
+    predicted_cod: 1.5
+    actual_bod: 1.5
+    actual_cod: 1.5
+    prediction_model_version: __version__
+    status: 1
+    predicted_at: 2025-09-30 09:26:35
+    submitted_at: 2025-09-30 09:26:35
+    submitter: bob
+    store: one
+
+two:
+    turbidity: 1.5
+    predicted_bod: 1.5
+    predicted_cod: 1.5
+    actual_bod: 1.5
+    actual_cod: 1.5
+    prediction_model_version: __version__
+    status: 1
+    predicted_at: 2025-09-30 09:26:35
+    submitted_at: 2025-09-30 09:26:35
+    submitter: bob
+    store: two
+
+three:
+    turbidity: 2.0
+    predicted_bod: 2.0
+    predicted_cod: 2.0
+    actual_bod:
+    actual_cod:
+    prediction_model_version: __version__
+    status: 1
+    predicted_at: 2025-09-30 10:00:00
+    submitted_at: 2025-09-30 10:00:00
+    submitter: alice
+    store:

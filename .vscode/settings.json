@@ -1,22 +1,13 @@
 {
-    "editor.formatOnSave": true,
-    // "files.autoSave": "afterDelay",
-    "editor.wordWrap": "on",
-    "editor.autoIndentOnPaste": true,
-    "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
-    "rubyLsp.rubyVersionManager": {
-        "identifier": "custom"
-    },
-    "rubyLsp.customRubyCommand": "/usr/local/bin/ruby",
     "cSpell.words": [
+        "foodshare",
         "googlemaps",
         "hotwired",
         "importmap",
         "javascripts"
     ],
-    "[ruby]": {
-        "editor.formatOnSave": true,
-        "editor.defaultFormatter": "rubocop.vscode-rubocop"
-    }
-    // "rubyLsp.bundleGemfile": "/workspaces/UNDO/Gemfile"
+    "vscode-erb-beautify.keepBlankLines": 1,
+    "cssPeek.peekToExclude": [
+        "**/builds/**",
+    ]
 }

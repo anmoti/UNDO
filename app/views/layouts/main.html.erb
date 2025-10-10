@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title><%= content_for(:title) || "UNDO" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= yield :head %>
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+    <%= stylesheet_link_tag "main", "data-turbo-track": "reload", "as": "style" %>
+    <meta name="google-maps-api-key" content="<%= Rails.application.credentials.dig(:google_cloud, :maps_api_key) %>">
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body data-controller="user-menu" data-action="click@window->user-menu#close">
+    <%= render "shared/header" %>
+    <main>
+      <%= render "shared/flash" %>
+      <%= yield %>
+    </main>
+    <%= render "shared/footer" %>
+  </body>
+</html>

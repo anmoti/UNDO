@@ -1,9 +1,12 @@
 import { Controller } from "@hotwired/stimulus";
 import { Loader } from "@googlemaps/js-api-loader";
+import { triggerShowComments, triggerHideComments } from "controllers/comments_controller";
 
-// Helper to read Google Maps API key from meta tag
+/** @import { Context } from "@hotwired/stimulus"  */
+
+/** Helper to read Google Maps API key from meta tag */
 function getGoogleMapsApiKey() {
-    /** @type {HTMLMetaElement} */
+    /** @type {HTMLMetaElement | null} */
     const meta = document.querySelector('meta[name="google-maps-api-key"]');
     if (!meta) {
         console.warn("Google Maps API key meta tag not found.");
@@ -11,11 +14,6 @@ function getGoogleMapsApiKey() {
     }
     return meta.content;
 }
-
-const loader = new Loader({
-    apiKey: getGoogleMapsApiKey(),
-    version: "weekly",
-});
 
 // 香川県範囲 34.2128846,134.065572,10.75z
 
@@ -30,238 +28,437 @@ const mapOptions = {
     disableDefaultUI: true,
 };
 
-const shops = [
-    {
-        name: "味庄",
-        lat: 34.3438,
-        lon: 134.0461,
-        openTime: "5:00～14:00 麺終了次第",
-        address: "香川県高松市西の丸町5-15",
-    },
-    {
-        name: "こだわり麺や高松店",
-        lat: 34.3415,
-        lon: 134.0498,
-        openTime: "9:00〜20:00（土日祝6:30〜15:00）",
-        address: "香川県高松市天神前5-25",
-    },
-    {
-        name: "さか枝うどん本店",
-        lat: 34.3397,
-        lon: 134.0485,
-        openTime: "7:00～15:00",
-        address: "香川県高松市番町5-2-23",
-    },
-    {
-        name: "めりけんや高松駅前店",
-        lat: 34.3439,
-        lon: 134.0465,
-        openTime: "7:00〜20:00",
-        address: "香川県高松市西の丸町6-20",
-    },
-    {
-        name: "植田うどん",
-        lat: 34.3412,
-        lon: 134.0492,
-        openTime: "9:38～14:30（麺終了次第）",
-        address: "香川県高松市内町1-8",
-    },
-    {
-        name: "うどん市場めんくい",
-        lat: 34.3423,
-        lon: 134.0478,
-        openTime: "月～金曜 11:00～15:00, 土日祝 11:00～14:00, 麺終了次第",
-        address: "香川県高松市塩屋町9-7",
-    },
-    {
-        name: "釜揚げうどん 岡じま",
-        lat: 34.3428,
-        lon: 134.0482,
-        openTime: "10:00～15:00",
-        address: "香川県高松市寿町1-4-3 高松中央通りビル１Ｆ北側",
-    },
-    {
-        name: "さか枝うどん 南新町店",
-        lat: 34.3401,
-        lon: 134.0489,
-        openTime: "7:00～17:00",
-        address: "香川県高松市南新町4-6",
-    },
-    {
-        name: "松下製麺所",
-        lat: 34.335057,
-        lon: 134.044763,
-        openTime: "7時～15時頃（麺がなくなり次第終了）",
-        address: "香川県高松市中野町2-2",
-    },
-    {
-        name: "手打うどん 三徳",
-        lat: 34.292697,
-        lon: 134.069001,
-        openTime: "11時～16時（LO15時45分）",
-        address: "香川県高松市林町390-1",
-    },
-    {
-        name: "手打十段 うどんバカ一代",
-        lat: 34.336594,
-        lon: 134.058423,
-        openTime: "6時～18時",
-        address: "香川県高松市多賀町1-6-7",
-    },
-    {
-        name: "さぬき一番 一宮店",
-        lat: 34.287691,
-        lon: 134.033044,
-        openTime: "10時～21時",
-        address: "香川県高松市三名町105-2",
-    },
-    {
-        name: "本格手打ちもり家",
-        lat: 34.239623,
-        lon: 134.051456,
-        openTime: "10:30～18:00",
-        address: "香川県高松市香川町川内原1575-1",
-    },
-    {
-        name: "本格手打ちうどん おか泉",
-        lat: 34.309226,
-        lon: 133.821004,
-        openTime: "11:00（土日祝は10:45）～19:00",
-        address: "香川県綾歌郡宇多津町浜八番丁129-10",
-    },
-    {
-        name: "元祖セルフうどんの店 竹清",
-        lat: 34.338077,
-        lon: 134.042292,
-        openTime: "11:00～14:30（売り切れ次第終了）",
-        address: "香川県高松市亀岡町2-23",
-    },
-    {
-        name: "めりけんや",
-        lat: 34.313155,
-        lon: 133.814618,
-        openTime: "9:00～15:00（土日祝は16:00まで）",
-        address: "香川県綾歌郡宇多津町浜三番丁36-1",
-    },
-];
+/**
+ * @typedef {Object} ShareInfo
+ * @property {string} itemName
+ * @property {string} description
+ * @property {string} takeDownTime
+ * @property {string} photoUrl
+ */
+
+/**
+ * @typedef {Object} StoreFeature
+ * @property {number} id
+ * @property {string} name
+ * @property {number} lat
+ * @property {number} lon
+ * @property {string | null | undefined} [openTime]
+ * @property {string | null | undefined} [address]
+ * @property {boolean | null | undefined} [eco]
+ * @property {boolean | null | undefined} [foodshare]
+ * @property {ShareInfo | null | undefined} [shareInfo]
+ */
 
 // Connects to data-controller="maps"
 /** @extends {Controller<HTMLDivElement>} */
-export default class extends Controller {
-    /** @type {google.maps.Map} */
+export default class MapsController extends Controller {
+    /** @type {Loader} */
+    loader;
+
+    /** @type {Promise<google.maps.Map>} */
     map;
+
+    /** @type {?google.maps.InfoWindow} */
+    infoWindow = null;
+
+    /** @type {Map<number, google.maps.marker.AdvancedMarkerElement>} */
+    markers = new Map();
+
+    /** @type {?number} */
+    updateMarkersTimeout = null;
+
+    /** @type {Map<number, number>} */
+    pendingMarkerTimeouts = new Map();
+
+    static targets = ["icon"];
+    static values = {
+        ecoIconUrl: String,
+        foodshareIconUrl: String,
+        stores: Array,
+        isCompany: Boolean,
+        companyRestrictionMessage: String,
+    };
+
+    /**
+     * @param  {Context} context
+     */
+    constructor(context) {
+        super(context);
+
+        this.loader = new Loader({
+            apiKey: getGoogleMapsApiKey(),
+            version: "weekly",
+            libraries: ["maps", "marker"],
+        });
+
+        this.map = this.loader
+            .importLibrary("maps")
+            .then(async ({ Map: GMaps }) => {
+                const map = new GMaps(this.element, mapOptions);
+                console.log("Map initialized:", map);
+                return map;
+            });
+    }
 
     async connect() {
         console.log("Maps controller connected");
-        const { Map: GMaps } = await loader.importLibrary("maps");
-        this.map = new GMaps(this.element, mapOptions);
-        console.log("Map initialized:", this.map);
 
-        this.map.addListener("click", this.onMapClick.bind(this));
+        const map = await this.map;
 
-        // マーカーを作成して店舗を表示
-        await this.createShopMarkers();
+        await Promise.race([
+            new Promise((resolve) => {
+                const listener = map.addListener("idle", () => {
+                    google.maps.event.removeListener(listener);
+                    resolve(undefined);
+                });
+            }),
+            new Promise((resolve) => setTimeout(resolve, 5000))
+        ]);
+
+
+        // 地図の表示領域が変更されたときにマーカーを更新
+        map.addListener("bounds_changed", () => {
+            this.scheduleUpdateMarkers();
+        });
+
+        // 初回のマーカー表示
+        await this.updateVisibleMarkers();
     }
 
-    /** @param {google.maps.MapMouseEvent} event */
-    async onMapClick(event) {}
+    /**
+     * マーカー更新をスケジュール（デバウンス処理）
+     */
+    scheduleUpdateMarkers() {
+        if (this.updateMarkersTimeout) {
+            clearTimeout(this.updateMarkersTimeout);
+        }
 
-    async createShopMarkers() {
-        // 各店舗にマーカーを作成
-        for (const shop of shops) {
-            const { AdvancedMarkerElement } = await loader.importLibrary(
-                "marker"
-            );
-            const position = { lat: shop.lat, lng: shop.lon };
+        this.updateMarkersTimeout = setTimeout(() => {
+            this.updateVisibleMarkers();
+        }, 300); // 300ms後に更新
+    }
 
-            // カスタムマーカーアイコンを作成
-            const markerIcon = document.createElement("div");
-            markerIcon.className = "map__marker";
+    /**
+     * 表示領域内の店舗のみマーカーを表示
+     */
+    async updateVisibleMarkers() {
+        // @ts-ignore Stimulus value accessors are defined at runtime
+        const stores = this.hasStoresValue ? this.storesValue : [];
 
-            // マーカーを作成
-            const marker = new AdvancedMarkerElement({
-                position: position,
-                map: this.map,
-                title: shop.name,
-                content: markerIcon,
-                gmpClickable: true,
-            });
+        if (!stores.length) {
+            console.info("No store data provided for map markers.");
+            return;
+        }
 
-            // ホバーエフェクト用のスタイル
-            const originalContent = markerIcon.innerHTML;
+        const map = await this.map;
+        const bounds = map.getBounds();
 
-            // ホバーイベント
-            marker.addListener("mouseover", () => {
-                // ホバー時に名前を表示するツールチップ
-                const tooltip = document.createElement("div");
-                tooltip.className = "shop-tooltip";
-                tooltip.textContent = shop.name;
-                tooltip.style.cssText = `
-                    position: absolute;
-                    background: rgba(0, 0, 0, 0.8);
-                    color: white;
-                    padding: 4px 8px;
-                    border-radius: 4px;
-                    font-size: 12px;
-                    white-space: nowrap;
-                    z-index: 1000;
-                    pointer-events: none;
-                    transform: translate(-50%, -100%);
-                    margin-top: -8px;
-                `;
+        if (!bounds) {
+            console.warn("Map bounds not available yet");
+            return;
+        }
 
-                markerIcon.appendChild(tooltip);
-                markerIcon.style.transform = "scale(1.1)";
-            });
+        console.log("Updating markers for current bounds");
 
-            marker.addListener("mouseout", () => {
-                // ツールチップを削除
-                const tooltip = markerIcon.querySelector(".shop-tooltip");
-                if (tooltip) {
-                    tooltip.remove();
-                }
-                markerIcon.style.transform = "scale(1)";
-            });
+        // 表示領域内の店舗を特定
+        const visibleStoreIds = new Set();
 
-            // クリックイベント
-            marker.addListener("click", () => {
-                this.showShopInfo(shop, marker);
-            });
+        for (const store of stores) {
+            const lat = Number(store.lat);
+            const lon = Number(store.lon);
 
-            // マーカーを配列に保存
-            if (!this.markers) {
-                this.markers = [];
+            if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
+                continue;
             }
-            this.markers.push({ marker, shop });
+
+            const position = { lat, lng: lon };
+
+            // 店舗が表示領域内にあるかチェック
+            if (bounds.contains(position)) {
+                visibleStoreIds.add(store.id);
+
+                // まだマーカーが作成されていない場合は作成（アニメーション付き）
+                if (!this.markers.has(store.id)) {
+                    // 既存の保留中タイムアウトを中止
+                    if (this.pendingMarkerTimeouts.has(store.id)) {
+                        clearTimeout(this.pendingMarkerTimeouts.get(store.id));
+                    }
+
+                    // ランダムな遅延を追加して、マーカーが順次表示されるようにする
+                    const delay = Math.random() * 300;
+                    const timeoutId = setTimeout(() => {
+                        if (bounds.contains(position)) {
+                            this.createMarker(store, position);
+                        }
+                        this.pendingMarkerTimeouts.delete(store.id);
+                    }, delay);
+                    this.pendingMarkerTimeouts.set(store.id, timeoutId);
+                }
+            }
+        }
+
+        // 表示領域外のマーカーをアニメーション付きで削除
+        for (const [storeId, marker] of this.markers.entries()) {
+            if (!visibleStoreIds.has(storeId)) {
+                if (this.pendingMarkerTimeouts.has(storeId)) {
+                    clearTimeout(this.pendingMarkerTimeouts.get(storeId));
+                    this.pendingMarkerTimeouts.delete(storeId);
+                }
+                this.removeMarkerWithAnimation(storeId, marker);
+            }
+        }
+
+        console.log(`Visible markers: ${this.markers.size} / ${stores.length} stores`);
+    }
+
+    /**
+     * 個別のマーカーを作成
+     * @param {StoreFeature} store
+     * @param {{lat: number, lng: number}} position
+     */
+    async createMarker(store, position) {
+        const { AdvancedMarkerElement } = await this.loader.importLibrary(
+            "marker",
+        );
+        const map = await this.map;
+
+        // カスタムマーカーアイコンを作成
+        const markerIcon = document.createElement("div");
+        markerIcon.className = "maps__marker";
+
+        // シェア情報がある場合、リサイクルマークと残り時間を追加
+        if (store.foodshare && store.shareInfo) {
+            const shareIndicator = document.createElement("div");
+            shareIndicator.className = "maps__marker-share";
+
+            // リサイクルマーク
+            const recycleIcon = document.createElement("span");
+            recycleIcon.className = "maps__marker-share-icon";
+            recycleIcon.textContent = "♻️";
+            shareIndicator.appendChild(recycleIcon);
+
+            // 残り時間を計算
+            const takeDownTime = new Date(store.shareInfo.takeDownTime);
+            const now = new Date();
+            const diffMs = takeDownTime - now;
+            const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+            const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+
+            if (diffMs > 0) {
+                const timeText = document.createElement("span");
+                timeText.className = "maps__marker-share-time";
+                timeText.textContent = diffHours > 0 ? `${diffHours}h${diffMinutes}m` : `${diffMinutes}m`;
+                shareIndicator.appendChild(timeText);
+            }
+
+            markerIcon.appendChild(shareIndicator);
+        }
+
+        // マーカーを作成
+        const marker = new AdvancedMarkerElement({
+            position,
+            map,
+            title: store.name,
+            content: markerIcon,
+            gmpClickable: true,
+        });
+
+        marker.addListener("click", () => {
+            this.showShopInfo(store, marker);
+        });
+
+        this.markers.set(store.id, marker);
+        console.log(`Marker created for ${store.name}`);
+    }
+
+    /**
+     * マーカーをアニメーション付きで削除
+     * @param {number} storeId
+     * @param {google.maps.marker.AdvancedMarkerElement} marker
+     */
+    removeMarkerWithAnimation(storeId, marker) {
+        const markerElement = marker.content;
+
+        if (markerElement instanceof HTMLElement) {
+            // 消えるアニメーションを追加
+            markerElement.classList.add("maps__marker--disappear");
+
+            // アニメーション完了後にマーカーを削除
+            setTimeout(() => {
+                marker.map = null;
+                if (this.markers.has(storeId)) {
+                    this.markers.delete(storeId);
+                }
+            }, 300); // アニメーション時間と一致
+        } else {
+            // フォールバック: 即座に削除
+            marker.map = null;
+            this.markers.delete(storeId);
         }
     }
 
+    /**
+     * @param {StoreFeature} shop
+     * @param {google.maps.marker.AdvancedMarkerElement} marker
+     */
     async showShopInfo(shop, marker) {
-        const { InfoWindow } = await loader.importLibrary("maps");
+        const { InfoWindow } = await this.loader.importLibrary("maps");
 
         // 既存の情報ウィンドウがあれば閉じる
         if (this.infoWindow) {
             this.infoWindow.close();
         }
 
-        // 新しい情報ウィンドウを作成
         this.infoWindow = new InfoWindow();
 
+        // InfoWindowが閉じられたときにコメント欄も閉じる
+        this.infoWindow.addListener("closeclick", () => {
+            triggerHideComments();
+        });
+
         // 情報ウィンドウのコンテンツを作成
-        const content = `
-            <div style="min-width: 200px; padding: 12px; font-family: Arial, sans-serif;">
-                <h3 style="margin: 0 0 8px 0; color: #333; font-size: 16px;">${shop.name}</h3>
-                <div style="margin-bottom: 6px; color: #666; font-size: 13px;">
-                    <strong>住所:</strong> ${shop.address}
-                </div>
-                <div style="color: #666; font-size: 13px;">
-                    <strong>営業時間:</strong> ${shop.openTime}
-                </div>
-            </div>
-        `;
+        const content = document.createElement("div");
+        content.className = "maps__info";
+
+        const title = document.createElement("h3");
+        title.className = "maps__info--title";
+        title.textContent = shop.name;
+        content.appendChild(title);
+
+        if (shop.eco) {
+            const EcoOptions = document.createElement("div");
+            const ecoImg = new Image(16, 16);
+            // @ts-ignore Stimulus value accessors are defined at runtime
+            if (this.hasEcoIconUrlValue) {
+                // @ts-ignore
+                ecoImg.src = this.ecoIconUrlValue;
+            }
+            EcoOptions.appendChild(ecoImg);
+
+            const ecoDesc = document.createElement("span");
+            ecoDesc.className = "maps__info--eco";
+            ecoDesc.textContent = "環境に優しいうどん店";
+            EcoOptions.appendChild(ecoDesc);
+            content.appendChild(EcoOptions);
+        }
+        if (shop.foodshare) {
+            const foodshareOptions = document.createElement("div");
+            const foodshareImg = new Image(16, 16);
+            // @ts-ignore Stimulus value accessors are defined at runtime
+            if (this.hasFoodshareIconUrlValue) {
+                //@ts-ignore
+                foodshareImg.src = this.foodshareIconUrlValue;
+            }
+            foodshareOptions.appendChild(foodshareImg);
+
+            const foodshareDesc = document.createElement("span");
+            foodshareDesc.className = "maps__info--foodshare";
+            foodshareDesc.textContent = "フードシェア実施中";
+            foodshareOptions.appendChild(foodshareDesc);
+            content.appendChild(foodshareOptions);
+
+            // シェア詳細情報を追加
+            if (shop.shareInfo) {
+                const shareDetail = document.createElement("div");
+                shareDetail.className = "maps__info--share-detail";
+                shareDetail.style.marginTop = "8px";
+                shareDetail.style.padding = "8px";
+                shareDetail.style.backgroundColor = "#f0fdf4";
+                shareDetail.style.borderRadius = "4px";
+
+                const shareItem = document.createElement("div");
+                const shareItemLabel = document.createElement("strong");
+                shareItemLabel.textContent = "シェア中: ";
+                shareItem.appendChild(shareItemLabel);
+                shareItem.appendChild(document.createTextNode(shop.shareInfo.itemName));
+                shareDetail.appendChild(shareItem);
+
+                const shareDesc = document.createElement("div");
+                const shareDescLabel = document.createElement("strong");
+                shareDescLabel.textContent = "内容: ";
+                shareDesc.appendChild(shareDescLabel);
+                shareDesc.appendChild(document.createTextNode(shop.shareInfo.description));
+                shareDetail.appendChild(shareDesc);
+
+                const shareTakeDown = document.createElement("div");
+                const shareTakeDownLabel = document.createElement("strong");
+                shareTakeDownLabel.textContent = "取り下げ時間: ";
+                shareTakeDown.appendChild(shareTakeDownLabel);
+                shareTakeDown.appendChild(document.createTextNode(shop.shareInfo.takeDownTime));
+                shareDetail.appendChild(shareTakeDown);
+
+                content.appendChild(shareDetail);
+            }
+        }
+
+        const address = document.createElement("div");
+        const addressText = shop.address || "住所情報が登録されていません";
+        address.textContent = `住所: ${addressText}`;
+        content.appendChild(address);
+
+        const openTime = document.createElement("div");
+        const openTimeText = shop.openTime || "営業時間情報が登録されていません";
+        openTime.textContent = `営業時間: ${openTimeText}`;
+        content.appendChild(openTime);
+
+        const buttons = document.createElement("div");
+        buttons.className = "maps__info--buttons";
+        content.appendChild(buttons);
+
+        const reviewButton = document.createElement("button");
+        reviewButton.textContent = "レビューする";
+
+        // @ts-ignore Stimulus value accessors are defined at runtime
+        const isCompany = this.hasIsCompanyValue ? this.isCompanyValue : false;
+
+        if (isCompany) {
+            // 企業アカウントの場合、ボタンを無効化
+            reviewButton.classList.add("maps__info--button-disabled");
+            reviewButton.disabled = true;
+            // @ts-ignore Stimulus value accessors are defined at runtime
+            const message = this.hasCompanyRestrictionMessageValue
+                // @ts-ignore
+                ? this.companyRestrictionMessageValue
+                : "";
+            reviewButton.title = message;
+        } else {
+            // 個人アカウントの場合、通常通り動作
+            reviewButton.onclick = () => {
+                window.location.href = `/reviews/new?reviewee_id=${shop.id}`;
+            };
+        }
+        buttons.appendChild(reviewButton);
+
+        const commentButton = document.createElement("button");
+        commentButton.textContent = "コメントを見る";
+        commentButton.onclick = () => {
+            triggerShowComments(shop.id, shop.name);
+        };
+        buttons.appendChild(commentButton);
 
         // 情報ウィンドウを開く
         this.infoWindow.setContent(content);
-        this.infoWindow.open(this.map, marker);
+        this.infoWindow.open(await this.map, marker);
+    }
+
+    /**
+     * コントローラーが切断されたときのクリーンアップ
+     */
+    disconnect() {
+        // 保留中のマーカー作成タイムアウトをクリア
+        for (const timeoutId of this.pendingMarkerTimeouts.values()) {
+            clearTimeout(timeoutId);
+        }
+        this.pendingMarkerTimeouts.clear();
+
+        // すべてのマーカーをアニメーション付きで削除
+        for (const [storeId, marker] of this.markers.entries()) {
+            this.removeMarkerWithAnimation(storeId, marker);
+        }
+
+        // タイムアウトをクリア
+        if (this.updateMarkersTimeout) {
+            clearTimeout(this.updateMarkersTimeout);
+        }
     }
 }

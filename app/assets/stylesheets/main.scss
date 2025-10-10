@@ -1,0 +1,1122 @@
+// Sassy
+
+@use "sass:color";
+@use "sass:map";
+
+//================================================
+// 設定 (Variables, Mixins, Placeholders)
+//================================================
+
+$palette: (
+    "primary": #f28705,
+    // メインカラー (ヘッダー, フッターなど)
+    "secondary": #f29f05,
+    // サブカラー (ボーダー, リンクなど)
+    "accent": #f23030,
+    // アクセントカラー (マーカーなど)
+    "highlight": #f2cb05,
+    // 強調色 (星の評価, 背景など)
+    "dark": #301b01,
+    // 暗い色 (テキスト, 背景など)
+    "light": #ffffff,
+    // 明るい色 (テキスト, 背景など)
+    "success": #00cc00,
+    // 成功・肯定的な色
+    "danger": #ff0000,
+    // 危険・注意を促す色
+    "gray": #666666,
+    // グレー
+    "black": #000000,
+);
+
+$header-height: 60px;
+$footer-height: 60px;
+$radius-sm: 4px;
+$radius-md: 8px;
+$base-padding: 1rem;
+
+$z-layers: (
+    "base": 0,
+    "dropdown": 10,
+    "modal": 20,
+    "header": 30,
+    "footer": 30,
+    "tooltip": 40,
+);
+
+@mixin flexbox($justify: flex-start,
+    $align: stretch,
+    $direction: row,
+    $gap: 0) {
+    display: flex;
+    justify-content: $justify;
+    align-items: $align;
+    flex-direction: $direction;
+    gap: $gap;
+}
+
+%button-reset {
+    display: block;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-family: inherit;
+    color: inherit;
+}
+
+//================================================
+// グローバルスタイル
+//================================================
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0 solid;
+}
+
+body {
+    min-height: 100dvh;
+    @include flexbox($direction: column);
+    background-color: map.get($palette, "light");
+    z-index: map.get($z-layers, "base");
+}
+
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+.careful {
+    color: map.get($palette, "danger");
+}
+
+//================================================
+// コンポーネントごとのスタイル
+//================================================
+
+.header {
+    &__container {
+        @include flexbox($justify: space-between, $align: center);
+        height: $header-height;
+        padding: 11px;
+        background-color: map.get($palette, "primary");
+        z-index: map.get($z-layers, "header");
+    }
+
+    &__logo,
+    &__logo img {
+        height: 100%;
+    }
+
+    &__right {
+        @include flexbox($align: center, $gap: 1rem);
+    }
+
+    &__user {
+        color: map.get($palette, "light");
+    }
+
+    &__button {
+        @extend %button-reset;
+        display: flex;
+        align-items: center;
+    }
+
+    &__btn--text {
+        @extend .header__button;
+        display: block;
+        padding: 0.5rem 1rem;
+        border-radius: $radius-sm;
+        font-size: 1rem;
+        background-color: map.get($palette, "light");
+        color: map.get($palette, "dark");
+        text-decoration: none;
+        text-align: center;
+    }
+}
+
+.user-menu {
+    position: relative;
+
+    // 企業アカウント用のスタイル
+    &[data-user-type="company"] {
+        .user-menu__trigger {
+            border: 2px solid map.get($palette, "secondary");
+            background: linear-gradient(
+                to bottom,
+                map.get($palette, "light"),
+                color.scale(map.get($palette, "secondary"), $lightness: 90%)
+            );
+        }
+
+        .user-menu__header {
+            background: linear-gradient(to right, #fef3c7, #fde68a);
+            border-bottom-color: #f59e0b;
+        }
+    }
+
+    &__trigger {
+        @extend %button-reset;
+        @include flexbox($align: center, $gap: 0.75rem);
+        padding: 0.5rem 1rem;
+        border-radius: $radius-sm;
+        background-color: map.get($palette, "light");
+        color: map.get($palette, "dark");
+        cursor: pointer;
+        transition: background-color 0.2s;
+
+        &:hover {
+            background-color: color.scale(
+                map.get($palette, "light"),
+                $lightness: -10%
+            );
+        }
+    }
+
+    &__info {
+        @include flexbox($direction: column, $align: flex-start, $gap: 0.1rem);
+        text-align: left;
+    }
+
+    &__name {
+        font-size: 0.95rem;
+        font-weight: 600;
+        line-height: 1.2;
+        @include flexbox($align: center, $gap: 0.4rem);
+    }
+
+    &__badge {
+        display: inline-block;
+        padding: 0.1rem 0.4rem;
+        border-radius: 3px;
+        font-size: 0.65rem;
+        font-weight: 600;
+        line-height: 1;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+
+        &--company {
+            background-color: map.get($palette, "secondary");
+            color: map.get($palette, "dark");
+            border: 1px solid
+                color.scale(map.get($palette, "secondary"), $lightness: -20%);
+        }
+    }
+
+    &__email {
+        font-size: 0.75rem;
+        font-weight: 400;
+        opacity: 0.7;
+        line-height: 1.2;
+    }
+
+    &__arrow {
+        font-size: 0.7rem;
+        transition: transform 0.2s;
+        margin-left: auto;
+    }
+
+    &__dropdown {
+        position: absolute;
+        top: calc(100% + 0.5rem);
+        right: 0;
+        min-width: 280px;
+        background-color: map.get($palette, "light");
+        border-radius: $radius-sm;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: all 0.2s ease;
+        z-index: map.get($z-layers, "dropdown");
+    }
+
+    &__dropdown.user-menu--open {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    &__header {
+        @include flexbox($align: center, $gap: 1rem);
+        padding: 1rem;
+        border-bottom: 2px solid
+            color.scale(map.get($palette, "secondary"), $lightness: 70%);
+        background-color: color.scale(
+            map.get($palette, "secondary"),
+            $lightness: 95%
+        );
+    }
+
+    &__avatar {
+        @include flexbox($justify: center, $align: center);
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: linear-gradient(
+            135deg,
+            map.get($palette, "primary"),
+            map.get($palette, "secondary")
+        );
+        color: map.get($palette, "light");
+        font-size: 1.5rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        flex-shrink: 0;
+
+        &--company {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            font-size: 1.8rem;
+        }
+    }
+
+    &__details {
+        @include flexbox($direction: column, $gap: 0.25rem);
+        overflow: hidden;
+    }
+
+    &__name--large {
+        font-size: 1rem;
+        font-weight: 600;
+        color: map.get($palette, "dark");
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        @include flexbox($align: center, $gap: 0.5rem);
+    }
+
+    &__email--small {
+        font-size: 0.85rem;
+        color: color.scale(map.get($palette, "dark"), $lightness: 40%);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    &__list {
+        list-style: none;
+        padding: 0.5rem 0;
+        margin: 0;
+    }
+
+    &__item {
+        border-bottom: 1px solid
+            color.scale(map.get($palette, "secondary"), $lightness: 80%);
+
+        &:last-child {
+            border-bottom: none;
+        }
+    }
+
+    &__link {
+        @extend %button-reset;
+        @include flexbox($align: center, $gap: 0.75rem);
+        width: 100%;
+        padding: 0.75rem 1rem;
+        text-decoration: none;
+        color: map.get($palette, "dark");
+        background-color: transparent;
+        transition: background-color 0.2s;
+        cursor: pointer;
+        text-align: left;
+
+        &:hover {
+            background-color: color.scale(
+                map.get($palette, "secondary"),
+                $lightness: 85%
+            );
+        }
+
+        &--logout {
+            color: map.get($palette, "danger");
+        }
+    }
+
+    &__icon {
+        font-size: 1.2rem;
+        width: 1.5rem;
+        text-align: center;
+    }
+}
+
+.footer {
+    &__container {
+        @include flexbox($justify: space-evenly, $align: center);
+        height: $footer-height;
+        background-color: map.get($palette, "primary");
+        border-bottom: 1px solid map.get($palette, "secondary");
+        padding: 0 20px;
+        z-index: map.get($z-layers, "footer");
+    }
+
+    &__button {
+        @extend %button-reset;
+        @include flexbox($justify: center, $align: center);
+        width: 60px;
+    }
+}
+
+.maps {
+    &__container {
+        flex: 1;
+        width: 100%;
+    }
+
+    &__marker {
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+        position: relative;
+        border-radius: 50%;
+        background-color: map.get($palette, "accent");
+        border: 2px solid map.get($palette, "light");
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        opacity: 0;
+        transform: scale(0) translateY(-30px);
+        animation: markerAppear 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+
+        &:hover {
+            background-color: color.scale(map.get($palette, "accent"),
+                    $lightness: -10%);
+            transform: scale(1.15);
+            transition: all 0.2s ease;
+        }
+
+        &--disappear {
+            animation: markerDisappear 0.3s ease-in forwards;
+        }
+
+        &-share {
+            position: absolute;
+            top: -24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: map.get($palette, "success");
+            color: map.get($palette, "light");
+            padding: 2px 6px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            white-space: nowrap;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            @include flexbox($align: center, $gap: 3px);
+
+            &-icon {
+                font-size: 12px;
+                line-height: 1;
+            }
+
+            &-time {
+                font-size: 9px;
+                font-weight: 700;
+                letter-spacing: 0.5px;
+            }
+        }
+    }
+
+    &__info {
+        min-width: 200px;
+        padding: 10px;
+        max-width: 300px;
+        font-size: 14px;
+        color: map.get($palette, "gray");
+
+        &--title {
+            color: map.get($palette, "dark");
+            font-size: 16px;
+            font-weight: 700;
+            margin-left: 10px;
+        }
+
+        &--eco {
+            display: inline-block;
+            margin-left: 5px;
+            font-size: 12px;
+            background-color: map.get($palette, "success");
+            color: map.get($palette, "light");
+        }
+
+        &--foodshare {
+            display: inline-block;
+            margin-left: 5px;
+            font-size: 12px;
+            background-color: map.get($palette, "accent");
+            color: map.get($palette, "light");
+        }
+
+        &--buttons {
+            margin-top: 10px;
+            @include flexbox($gap: 10px);
+
+            button {
+                @extend %button-reset;
+                padding: 8px 12px;
+                border-radius: 4px;
+                background-color: #4285f4;
+                color: map.get($palette, "light");
+                font-size: 14px;
+
+                &:hover {
+                    background-color: #3367d6;
+                }
+            }
+        }
+
+        &--button-disabled {
+            background-color: map.get($palette, "gray") !important;
+            cursor: not-allowed !important;
+            opacity: 0.6;
+
+            &:hover {
+                background-color: map.get($palette, "gray") !important;
+            }
+        }
+    }
+}
+
+@keyframes markerAppear {
+    0% {
+        opacity: 0;
+        transform: scale(0) translateY(-30px);
+    }
+
+    50% {
+        opacity: 0.8;
+    }
+
+    70% {
+        transform: scale(1.15) translateY(-5px);
+    }
+
+    85% {
+        transform: scale(0.95) translateY(0);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes markerDisappear {
+    0% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(0) translateY(20px);
+    }
+}
+
+.form-wrapper {
+    @include flexbox($justify: center, $align: center);
+    flex: 1;
+    background-color: map.get($palette, "highlight");
+    padding: 40px;
+
+    &__container {
+        background-color: map.get($palette, "light");
+        padding: 2.5rem;
+        border-radius: $radius-md;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15),
+            0 2px 8px rgba(0, 0, 0, 0.08);
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+        transition: box-shadow 0.3s ease;
+
+        &:hover {
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18),
+                0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+    }
+
+    &__title {
+        margin-bottom: 1.5rem;
+        color: map.get($palette, "dark");
+        font-size: 1.8rem;
+        font-weight: 600;
+        transition: color 0.3s ease;
+    }
+
+    &__links {
+        margin-top: 1.5rem;
+        @include flexbox($direction: column, $gap: 0.75rem);
+    }
+
+    &__link {
+        color: map.get($palette, "secondary");
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+.form {
+    @include flexbox($direction: column, $gap: 1.25rem);
+
+    &__field {
+        text-align: left;
+        color: map.get($palette, "dark");
+    }
+
+    &__label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+    }
+
+    &__input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid map.get($palette, "secondary");
+        border-radius: $radius-sm;
+        font-size: 1rem;
+        transition: border-color 0.2s, box-shadow 0.2s;
+
+        &:focus {
+            outline: none;
+            border-color: map.get($palette, "secondary");
+            box-shadow: 0 0 0 3px rgba(map.get($palette, "secondary"), 0.2);
+        }
+    }
+
+    &__submit-btn {
+        @extend %button-reset;
+        width: 100%;
+        padding: 0.8rem;
+        background-color: map.get($palette, "primary");
+        color: map.get($palette, "light");
+        border-radius: $radius-sm;
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+
+    &__account-type {
+        text-align: center;
+    }
+
+    &__tabs {
+        @include flexbox($justify: center, $gap: 0);
+        background-color: #f0f0f0;
+        border-radius: $radius-sm;
+        padding: 4px;
+        margin-top: 8px;
+    }
+
+    &__tab-radio {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    &__tab-label {
+        flex: 1;
+        padding: 0.6rem 1.5rem;
+        background-color: transparent;
+        color: map.get($palette, "gray");
+        border-radius: $radius-sm;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        text-align: center;
+        user-select: none;
+
+        &:hover {
+            color: map.get($palette, "dark");
+        }
+    }
+
+    &__tab-radio:checked+&__tab-label {
+        background-color: map.get($palette, "light");
+        color: map.get($palette, "dark");
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        font-weight: 600;
+    }
+
+    &__review {
+        &--stars {
+            @include flexbox($direction: row-reverse);
+            margin-top: 5px;
+
+            .star-label {
+                flex: 1;
+                cursor: pointer;
+
+                svg {
+                    width: 100%;
+                    aspect-ratio: 1 / 1;
+                    fill: map.get($palette, "light");
+                    stroke: map.get($palette, "dark");
+                }
+            }
+
+            // チェックされている星とそれ以前(~)の星をハイライト色にする
+            &:not(:hover) .star-radio:checked~.star-label svg {
+                fill: map.get($palette, "highlight");
+            }
+
+            // ホバーしている星とそれ以前(~)の星をハイライト色にする
+            .star-label:hover svg,
+            .star-label:hover~.star-label svg {
+                fill: map.get($palette, "highlight");
+            }
+
+            .star-radio:focus-visible+.star-label svg {
+                stroke: map.get($palette, "accent");
+            }
+        }
+    }
+}
+
+/* Flash messages */
+.flash {
+    position: fixed;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: map.get($z-layers, "modal");
+    min-width: 280px;
+    max-width: 90%;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+    border-radius: $radius-md;
+    overflow: hidden;
+
+    &__inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 0.75rem 1rem;
+    }
+
+    &__message {
+        font-size: 0.95rem;
+        color: map.get($palette, "dark");
+        margin: 0;
+    }
+
+    &__close {
+        @extend %button-reset;
+        font-size: 1.1rem;
+        line-height: 1;
+    }
+
+    &-notice {
+        background: linear-gradient(180deg,
+                map.get($palette, "success"),
+                color.scale(map.get($palette, "success"), $lightness: 6%));
+        color: map.get($palette, "light");
+    }
+
+    &-alert {
+        background: linear-gradient(180deg,
+                map.get($palette, "danger"),
+                color.scale(map.get($palette, "danger"), $lightness: -6%));
+        color: map.get($palette, "light");
+    }
+
+    &--closing {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-8px) scale(0.98);
+        transition: opacity 300ms ease, transform 300ms ease;
+    }
+
+    // default visible state transition
+    transition: opacity 300ms ease,
+    transform 300ms ease;
+}
+
+.comments {
+    &__container {
+        position: fixed;
+        right: 0;
+        top: $header-height;
+        width: min(100vw, 400px);
+        height: calc(100vh - $header-height);
+        background-color: map.get($palette, "light");
+        box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+        z-index: map.get($z-layers, "modal");
+        transition: transform 0.3s ease;
+
+        &.hidden {
+            transform: translateX(100%);
+        }
+    }
+
+    &__header {
+        @include flexbox($justify: space-between, $align: center);
+        width: 100%;
+        padding: 16px;
+        border-bottom: 1px solid #e0e0e0;
+        background-color: map.get($palette, "primary");
+    }
+
+    &__text {
+        color: map.get($palette, "light");
+        margin: 0;
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+    &__btn--close {
+        @extend %button-reset;
+        font-size: 24px;
+        padding: 0;
+        width: 30px;
+        height: 30px;
+        line-height: 1;
+        color: map.get($palette, "dark");
+
+        &:hover {
+            color: map.get($palette, "accent");
+        }
+    }
+
+    &__list {
+        padding: 16px;
+        overflow-y: auto;
+        height: calc(100vh - $header-height - 60px);
+    }
+
+    &__content {
+        @include flexbox($direction: column, $gap: 16px);
+    }
+
+    &__loading,
+    &__error,
+    &__empty {
+        text-align: center;
+        padding: 32px 16px;
+        color: map.get($palette, "gray");
+        font-size: 14px;
+    }
+
+    &__error {
+        color: map.get($palette, "danger");
+    }
+
+    &__item {
+        padding: 16px;
+        border-radius: $radius-md;
+        background-color: #f8f9fa;
+        border-left: 4px solid map.get($palette, "primary");
+
+        &:hover {
+            background-color: #f0f1f2;
+        }
+    }
+
+    &__item-header {
+        @include flexbox($justify: space-between, $align: center);
+        margin-bottom: 8px;
+    }
+
+    &__rating {
+        @include flexbox($gap: 2px);
+
+        .star {
+            font-size: 18px;
+
+            &--filled {
+                color: map.get($palette, "highlight");
+            }
+
+            &--empty {
+                color: #ddd;
+            }
+        }
+    }
+
+    &__date {
+        font-size: 12px;
+        color: map.get($palette, "gray");
+    }
+
+    &__item-text {
+        margin: 0;
+        color: map.get($palette, "dark");
+        font-size: 14px;
+        line-height: 1.6;
+        word-wrap: break-word;
+    }
+}
+
+.measures {
+    flex: 1;
+    position: relative;
+    @include flexbox($direction: column, $align: center, $gap: 1rem);
+    background-color: map.get($palette, "secondary");
+    padding: 1rem;
+
+    // .measures__measure内のボタンと共通化
+    %measure-button {
+        @extend %button-reset;
+        font-size: 18px;
+        background-color: map.get($palette, "light");
+        color: map.get($palette, "dark");
+        padding: 10px 20px;
+        border-radius: 5px;
+    }
+
+    &__list {
+        button {
+            @extend %measure-button;
+        }
+    }
+
+    &__header {
+        width: 100%;
+        max-width: 900px;
+        margin-bottom: 0.75rem;
+        text-align: left;
+    }
+
+    &__heading {
+        color: map.get($palette, "dark");
+        font-size: 1.25rem;
+        margin-bottom: 0.25rem;
+    }
+
+    &__sub {
+        color: map.get($palette, "gray");
+        font-size: 0.9rem;
+    }
+
+    &__list {
+        width: 100%;
+        max-width: 900px;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    &__empty {
+        background-color: map.get($palette, "light");
+        padding: 1rem;
+        border-radius: $radius-md;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+        color: map.get($palette, "dark");
+    }
+
+    &__record {
+        background-color: map.get($palette, "light");
+        border-radius: $radius-md;
+        padding: 12px 16px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &__date {
+        color: map.get($palette, "gray");
+        font-size: 0.9rem;
+        min-width: 160px;
+    }
+
+    &__values {
+        display: flex;
+        gap: 18px;
+        align-items: baseline;
+    }
+
+    &__value-row {
+        display: flex;
+        gap: 8px;
+        align-items: baseline;
+    }
+
+    &__label {
+        color: map.get($palette, "gray");
+        font-size: 0.9rem;
+    }
+
+    &__value {
+        font-weight: 700;
+        color: map.get($palette, "dark");
+        font-size: 1.1rem;
+    }
+
+    &__unit {
+        color: map.get($palette, "gray");
+        font-size: 0.85rem;
+    }
+}
+
+.measure {
+    &__start-btn {
+        @extend %button-reset;
+        font-size: 18px;
+        background-color: map.get($palette, "light");
+        color: map.get($palette, "dark");
+        padding: 10px 20px;
+        border-radius: 5px;
+    }
+
+    &__modal {
+        @include flexbox($justify: center, $align: center);
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100dvh;
+        text-align: center;
+        background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.7));
+        z-index: map.get($z-layers, "modal");
+    }
+
+    &__container {
+        background-color: map.get($palette, "dark");
+        border: 2px solid map.get($palette, "secondary");
+        border-radius: 10px;
+        padding: 20px;
+        max-width: 500px;
+        color: map.get($palette, "light");
+        font-size: 18px;
+    }
+
+    &__title {
+        color: map.get($palette, "highlight");
+        font-size: 23px;
+        margin-bottom: 20px;
+    }
+
+    &__steps {
+        list-style-type: decimal;
+        padding-left: 25px;
+        text-align: left;
+
+        >li {
+            padding-bottom: 10px;
+        }
+    }
+
+    &__result {
+        font-size: 28px;
+        margin-bottom: 20px;
+    }
+
+    &__values {
+        font-size: 36px;
+        margin-bottom: 20px;
+    }
+
+    &__buttons {
+        margin-top: 20px;
+        @include flexbox($justify: center, $gap: 20px);
+
+        >button {
+            @extend %measure-button;
+        }
+    }
+
+    &__progress-wrapper {
+        margin-top: 18px;
+        @include flexbox($justify: center, $align: center, $direction: column);
+        gap: 8px;
+        color: map.get($palette, "light");
+    }
+
+    &__progress-track {
+        width: 100%;
+        max-width: 420px;
+        height: 14px;
+        background: rgba(map.get($palette, "black"), 0.12);
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: inset 0 1px 3px rgba(map.get($palette, "black"), 0.04);
+    }
+
+    &__progress {
+        height: 100%;
+        background: linear-gradient(90deg, map.get($palette, "highlight"), map.get($palette, "secondary"));
+        width: 0%;
+        transition: width 600ms cubic-bezier(0.2, 0.8, 0.2, 1);
+        border-radius: 10px 0 0 10px;
+    }
+
+    &__progress-label {
+        font-size: 14px;
+        color: map.get($palette, "light");
+    }
+}
+
+.tooltip {
+    &__container {
+        position: relative;
+        /* 補足情報を親要素に基づいて配置 */
+        display: inline-block;
+        cursor: pointer;
+
+        /* ホバー時のスタイル */
+        &:hover .tooltip__text {
+            visibility: visible;
+            /* 表示 */
+            opacity: 1;
+            /* 不透明にする (アニメーション) */
+        }
+    }
+
+    /* 補足情報のスタイル */
+    &__text {
+        visibility: hidden;
+        /* 初期状態では非表示 */
+        background-color: map.get($palette, "dark");
+        /* 背景色 */
+        color: map.get($palette, "light");
+        /* 文字色 */
+        text-align: center;
+        padding: 8px;
+        border-radius: 4px;
+        position: absolute;
+        bottom: 125%;
+        /* 親要素の上に配置 */
+        left: 50%;
+        transform: translateX(-50%);
+        white-space: nowrap;
+        /* テキストを1行に収める */
+        z-index: map.get($z-layers, "tooltip");
+        opacity: 0;
+        /* 初期状態で透明　(アニメーション) */
+        transition: opacity 0.3s;
+        /* スムーズな表示 */
+
+        &::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            /* 補足情報の下に配置 */
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 5px;
+            border-style: solid;
+            border-color: transparent;
+            border-top-color: map.get($palette, "dark");
+            /* 矢印の色 */
+        }
+    }
+}

@@ -1,0 +1,28 @@
+<% content_for :title, "Measurements" %>
+
+<div class="measures">
+  <% if notice.present? %>
+    <div class="flash flash-notice">
+      <p class="flash__message"><%= notice %></p>
+    </div>
+  <% end %>
+
+  <header class="measures__header">
+    <h2 class="measures__heading">測定履歴</h2>
+    <p class="measures__sub">これまでに保存された水質推定の結果です</p>
+  </header>
+
+  <div class="measures__list">
+    <% if @measurements.any? %>
+      <% @measurements.each do |measurement| %>
+        <%= render 'measurement_item', measurement: measurement %>
+      <% end %>
+    <% else %>
+      <div class="measures__empty">
+        <p>まだ測定結果がありません。右下の「水質測定開始」ボタンから測定を始めてください。</p>
+      </div>
+    <% end %>
+  </div>
+
+  <%= render 'measure' %>
+</div>

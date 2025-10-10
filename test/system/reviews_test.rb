@@ -3,45 +3,25 @@ require "application_system_test_case"
 class ReviewsTest < ApplicationSystemTestCase
   setup do
     @review = reviews(:one)
-  end
-
-  test "visiting the index" do
-    visit reviews_url
-    assert_selector "h1", text: "Reviews"
+    @user = users(:carol)
+    sign_in_as(@user, password: "passwordcarol")
   end
 
   test "should create review" do
-    visit reviews_url
-    click_on "New review"
+    # 直接new pageに行く
+    visit new_review_path
 
-    fill_in "Comment", with: @review.comment
-    fill_in "Rating", with: @review.rating
-    fill_in "Reviewee", with: @review.reviewee_id
-    fill_in "Reviewer", with: @review.reviewer_id
-    click_on "Create Review"
+    # レビューするお店を選択
+    select "Bob's Store", from: "review_reviewee_id"
+    # 評価を選択（5つ星） - visually-hiddenなのでJavaScriptで選択
+    page.execute_script("document.getElementById('star5').click()")
+    # コメントを入力 - IDを使用
+    fill_in "review_comment", with: @review.comment
+    click_on "送信"
 
-    assert_text "Review was successfully created"
-    click_on "Back"
-  end
-
-  test "should update Review" do
-    visit review_url(@review)
-    click_on "Edit this review", match: :first
-
-    fill_in "Comment", with: @review.comment
-    fill_in "Rating", with: @review.rating
-    fill_in "Reviewee", with: @review.reviewee_id
-    fill_in "Reviewer", with: @review.reviewer_id
-    click_on "Update Review"
-
-    assert_text "Review was successfully updated"
-    click_on "Back"
-  end
-
-  test "should destroy Review" do
-    visit review_url(@review)
-    click_on "Destroy this review", match: :first
-
-    assert_text "Review was successfully destroyed"
+    # 作成後はroot_pathにリダイレクトされる
+    assert_current_path root_path
+    # フラッシュメッセージが表示されるまで待つ
+    assert_text I18n.t("flash.reviews.created")
   end
 end
