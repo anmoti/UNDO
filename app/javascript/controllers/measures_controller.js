@@ -91,6 +91,7 @@ export default class extends Controller {
         serviceUuid: String,
         charUuid: String,
         bodUpperLimit: String,
+        storeId: String,
     };
 
     static targets = [
@@ -492,7 +493,8 @@ export default class extends Controller {
         await this.disconnectBLE();
 
         try {
-            await createMeasurement(avg).then((measurement) => {
+            // @ts-ignore
+            await createMeasurement(avg, this.storeIdValue).then((measurement) => {
                 this.measurementId = measurement.id;
             });
             this.changeState(STATES.WAITING);
@@ -558,18 +560,25 @@ function getCSRFToken() {
  * 測定結果を保存する
  *
  * @param {number} turbidity
+ * @param {string} [storeId]
  * @returns {Promise<Measurement>}
  */
-async function createMeasurement(turbidity) {
+async function createMeasurement(turbidity, storeId) {
     if (typeof turbidity !== "number" || turbidity < 0) {
         alert("無効な値です");
         throw new Error("無効な値です");
     }
 
+    const body = { measurement: { turbidity } };
+    if (storeId) {
+        // @ts-ignore
+        body.measurement.store_id = storeId;
+    }
+
     const data = await ky.post("/measurements", {
         credentials: "include",
         headers: { "X-CSRF-Token": getCSRFToken() },
-        json: { measurement: { turbidity } },
+        json: body,
     });
 
     const json = await data.json();

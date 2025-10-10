@@ -10,6 +10,26 @@
   <header class="measures__header">
     <h2 class="measures__heading">測定履歴</h2>
     <p class="measures__sub">これまでに保存された水質推定の結果です</p>
+
+    <% if Current.user.is_company %>
+      <div class="measures__store-selector">
+        <%= form_with url: measurements_path, method: :get, local: true do |f| %>
+          <%= f.label :store_id, "店舗を選択:" %>
+          <%= f.select :store_id,
+                      Current.user.operated_stores.map { |s| [s.name, s.id] },
+                      { include_blank: "全店舗" },
+                      { onchange: "this.form.submit()" } %>
+        <% end %>
+
+        <% if params[:store_id].present? && @store && @store.eco_active? %>
+          <div class="measures__eco-notice">
+            🌱 この店舗は現在エコマーク付与中です（<%= @store.eco_expires_at.strftime("%Y/%m/%d") %>まで）
+            <br>
+            エコマーク期間中は測定できません。
+          </div>
+        <% end %>
+      </div>
+    <% end %>
   </header>
 
   <div class="measures__list">

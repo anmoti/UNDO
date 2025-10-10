@@ -74,21 +74,37 @@ class MeasurementsController < ApplicationController
     @measurement = find_measurement_for_current_user
 
     unless @measurement
-      return render json: { error: "測定データが見つかりません" }, status: :not_found
+      respond_to do |format|
+        format.html { redirect_to measurements_path, alert: "測定データが見つかりません" }
+        format.json { render json: { error: "測定データが見つかりません" }, status: :not_found }
+      end
+      return
     end
 
     if @measurement.responded?
-      return render json: { error: "既に対応済みです" }, status: :unprocessable_entity
+      respond_to do |format|
+        format.html { redirect_to measurements_path, alert: "既に対応済みです" }
+        format.json { render json: { error: "既に対応済みです" }, status: :unprocessable_entity }
+      end
+      return
     end
 
     if @measurement.mark_as_responded!
-      render json: {
-        message: "対応完了しました。エコマークが付与されました。",
-        measurement: @measurement,
-        store: @measurement.store
-      }, status: :ok
+      respond_to do |format|
+        format.html { redirect_to measurements_path, notice: "対応完了しました。エコマークが付与されました。" }
+        format.json {
+          render json: {
+            message: "対応完了しました。エコマークが付与されました。",
+            measurement: @measurement,
+            store: @measurement.store
+          }, status: :ok
+        }
+      end
     else
-      render json: { error: "対応処理に失敗しました" }, status: :unprocessable_entity
+      respond_to do |format|
+        format.html { redirect_to measurements_path, alert: "対応処理に失敗しました" }
+        format.json { render json: { error: "対応処理に失敗しました" }, status: :unprocessable_entity }
+      end
     end
   end
 

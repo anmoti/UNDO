@@ -1,5 +1,13 @@
-<article class="measures__record" aria-labelledby="measurement-<%= measurement.id %>-date">
+<article class="measures__record" aria-labelledby="measurement-<%= measurement.id %>-date" data-measurement-id="<%= measurement.id %>">
   <div class="measures__date" id="measurement-<%= measurement.id %>-date"><%= measurement.created_at.strftime("%Y/%m/%d %H:%M") %></div>
+
+  <% if measurement.store.present? %>
+    <div class="measures__store">
+      <span class="measures__label">店舗</span>
+      <span class="measures__value"><%= measurement.store.name %></span>
+    </div>
+  <% end %>
+
   <div class="measures__values" role="group" aria-label="測定値">
     <div class="measures__value-row">
       <span class="measures__label">BOD値</span>
@@ -12,4 +20,22 @@
       <span class="measures__unit">mg/L</span>
     </div>
   </div>
+
+  <% if Current.user.is_company && measurement.store.present? %>
+    <div class="measures__response">
+      <% if measurement.responded? %>
+        <span class="measures__responded-badge">✓ 対応済み</span>
+        <% if measurement.store.eco_active? %>
+          <span class="measures__eco-badge">🌱 エコマーク付与中（<%= measurement.store.eco_expires_at.strftime("%m/%d") %>まで）</span>
+        <% end %>
+      <% elsif measurement.bod_below_limit? %>
+        <span class="measures__auto-eco">✓ 自動エコマーク付与済み</span>
+      <% else %>
+        <%= form_with(url: respond_measurement_path(measurement), method: :post, class: "measures__respond-form", local: false) do |f| %>
+          <%= f.check_box :respond, onchange: "this.form.requestSubmit()", id: "respond_#{measurement.id}" %>
+          <%= f.label :respond, "対応した", for: "respond_#{measurement.id}" %>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
 </article>
