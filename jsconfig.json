@@ -27,6 +27,9 @@
             "ky": [
                 "./vendor/javascript/ky"
             ],
+            "valibot": [
+                "./vendor/javascript/valibot"
+            ],
             "controllers/*": [
                 "./app/javascript/controllers/*"
             ]
