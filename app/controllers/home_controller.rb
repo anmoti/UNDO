@@ -26,7 +26,7 @@ class HomeController < ApplicationController
         shareInfo: active_share ? {
           itemName: active_share.item_name,
           description: active_share.description,
-          takeDownTime: active_share.take_down_time.in_time_zone(current_user.time_zone).strftime("%Y-%m-%d %H:%M"),
+          takeDownTime: active_share.take_down_time.in_time_zone("Tokyo").strftime("%Y-%m-%d %H:%M"),
           photoUrl: active_share.photo_url
         } : nil
       }
