@@ -5,11 +5,7 @@ import * as v from "valibot";
 const CHAR_CHANGED = "characteristicvaluechanged"; // cSpell:words characteristicvaluechanged
 const GATT_DISCONNECTED = "gattserverdisconnected"; // cSpell:words gattserverdisconnected
 
-const SERVICE_UUID = "0696b0a8-b883-4d89-a87c-1f5d5e78d0e9";
-const CHAR_UUID = "3d8828a9-e983-4235-a25a-25b741e81893";
-
 const avgWindowSize = 10;
-const bodThreshold = 5000;
 
 /**
  * @type {{
@@ -91,6 +87,12 @@ const MeasurementStatusSchema = v.object({
 // Connects to data-controller="measures"
 /** @extends {Controller<HTMLDivElement>} */
 export default class extends Controller {
+    static values = {
+        serviceUuid: String,
+        charUuid: String,
+        bodUpperLimit: String,
+    };
+
     static targets = [
         "modal",
         "in-process",
@@ -291,7 +293,8 @@ export default class extends Controller {
             const { signal } = this.bleAbortController;
 
             const ble = await navigator.bluetooth.requestDevice({
-                filters: [{ services: [SERVICE_UUID] }],
+                // @ts-ignore
+                filters: [{ services: [this.serviceUuidValue] }],
             });
 
             if (!ble.gatt) {
@@ -311,8 +314,10 @@ export default class extends Controller {
             const server = await ble.gatt.connect();
             this.server = server;
 
-            const service = await server.getPrimaryService(SERVICE_UUID);
-            const char = await service.getCharacteristic(CHAR_UUID);
+            // @ts-ignore
+            const service = await server.getPrimaryService(this.serviceUuidValue);
+            // @ts-ignore
+            const char = await service.getCharacteristic(this.charUuidValue);
 
             // 通知開始
             await char.startNotifications();
@@ -512,7 +517,8 @@ export default class extends Controller {
                 this.setBodValue(measurement.predicted_bod);
                 this.setCodValue(measurement.predicted_cod);
 
-                if (measurement.predicted_bod > bodThreshold) {
+                // @ts-ignore
+                if (measurement.predicted_bod > this.bodUpperLimitValue) {
                     this.setResultMessage("茹で汁の水質が基準値を超えました。");
                     this.setResultCareful(true);
                 } else {
