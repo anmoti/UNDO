@@ -4,6 +4,7 @@ class Admin::UdonSharesController < ApplicationController
   before_action :set_store, only: [ :new, :create ]
   before_action :verify_operator, only: [ :new, :create ]
   before_action :check_active_share, only: [ :new, :create ]
+  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
   def new
     @udon_share = @store.udon_shares.build
@@ -15,8 +16,9 @@ class Admin::UdonSharesController < ApplicationController
     if @udon_share.save
       # is_shareフラグを立てる
       @store.update(is_share: true)
-      redirect_to admin_stores_path, notice: "うどんシェアを設定しました。"
+      redirect_to admin_stores_path, notice: t("flash.admin.udon_shares.created")
     else
+      flash.now[:alert] = t("flash.admin.udon_shares.create_failed")
       render :new, status: :unprocessable_entity
     end
   end
@@ -27,25 +29,27 @@ class Admin::UdonSharesController < ApplicationController
 
     # 運営者かチェック
     unless @store.operators.include?(Current.session.user)
-      redirect_to admin_stores_path, alert: "権限がありません。"
+      redirect_to admin_stores_path, alert: t("flash.admin.udon_shares.unauthorized")
       return
     end
 
-    @udon_share.destroy
+    if @udon_share.destroy
+      # アクティブなシェアがなければis_shareフラグを下げる
+      unless @store.udon_shares.active.exists?
+        @store.update(is_share: false)
+      end
 
-    # アクティブなシェアがなければis_shareフラグを下げる
-    unless @store.udon_shares.active.exists?
-      @store.update(is_share: false)
+      redirect_to admin_stores_path, notice: t("flash.admin.udon_shares.destroyed")
+    else
+      redirect_to admin_stores_path, alert: t("flash.admin.udon_shares.destroy_failed")
     end
-
-    redirect_to admin_stores_path, notice: "うどんシェアを削除しました。"
   end
 
   private
 
   def require_login
     unless Current.session
-      redirect_to signin_path, alert: "ログインが必要です。"
+      redirect_to signin_path, alert: t("flash.admin.common.login_required")
     end
   end
 
@@ -55,17 +59,21 @@ class Admin::UdonSharesController < ApplicationController
 
   def verify_operator
     unless @store.operators.include?(Current.session.user)
-      redirect_to admin_stores_path, alert: "この店舗の運営者ではありません。"
+      redirect_to admin_stores_path, alert: t("flash.admin.udon_shares.not_operator")
     end
   end
 
   def check_active_share
     if @store.active_udon_share
-      redirect_to admin_stores_path, alert: "この店舗には既にアクティブなシェアが存在します。"
+      redirect_to admin_stores_path, alert: t("flash.admin.udon_shares.already_exists")
     end
   end
 
   def udon_share_params
     params.require(:udon_share).permit(:item_name, :description, :take_down_time, :photo_url)
+  end
+
+  def record_not_found
+    redirect_to admin_stores_path, alert: t("flash.admin.udon_shares.not_found")
   end
 end

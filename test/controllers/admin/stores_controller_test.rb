@@ -52,6 +52,39 @@ class Admin::StoresControllerTest < ActionDispatch::IntegrationTest
     assert_equal "アクティブなシェアがあるため、運営者から外れることができません。", flash[:alert]
   end
 
+  test "should not add operator when already operator" do
+    store = stores(:one) # bobは既にこの店舗の運営者
+
+    assert_no_difference("StoreOperator.count") do
+      post add_operator_admin_store_url(store)
+    end
+    assert_redirected_to admin_stores_path
+    assert_equal "既にこの店舗の運営者です。", flash[:alert]
+  end
+
+  test "should show error when store not found on add_operator" do
+    post add_operator_admin_store_url(id: 99999)
+    assert_redirected_to admin_stores_path
+    assert_equal "店舗が見つかりませんでした。", flash[:alert]
+  end
+
+  test "should show error when store not found on remove_operator" do
+    delete remove_operator_admin_store_url(id: 99999)
+    assert_redirected_to admin_stores_path
+    assert_equal "店舗が見つかりませんでした。", flash[:alert]
+  end
+
+  test "should not remove operator when not an operator" do
+    # 別のユーザーの店舗を作成
+    store = Store.create!(name: "Another Store", address: "Another Address")
+
+    assert_no_difference("StoreOperator.count") do
+      delete remove_operator_admin_store_url(store)
+    end
+    assert_redirected_to admin_stores_path
+    assert_equal "この店舗の運営者ではありません。", flash[:alert]
+  end
+
   test "should redirect to signin when not logged in" do
     sign_out
 

@@ -87,6 +87,36 @@ class Admin::UdonSharesControllerTest < ActionDispatch::IntegrationTest
     assert_equal "この店舗の運営者ではありません。", flash[:alert]
   end
 
+  test "should not create udon_share with invalid params" do
+    # 既存のアクティブなシェアを削除
+    @store.udon_shares.destroy_all
+
+    assert_no_difference("UdonShare.count") do
+      post admin_store_udon_shares_url(@store), params: {
+        udon_share: {
+          item_name: "", # 空の商品名（無効）
+          description: "大盛り、天ぷら付き",
+          take_down_time: 2.hours.from_now
+        }
+      }
+    end
+
+    assert_response :unprocessable_entity
+    assert_equal "うどんシェアの設定に失敗しました。", flash[:alert]
+  end
+
+  test "should show error when udon_share not found on destroy" do
+    delete admin_udon_share_url(id: 99999)
+    assert_redirected_to admin_stores_path
+    assert_equal "指定されたデータが見つかりませんでした。", flash[:alert]
+  end
+
+  test "should show error when store not found on new" do
+    get new_admin_store_udon_share_url(store_id: 99999)
+    assert_redirected_to admin_stores_path
+    assert_equal "指定されたデータが見つかりませんでした。", flash[:alert]
+  end
+
   test "should redirect to signin when not logged in" do
     sign_out
 

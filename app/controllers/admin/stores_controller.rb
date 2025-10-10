@@ -1,6 +1,7 @@
 class Admin::StoresController < ApplicationController
   layout "admin"
   before_action :require_login
+  rescue_from ActiveRecord::RecordNotFound, with: :store_not_found
 
   def index
     # 運営中の店舗のみを表示
@@ -16,10 +17,16 @@ class Admin::StoresController < ApplicationController
   def add_operator
     @store = Store.find(params[:id])
 
+    # 既に運営者かチェック
+    if StoreOperator.exists?(user: Current.session.user, store: @store)
+      redirect_to admin_stores_path, alert: t("flash.admin.stores.already_operator")
+      return
+    end
+
     if StoreOperator.create(user: Current.session.user, store: @store)
-      redirect_to admin_stores_path, notice: "#{@store.name}の運営者になりました。"
+      redirect_to admin_stores_path, notice: t("flash.admin.stores.operator_added", store_name: @store.name)
     else
-      redirect_to select_admin_stores_path, alert: "運営者の追加に失敗しました。"
+      redirect_to select_admin_stores_path, alert: t("flash.admin.stores.operator_add_failed")
     end
   end
 
@@ -27,16 +34,22 @@ class Admin::StoresController < ApplicationController
     @store = Store.find(params[:id])
     store_operator = StoreOperator.find_by(user: Current.session.user, store: @store)
 
-    # アクティブなシェアがある場合は削除を防ぐ
-    if @store.active_udon_share.present?
-      redirect_to admin_stores_path, alert: "アクティブなシェアがあるため、運営者から外れることができません。"
+    # 運営者でない場合
+    unless store_operator
+      redirect_to admin_stores_path, alert: t("flash.admin.stores.not_operator")
       return
     end
 
-    if store_operator&.destroy
-      redirect_to admin_stores_path, notice: "#{@store.name}の運営者から外れました。"
+    # アクティブなシェアがある場合は削除を防ぐ
+    if @store.active_udon_share.present?
+      redirect_to admin_stores_path, alert: t("flash.admin.stores.has_active_share")
+      return
+    end
+
+    if store_operator.destroy
+      redirect_to admin_stores_path, notice: t("flash.admin.stores.operator_removed", store_name: @store.name)
     else
-      redirect_to admin_stores_path, alert: "運営者の削除に失敗しました。"
+      redirect_to admin_stores_path, alert: t("flash.admin.stores.operator_remove_failed")
     end
   end
 
@@ -44,7 +57,11 @@ class Admin::StoresController < ApplicationController
 
   def require_login
     unless Current.session
-      redirect_to signin_path, alert: "ログインが必要です。"
+      redirect_to signin_path, alert: t("flash.admin.common.login_required")
     end
+  end
+
+  def store_not_found
+    redirect_to admin_stores_path, alert: t("flash.admin.stores.not_found")
   end
 end

@@ -44,6 +44,27 @@ en:
             signed_in: "Signed in successfully."
             signed_out: "Signed out successfully."
             invalid_credentials: "Email or password is incorrect."
+        admin:
+            stores:
+                operator_added: "You have become an operator of %{store_name}."
+                operator_add_failed: "Failed to add operator."
+                already_operator: "You are already an operator of this store."
+                operator_removed: "You have left as an operator of %{store_name}."
+                operator_remove_failed: "Failed to remove operator."
+                not_operator: "You are not an operator of this store."
+                has_active_share: "Cannot leave as operator because there is an active share."
+                not_found: "Store not found."
+            udon_shares:
+                created: "Udon share has been set up."
+                create_failed: "Failed to set up udon share."
+                destroyed: "Udon share has been deleted."
+                destroy_failed: "Failed to delete udon share."
+                not_operator: "You are not an operator of this store."
+                unauthorized: "You do not have permission."
+                already_exists: "An active share already exists for this store."
+                not_found: "The specified data could not be found."
+            common:
+                login_required: "Login is required."
         errors:
             generic: "An error has occurred."
             not_found: "The specified resource could not be found."
