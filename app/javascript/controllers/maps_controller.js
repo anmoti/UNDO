@@ -151,9 +151,7 @@ export default class MapsController extends Controller {
      * 表示領域内の店舗のみマーカーを表示
      */
     async updateVisibleMarkers() {
-        const json = await ky.get("/stores").json();
-
-        const stores = v.parse(v.array(StoreSchema), json);
+        const stores = await getStores();
 
         if (!stores.length) {
             console.info("No store data provided for map markers.");
@@ -425,5 +423,15 @@ export default class MapsController extends Controller {
         if (this.updateMarkersTimeout) {
             clearTimeout(this.updateMarkersTimeout);
         }
+    }
+}
+
+async function getStores() {
+    try {
+        const json = await ky.get("/stores").json();
+        return v.parse(v.array(StoreSchema), json);
+    } catch (error) {
+        console.error("Failed to fetch stores:", error);
+        return [];
     }
 }
