@@ -249,7 +249,21 @@ export default class MapsController extends Controller {
     }
 
     /**
+     * マーカーを削除
+     *
+     * @param {number} storeId
+     * @param {google.maps.marker.AdvancedMarkerElement} marker
+     */
+    removeMarker(storeId, marker) {
+        marker.map = null;
+        if (this.markers.has(storeId)) {
+            this.markers.delete(storeId);
+        }
+    }
+
+    /**
      * マーカーをアニメーション付きで削除
+     *
      * @param {number} storeId
      * @param {google.maps.marker.AdvancedMarkerElement} marker
      */
@@ -262,15 +276,11 @@ export default class MapsController extends Controller {
 
             // アニメーション完了後にマーカーを削除
             setTimeout(() => {
-                marker.map = null;
-                if (this.markers.has(storeId)) {
-                    this.markers.delete(storeId);
-                }
+                this.removeMarker(storeId, marker);
             }, 300); // アニメーション時間と一致
         } else {
             // フォールバック: 即座に削除
-            marker.map = null;
-            this.markers.delete(storeId);
+            this.removeMarker(storeId, marker);
         }
     }
 
@@ -416,7 +426,6 @@ export default class MapsController extends Controller {
         }
         this.pendingMarkerTimeouts.clear();
 
-        // すべてのマーカーをアニメーション付きで削除
         for (const [storeId, marker] of this.markers.entries()) {
             this.removeMarkerWithAnimation(storeId, marker);
         }
