@@ -70,6 +70,14 @@ en:
             not_found: "The specified resource could not be found."
             unauthorized: "You do not have permission to perform this action."
 
+    confirms:
+        admin:
+            stores:
+                add_operator: 'Register as an operator of "%{store_name}". Are you sure?'
+                remove_operator: 'Remove yourself as an operator of "%{store_name}". Are you sure?'
+            udon_shares:
+                destroy: 'Delete the share "%{item_name}"?'
+
     activerecord:
         models:
             user: "User"

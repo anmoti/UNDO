@@ -32,7 +32,7 @@
               <%= button_to "運営する", add_operator_admin_store_path(store),
                            method: :post,
                            class: "admin__btn admin__btn--primary",
-                           data: { confirm: "#{store.name}の運営者になりますか？" } %>
+                           form: { data: { turbo_confirm: t('confirms.admin.stores.add_operator', store_name: store.name) } } %>
             <% end %>
           </div>
         </div>

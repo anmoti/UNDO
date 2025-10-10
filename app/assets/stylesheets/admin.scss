@@ -185,6 +185,18 @@ $radius-lg: 12px;
         }
     }
 
+    &__button-group {
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    &__button-flex {
+        flex: 1;
+        min-width: 120px;
+    }
+
     //================================================
     // カードグリッド
     //================================================

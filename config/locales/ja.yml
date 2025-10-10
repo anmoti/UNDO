@@ -40,6 +40,14 @@ ja:
             not_found: "指定されたリソースが見つかりません。"
             unauthorized: "この操作を実行する権限がありません。"
 
+    confirms:
+        admin:
+            stores:
+                add_operator: "「%{store_name}」の運営者として登録します。よろしいですか？"
+                remove_operator: "「%{store_name}」の運営を解除します。本当によろしいですか？"
+            udon_shares:
+                destroy: "「%{item_name}」のシェアを削除しますか？"
+
     activerecord:
         models:
             user: "ユーザー"

@@ -22,7 +22,10 @@
                 <p class="admin__share-description"><%= active_share.description %></p>
                 <p class="admin__share-time">取り下げ: <%= active_share.take_down_time&.strftime('%m/%d %H:%M') || '未設定' %></p>
                 <div class="admin__button-group" style="margin-top: 0.75rem;">
-                  <%= button_to "シェア削除", admin_udon_share_path(active_share), method: :delete, data: { confirm: "削除しますか？" }, class: "admin__btn admin__btn--danger admin__btn--small" %>
+                  <%= button_to "シェア削除", admin_udon_share_path(active_share),
+                               method: :delete,
+                               form: { data: { turbo_confirm: t('confirms.admin.udon_shares.destroy', item_name: active_share.item_name) } },
+                               class: "admin__btn admin__btn--danger admin__btn--small" %>
                 </div>
               </div>
             <% end %>
@@ -42,11 +45,14 @@
             <% end %>
 
             <% if store.active_udon_share %>
-              <button disabled class="admin__btn admin__btn--disabled" title="アクティブなシェアがあるため運営解除できません">
+              <button disabled class="admin__btn admin__btn--disabled admin__btn--small" title="アクティブなシェアがあるため運営解除できません">
                 運営解除
               </button>
             <% else %>
-              <%= button_to "運営解除", remove_operator_admin_store_path(store), method: :delete, data: { confirm: "本当に運営を解除しますか？" }, class: "admin__btn admin__btn--secondary" %>
+              <%= button_to "運営解除", remove_operator_admin_store_path(store),
+                           method: :delete,
+                           form: { data: { turbo_confirm: t('confirms.admin.stores.remove_operator', store_name: store.name) } },
+                           class: "admin__btn admin__btn--secondary admin__btn--small" %>
             <% end %>
           </div>
         </div>
