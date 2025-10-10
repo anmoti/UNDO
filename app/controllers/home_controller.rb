@@ -7,7 +7,6 @@ class HomeController < ApplicationController
     # N+1対策で関連テーブルを事前ロード
     @stores_for_map = Store.where.not(lat: nil, lon: nil)
                            .includes(:udon_shares)
-                           .preload(udon_shares: :store)
 
     # アクティブなシェアをメモリ上でフィルタリング
     @stores_for_map_json = @stores_for_map.map do |store|
