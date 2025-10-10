@@ -2,25 +2,77 @@ require "test_helper"
 
 class Admin::UdonSharesControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @store_operator = users(:store_operator) # 適切なfixture名に変更してください
-    @store = stores(:one) # 適切なfixture名に変更してください
-    @udon_share = udon_shares(:one) # 適切なfixture名に変更してください
-    sign_in @store_operator # deviseを利用している場合
+    @user = users(:bob) # 企業アカウント
+    @store = stores(:one)
+    @udon_share = udon_shares(:one)
+
+    # サインイン
+    sign_in_as(@user, password: "passwordbob")
   end
 
   test "should get new" do
-    get admin_udon_shares_new_url(store_id: @store.id)
+    get new_admin_store_udon_share_url(@store)
     assert_response :success
+    assert_select "h1", "うどんシェアを設定"
   end
 
-  test "should get create" do
-    post admin_udon_shares_create_url(store_id: @store.id), params: { udon_share: { some_attribute: "value" } }
-    assert_response :success
+  test "should create udon_share" do
+    assert_difference("UdonShare.count") do
+      post admin_store_udon_shares_url(@store), params: {
+        udon_share: {
+          item_name: "かけうどん",
+          description: "大盛り、天ぷら付き",
+          take_down_time: 2.hours.from_now,
+          photo_url: "https://example.com/photo.jpg"
+        }
+      }
+    end
+
+    # is_shareフラグが立っているか確認
+    @store.reload
+    assert @store.is_share
+
+    assert_redirected_to admin_stores_path
+    assert_equal "うどんシェアを設定しました。", flash[:notice]
   end
 
-  test "should get destroy" do
-    delete admin_udon_share_url(@udon_share, store_id: @store.id)
-    assert_response :success
+  test "should destroy udon_share" do
+    # まずis_shareをtrueにする
+    @store.update(is_share: true)
+
+    assert_difference("UdonShare.count", -1) do
+      delete admin_udon_share_url(@udon_share)
+    end
+
+    # アクティブなシェアがなくなったのでis_shareフラグが下がっているか確認
+    @store.reload
+    assert_not @store.is_share
+
+    assert_redirected_to admin_stores_path
+    assert_equal "うどんシェアを削除しました。", flash[:notice]
   end
-end
+
+  test "should not allow non-operator to create share" do
+    # 別の店舗（bobが運営していない）
+    other_store = Store.create!(name: "Other Store", address: "Other Address")
+
+    post admin_store_udon_shares_url(other_store), params: {
+      udon_share: {
+        item_name: "かけうどん",
+        description: "大盛り",
+        take_down_time: 2.hours.from_now,
+        photo_url: "https://example.com/photo.jpg"
+      }
+    }
+
+    assert_redirected_to admin_stores_path
+    assert_equal "この店舗の運営者ではありません。", flash[:alert]
+  end
+
+  test "should redirect to signin when not logged in" do
+    sign_out
+
+    get new_admin_store_udon_share_url(@store)
+    assert_redirected_to signin_path
+  end
 end
