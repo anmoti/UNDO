@@ -42,14 +42,14 @@ class UdonShareTest < ActiveSupport::TestCase
     assert_not udon_share.save
   end
 
-  test "should require photo_url" do
+  test "photo_url should be optional" do
     udon_share = UdonShare.new(
       store: stores(:one),
       item_name: "かけうどん",
       description: "大盛り",
       take_down_time: 2.hours.from_now
     )
-    assert_not udon_share.save
+    assert udon_share.save
   end
 
   test "active scope should return only non-expired shares" do

@@ -11,12 +11,27 @@ class Admin::UdonSharesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get new" do
+    # 既存のアクティブなシェアを削除
+    @store.udon_shares.destroy_all
+
     get new_admin_store_udon_share_url(@store)
     assert_response :success
     assert_select "h1", "うどんシェアを設定"
   end
 
+  test "should not get new when active share exists" do
+    # すでにアクティブなシェアがある（fixtureのone）
+    @store.update(is_share: true)
+
+    get new_admin_store_udon_share_url(@store)
+    assert_redirected_to admin_stores_path
+    assert_equal "この店舗には既にアクティブなシェアが存在します。", flash[:alert]
+  end
+
   test "should create udon_share" do
+    # 既存のアクティブなシェアを削除
+    @store.udon_shares.destroy_all
+
     assert_difference("UdonShare.count") do
       post admin_store_udon_shares_url(@store), params: {
         udon_share: {
@@ -39,6 +54,9 @@ class Admin::UdonSharesControllerTest < ActionDispatch::IntegrationTest
   test "should destroy udon_share" do
     # まずis_shareをtrueにする
     @store.update(is_share: true)
+
+    # 他のアクティブなシェアを削除（oneだけを残す）
+    @store.udon_shares.where.not(id: @udon_share.id).destroy_all
 
     assert_difference("UdonShare.count", -1) do
       delete admin_udon_share_url(@udon_share)
