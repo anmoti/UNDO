@@ -44,7 +44,7 @@ $radius-lg: 12px;
 
 .admin {
     &__container {
-        max-width: 1400px;
+        max-width: 1600px;
         margin: 0 auto;
         padding: 2rem 1rem;
     }
@@ -57,14 +57,13 @@ $radius-lg: 12px;
     }
 
     &__title {
-        font-size: 2rem;
+        font-size: 1.6rem;
         font-weight: 700;
         color: map.get($palette, "dark");
         margin: 0;
 
         &::before {
-            content: "🏪 ";
-            margin-right: 0.5rem;
+            content: "🏪";
         }
     }
 
@@ -122,6 +121,7 @@ $radius-lg: 12px;
         &--success {
             background: linear-gradient(135deg, #10b981, #059669);
             color: map.get($palette, "light");
+            width: 30%;
 
             &:hover {
                 background: linear-gradient(135deg, #059669, #047857);

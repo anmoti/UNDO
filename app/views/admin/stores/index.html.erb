@@ -1,7 +1,7 @@
 <div class="admin__container">
   <div class="admin__header">
     <h1 class="admin__title">運営中の店舗</h1>
-    <%= link_to "店舗を追加する", select_admin_stores_path, class: "admin__btn admin__btn--success" %>
+    <%= link_to "追加", select_admin_stores_path, class: "admin__btn admin__btn--success" %>
   </div>
 
   <% if @operated_stores.any? %>
@@ -45,14 +45,14 @@
             <% end %>
 
             <% if store.active_udon_share %>
-              <button disabled class="admin__btn admin__btn--disabled admin__btn--small" title="アクティブなシェアがあるため運営解除できません">
+              <button disabled class="admin__btn admin__btn--disabled" title="アクティブなシェアがあるため運営解除できません">
                 運営解除
               </button>
             <% else %>
               <%= button_to "運営解除", remove_operator_admin_store_path(store),
                            method: :delete,
                            form: { data: { turbo_confirm: t('confirms.admin.stores.remove_operator', store_name: store.name) } },
-                           class: "admin__btn admin__btn--secondary admin__btn--small" %>
+                           class: "admin__btn admin__btn--secondary" %>
             <% end %>
           </div>
         </div>
