@@ -12,9 +12,10 @@ class Store < ApplicationRecord
 
   # うどんシェア
   has_many :udon_shares, dependent: :destroy
+  has_one :active_udon_share, -> { active.order(created_at: :desc) }, class_name: "UdonShare"
 
   # 現在アクティブなシェアを取得
   def active_udon_share
-    udon_shares.active.order(created_at: :desc).first
+    super
   end
 end
