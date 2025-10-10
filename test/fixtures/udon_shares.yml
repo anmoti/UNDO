@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  store: one
+  item_name: MyString
+  description: MyText
+  take_down_time: 2025-10-10 12:00:51
+  photo_url: MyString
+
+two:
+  store: two
+  item_name: MyString
+  description: MyText
+  take_down_time: 2025-10-10 12:00:51
+  photo_url: MyString
