@@ -9,8 +9,8 @@ class Admin::StoresController < ApplicationController
   end
 
   def select
-    # 店舗を選択できるページ
-    @stores = Store.all.order(:name)
+    # 店舗を選択できるページ（ページネーション付き）
+    @stores = Store.all.order(:name).page(params[:page]).per(20)
     @operated_store_ids = Current.session.user.operated_stores.pluck(:id)
   end
 

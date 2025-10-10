@@ -37,10 +37,10 @@ class MeasurementsTest < ApplicationSystemTestCase
     visit measurements_path
 
     # 店舗セレクターが表示されていることを確認
-    assert_selector "select#measurement_store_id"
+    assert_selector "select#store_id"
 
     # 店舗1を選択
-    select @store_one.name, from: "measurement_store_id"
+    select @store_one.name, from: "store_id"
 
     # 店舗1の測定データのみ表示されることを確認
     assert_selector ".measures__record", count: @store_one.measurements.count

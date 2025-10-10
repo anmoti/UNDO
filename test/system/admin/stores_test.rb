@@ -106,4 +106,54 @@ class Admin::StoresTest < ApplicationSystemTestCase
       assert_no_selector ".admin__eco-badge"
     end
   end
+
+  test "displays pagination on select page with many stores" do
+    # 25店舗作成してページネーションをテスト
+    25.times do |i|
+      Store.create!(
+        name: "Paginated Store #{i}",
+        address: "Address #{i}"
+      )
+    end
+
+    visit select_admin_stores_url
+
+    # ページネーションが表示されることを確認
+    assert_selector ".admin__pagination"
+    assert_selector ".pagination"
+  end
+
+  test "can navigate between pages on select page" do
+    # 25店舗作成
+    25.times do |i|
+      Store.create!(
+        name: "Paginated Store #{i}",
+        address: "Address #{i}"
+      )
+    end
+
+    visit select_admin_stores_url
+
+    # 1ページ目にいることを確認
+    assert_selector ".current", text: "1"
+
+    # 次のページへのリンクがあることを確認
+    within(".admin__pagination") do
+      assert_selector "a", text: "2"
+
+      # 2ページ目に移動
+      click_link "2"
+    end
+
+    # 2ページ目にいることを確認
+    assert_selector ".current", text: "2"
+  end
+
+  test "displays total store count on select page" do
+    visit select_admin_stores_url
+
+    # 全店舗数が表示されることを確認
+    total_count = Store.count
+    assert_text "全#{total_count}件の店舗があります"
+  end
 end

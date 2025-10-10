@@ -636,4 +636,85 @@ $radius-lg: 12px;
     &__store-item {
         animation: slideIn 0.3s ease-out;
     }
+
+    //================================================
+    // ページネーション
+    //================================================
+
+    &__pagination {
+        margin-top: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+
+        .pagination {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            gap: 0.5rem;
+        }
+
+        .page,
+        .first,
+        .prev,
+        .next,
+        .last,
+        .gap {
+            display: inline-block;
+
+            a,
+            span {
+                display: inline-block;
+                padding: 0.5rem 0.75rem;
+                border: 2px solid map.get($palette, "gray-light");
+                border-radius: $radius-sm;
+                background: map.get($palette, "light");
+                color: map.get($palette, "dark");
+                text-decoration: none;
+                font-weight: 500;
+                transition: all 0.2s ease;
+                min-width: 40px;
+                text-align: center;
+            }
+
+            a:hover {
+                border-color: map.get($palette, "primary");
+                background: map.get($palette, "gray-light");
+                transform: translateY(-1px);
+            }
+        }
+
+        .current {
+            a,
+            span {
+                background: linear-gradient(
+                    135deg,
+                    map.get($palette, "primary"),
+                    map.get($palette, "secondary")
+                );
+                color: map.get($palette, "light");
+                border-color: map.get($palette, "primary");
+                font-weight: 700;
+            }
+        }
+
+        .disabled {
+            a,
+            span {
+                opacity: 0.5;
+                cursor: not-allowed;
+                pointer-events: none;
+            }
+        }
+
+        .gap {
+            a,
+            span {
+                border: none;
+                background: transparent;
+            }
+        }
+    }
 }
