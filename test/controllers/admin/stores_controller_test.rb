@@ -32,12 +32,24 @@ class Admin::StoresControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should remove operator" do
-    store = stores(:one)
+    # stores(:two)にはアクティブなシェアがないので削除可能
+    store = stores(:two)
     assert_difference("StoreOperator.count", -1) do
       delete remove_operator_admin_store_url(store)
     end
     assert_redirected_to admin_stores_path
     assert_equal "#{store.name}の運営者から外れました。", flash[:notice]
+  end
+
+  test "should not remove operator when store has active share" do
+    # stores(:one)にはアクティブなシェア(udon_shares(:one))がある
+    store = stores(:one)
+
+    assert_no_difference("StoreOperator.count") do
+      delete remove_operator_admin_store_url(store)
+    end
+    assert_redirected_to admin_stores_path
+    assert_equal "アクティブなシェアがあるため、運営者から外れることができません。", flash[:alert]
   end
 
   test "should redirect to signin when not logged in" do

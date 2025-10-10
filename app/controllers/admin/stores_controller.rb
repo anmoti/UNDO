@@ -27,6 +27,12 @@ class Admin::StoresController < ApplicationController
     @store = Store.find(params[:id])
     store_operator = StoreOperator.find_by(user: Current.session.user, store: @store)
 
+    # アクティブなシェアがある場合は削除を防ぐ
+    if @store.active_udon_share.present?
+      redirect_to admin_stores_path, alert: "アクティブなシェアがあるため、運営者から外れることができません。"
+      return
+    end
+
     if store_operator&.destroy
       redirect_to admin_stores_path, notice: "#{@store.name}の運営者から外れました。"
     else
