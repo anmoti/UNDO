@@ -123,7 +123,8 @@ main {
         z-index: map.get($z-layers, "header");
     }
 
-    &__logo {
+    &__logo,
+    &__logo img {
         height: 100%;
     }
 
