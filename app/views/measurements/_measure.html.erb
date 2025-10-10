@@ -22,12 +22,19 @@
   <div class="hidden measure__modal" data-measures-target="modal">
     <div class="measure__container">
       <h3 class="measure__title">水質の推定方法</h3>
-      <ol class="measure__steps">
-        <li>紙コップに茹で汁を溢れる手前くらいまで入れてください。</li>
-        <li>キットに紙コップをセットしてください。</li>
-        <li>下の測定開始のボタンを押すと測定が始まります。</li>
-      </ol>
+
+      <!-- 測定前の説明 -->
+      <div data-measures-target="instructions">
+        <ol class="measure__steps">
+          <li>紙コップに茹で汁を溢れる手前くらいまで入れてください。</li>
+          <li>キットに紙コップをセットしてください。</li>
+          <li>下の測定開始のボタンを押すと測定が始まります。</li>
+        </ol>
+      </div>
+
+      <!-- 測定中の表示 -->
       <div class="hidden" data-measures-target="in-process">
+        <p class="measure__status-text">測定中です...</p>
         <span class="careful">推定が完了するまでキットに触れないでください。</span>
 
         <div class="measure__progress-wrapper" aria-hidden="false">
@@ -37,10 +44,16 @@
           <div class="measure__progress-label" data-measures-target="progressLabel">0 / 10</div>
         </div>
       </div>
+
+      <!-- サーバー応答待機中の表示 -->
       <div class="hidden" data-measures-target="waiting">
+        <p class="measure__status-text">測定データを解析中です...</p>
         <span>サーバーからの応答を待機しています。</span>
       </div>
+
+      <!-- 測定完了時の表示 -->
       <div class="hidden" data-measures-target="completed">
+        <p class="measure__status-text">測定完了</p>
         <div class="measure__result" data-measures-target="result">
           茹で汁の水質は綺麗です。
         </div>
@@ -49,9 +62,23 @@
           <div>COD値:<span data-measures-target="cod">0</span>[mg/L]</div>
         </div>
       </div>
+
       <div class="measure__buttons" id="back-root">
-        <button type="button" data-action="measures#startEstimation">推定開始</button>
-        <button type="button" data-action="measures#cancelEstimation">キャンセル</button>
+        <!-- 測定前のボタン -->
+        <div data-measures-target="beforeButtons">
+          <button type="button" data-action="measures#startEstimation">推定開始</button>
+          <button type="button" data-action="measures#cancelEstimation">キャンセル</button>
+        </div>
+
+        <!-- 測定中のボタン -->
+        <div class="hidden" data-measures-target="duringButtons">
+          <button type="button" data-action="measures#cancelEstimation">測定を中止</button>
+        </div>
+
+        <!-- 測定完了後のボタン -->
+        <div class="hidden" data-measures-target="afterButtons">
+          <button type="button" data-action="measures#closeAndReload">閉じる</button>
+        </div>
       </div>
     </div>
   </div>

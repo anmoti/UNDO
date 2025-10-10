@@ -1099,6 +1099,8 @@ main {
         text-align: center;
         background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.7));
         z-index: map.get($z-layers, "modal");
+        padding: 20px;
+        overflow-y: auto;
     }
 
     &__container {
@@ -1107,14 +1109,25 @@ main {
         border-radius: 10px;
         padding: 20px;
         max-width: 500px;
+        width: 100%;
         color: map.get($palette, "light");
         font-size: 18px;
+        margin: auto;
+        max-height: 90vh;
+        overflow-y: auto;
     }
 
     &__title {
         color: map.get($palette, "highlight");
         font-size: 23px;
         margin-bottom: 20px;
+    }
+
+    &__status-text {
+        color: map.get($palette, "secondary");
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 15px;
     }
 
     &__steps {
