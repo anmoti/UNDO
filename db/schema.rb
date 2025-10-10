@@ -77,9 +77,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_10_173301) do
 
   create_table "udon_shares", force: :cascade do |t|
     t.integer "store_id", null: false
-    t.string "item_name"
-    t.text "description"
-    t.datetime "take_down_time"
+    t.string "item_name", null: false
+    t.text "description", null: false
+    t.datetime "take_down_time", null: false
     t.string "photo_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
