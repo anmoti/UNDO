@@ -1,20 +1,17 @@
 class MeasurementsController < ApplicationController
   layout "main"
+  before_action :require_company_account, only: [ :index ]
 
   def index
-    if Current.user.is_company
-      # 企業アカウントの場合は店舗でフィルタリング可能
-      if params[:store_id].present?
-        @store = Current.user.operated_stores.find_by(id: params[:store_id])
-        @measurements = @store ? @store.measurements : Measurement.none
-      else
-         # 全店舗の測定データを取得
-         @measurements = Measurement
-          .where(store_id: Current.user.operated_stores.select(:id))
-          .includes(:store)
-      end
+    # 企業アカウントの場合は店舗でフィルタリング可能
+    if params[:store_id].present?
+      @store = Current.user.operated_stores.find_by(id: params[:store_id])
+      @measurements = @store ? @store.measurements : Measurement.none
     else
-      @measurements = Measurement.where(submitter_id: Current.user.id)
+       # 全店舗の測定データを取得
+       @measurements = Measurement
+        .where(store_id: Current.user.operated_stores.select(:id))
+        .includes(:store)
     end
   end
 
@@ -109,6 +106,12 @@ class MeasurementsController < ApplicationController
   end
 
   private
+
+  def require_company_account
+    unless Current.user&.is_company
+      redirect_to root_path, alert: "このページは企業アカウント専用です"
+    end
+  end
 
   def find_measurement_for_current_user
     if Current.user.is_company

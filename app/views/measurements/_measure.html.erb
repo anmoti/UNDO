@@ -1,86 +1,95 @@
 <%
   can_measure = true
-  if Current.user.is_company && params[:store_id].present?
-    selected_store = Current.user.operated_stores.find_by(id: params[:store_id])
-    can_measure = selected_store && selected_store.can_measure?
+  show_button = true
+
+  if Current.user.is_company
+    # 企業アカウントの場合、店舗が選択されていない（全店舗表示）場合はボタンを非表示
+    if params[:store_id].blank?
+      show_button = false
+    else
+      selected_store = Current.user.operated_stores.find_by(id: params[:store_id])
+      can_measure = selected_store && selected_store.can_measure?
+    end
   end
 %>
 
-<div
-  data-controller="measures"
-  data-measures-service-uuid-value="<%= Current.user.bt_service_uuid if authenticated? %>"
-  data-measures-char-uuid-value="<%= Current.user.bt_characteristic_uuid if authenticated? %>"
-  data-measures-bod-upper-limit-value="<%= Current.user.bod_upper_limit if authenticated? %>"
-  data-measures-store-id-value="<%= params[:store_id] if Current.user.is_company %>"
->
-  <% if can_measure %>
-    <button type="button" class="measure__start-btn" data-action="measures#open">水質測定開始</button>
-  <% else %>
-    <button type="button" class="measure__start-btn" disabled title="エコマーク期間中は測定できません">水質測定不可</button>
-  <% end %>
+<% if show_button %>
+  <div
+    data-controller="measures"
+    data-measures-service-uuid-value="<%= Current.user.bt_service_uuid if authenticated? %>"
+    data-measures-char-uuid-value="<%= Current.user.bt_characteristic_uuid if authenticated? %>"
+    data-measures-bod-upper-limit-value="<%= Current.user.bod_upper_limit if authenticated? %>"
+    data-measures-store-id-value="<%= params[:store_id] if Current.user.is_company %>"
+  >
+    <% if can_measure %>
+      <button type="button" class="measure__start-btn" data-action="measures#open">水質測定開始</button>
+    <% else %>
+      <button type="button" class="measure__start-btn measure__start-btn--disabled" disabled>水質測定開始</button>
+    <% end %>
 
-  <div class="hidden measure__modal" data-measures-target="modal">
-    <div class="measure__container">
-      <h3 class="measure__title">水質の推定方法</h3>
+    <div class="hidden measure__modal" data-measures-target="modal">
+      <div class="measure__container">
+        <h3 class="measure__title">水質の推定方法</h3>
 
-      <!-- 測定前の説明 -->
-      <div data-measures-target="instructions">
-        <ol class="measure__steps">
-          <li>紙コップに茹で汁を溢れる手前くらいまで入れてください。</li>
-          <li>キットに紙コップをセットしてください。</li>
-          <li>下の測定開始のボタンを押すと測定が始まります。</li>
-        </ol>
-      </div>
+        <!-- 測定前の説明 -->
+        <div data-measures-target="instructions">
+          <ol class="measure__steps">
+            <li>紙コップに茹で汁を溢れる手前くらいまで入れてください。</li>
+            <li>キットに紙コップをセットしてください。</li>
+            <li>下の測定開始のボタンを押すと測定が始まります。</li>
+          </ol>
+        </div>
 
-      <!-- 測定中の表示 -->
-      <div class="hidden" data-measures-target="in-process">
-        <p class="measure__status-text">測定中です...</p>
-        <span class="careful">推定が完了するまでキットに触れないでください。</span>
+        <!-- 測定中の表示 -->
+        <div class="hidden" data-measures-target="in-process">
+          <p class="measure__status-text">測定中です...</p>
+          <span class="careful">推定が完了するまでキットに触れないでください。</span>
 
-        <div class="measure__progress-wrapper" aria-hidden="false">
-          <div class="measure__progress-track">
-            <div class="measure__progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" data-measures-target="progress"></div>
+          <div class="measure__progress-wrapper" aria-hidden="false">
+            <div class="measure__progress-track">
+              <div class="measure__progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" data-measures-target="progress"></div>
+            </div>
+            <div class="measure__progress-label" data-measures-target="progressLabel">0 / 10</div>
           </div>
-          <div class="measure__progress-label" data-measures-target="progressLabel">0 / 10</div>
-        </div>
-      </div>
-
-      <!-- サーバー応答待機中の表示 -->
-      <div class="hidden" data-measures-target="waiting">
-        <p class="measure__status-text">測定データを解析中です...</p>
-        <span>サーバーからの応答を待機しています。</span>
-      </div>
-
-      <!-- 測定完了時の表示 -->
-      <div class="hidden" data-measures-target="completed">
-        <p class="measure__status-text">測定完了</p>
-        <div class="measure__result" data-measures-target="result">
-          茹で汁の水質は綺麗です。
-        </div>
-        <div class="measure__values">
-          <div>BOD値:<span data-measures-target="bod">0</span>[mg/L]</div>
-          <div>COD値:<span data-measures-target="cod">0</span>[mg/L]</div>
-        </div>
-      </div>
-
-      <div class="measure__buttons" id="back-root">
-        <!-- 測定前のボタン -->
-        <div data-measures-target="beforeButtons">
-          <button type="button" data-action="measures#startEstimation">推定開始</button>
-          <button type="button" data-action="measures#cancelEstimation">キャンセル</button>
         </div>
 
-        <!-- 測定中のボタン -->
-        <div class="hidden" data-measures-target="duringButtons">
-          <button type="button" data-action="measures#cancelEstimation">測定を中止</button>
+        <!-- サーバー応答待機中の表示 -->
+        <div class="hidden" data-measures-target="waiting">
+          <p class="measure__status-text">測定データを解析中です...</p>
+          <span>サーバーからの応答を待機しています。</span>
         </div>
 
-        <!-- 測定完了後のボタン -->
-        <div class="hidden" data-measures-target="afterButtons">
-          <button type="button" data-action="measures#closeAndReload">閉じる</button>
+        <!-- 測定完了時の表示 -->
+        <div class="hidden" data-measures-target="completed">
+          <p class="measure__status-text">測定完了</p>
+          <div class="measure__result" data-measures-target="result">
+            茹で汁の水質は綺麗です。
+          </div>
+          <div class="measure__values">
+            <div>BOD値:<span data-measures-target="bod">0</span>[mg/L]</div>
+            <div>COD値:<span data-measures-target="cod">0</span>[mg/L]</div>
+          </div>
+        </div>
+
+        <div class="measure__buttons" id="back-root">
+          <!-- 測定前のボタン -->
+          <div data-measures-target="beforeButtons">
+            <button type="button" data-action="measures#startEstimation">推定開始</button>
+            <button type="button" data-action="measures#cancelEstimation">キャンセル</button>
+          </div>
+
+          <!-- 測定中のボタン -->
+          <div class="hidden" data-measures-target="duringButtons">
+            <button type="button" data-action="measures#cancelEstimation">測定を中止</button>
+          </div>
+
+          <!-- 測定完了後のボタン -->
+          <div class="hidden" data-measures-target="afterButtons">
+            <button type="button" data-action="measures#closeAndReload">閉じる</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-</div>
+  </div>
+<% end %>

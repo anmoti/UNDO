@@ -40,9 +40,14 @@ class Store < ApplicationRecord
     )
   end
 
-  # 測定可能かどうか（エコマーク期間中は測定不可）
+  # 測定可能かどうか（エコマーク期間中、または未対応の測定データがある場合は測定不可）
   def can_measure?
-    !eco_active?
+    return false if eco_active?
+
+    # 未対応かつBOD値が基準値を超えた測定データが存在する場合は測定不可
+    # responded: false（未対応）かつ BOD値が基準値を超えている測定データをチェック
+    pending_measurements = measurements.where(responded: false, status: :predicted)
+    pending_measurements.none? { |m| !m.bod_below_limit? }
   end
 
   # 現在アクティブなシェアを取得

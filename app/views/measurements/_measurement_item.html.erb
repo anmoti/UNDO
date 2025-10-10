@@ -4,7 +4,7 @@
   <% if measurement.store.present? %>
     <div class="measures__store">
       <span class="measures__label">店舗</span>
-      <span class="measures__value"><%= measurement.store.name %></span>
+      <span class="measures__value" title="<%= measurement.store.name %>"><%= measurement.store.name %></span>
     </div>
   <% end %>
 
@@ -24,16 +24,14 @@
   <% if Current.user.is_company && measurement.store.present? %>
     <div class="measures__response">
       <% if measurement.responded? %>
-        <span class="measures__responded-badge">✓ 対応済み</span>
-        <% if measurement.store.eco_active? %>
-          <span class="measures__eco-badge">🌱 エコマーク付与中（<%= measurement.store.eco_expires_at.strftime("%m/%d") %>まで）</span>
-        <% end %>
-      <% elsif measurement.bod_below_limit? %>
-        <span class="measures__auto-eco">✓ 自動エコマーク付与済み</span>
-      <% else %>
+        <span class="measures__responded-badge" title="対応済み">✓</span>
+      <% end %>
+      <% if measurement.store.eco_active? %>
+        <span class="measures__eco-badge" title="エコバッジ">🌱</span>
+      <% end %>
+      <% if !measurement.responded? && !measurement.bod_below_limit? %>
         <%= form_with(url: respond_measurement_path(measurement), method: :post, class: "measures__respond-form", local: false) do |f| %>
-          <%= f.check_box :respond, onchange: "this.form.requestSubmit()", id: "respond_#{measurement.id}" %>
-          <%= f.label :respond, "対応した", for: "respond_#{measurement.id}" %>
+          <%= f.submit "対応する", class: "measures__respond-btn" %>
         <% end %>
       <% end %>
     </div>
