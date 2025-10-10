@@ -339,15 +339,24 @@ export default class MapsController extends Controller {
                 shareDetail.style.borderRadius = "4px";
 
                 const shareItem = document.createElement("div");
-                shareItem.innerHTML = `<strong>シェア中:</strong> ${shop.shareInfo.itemName}`;
+                const shareItemLabel = document.createElement("strong");
+                shareItemLabel.textContent = "シェア中: ";
+                shareItem.appendChild(shareItemLabel);
+                shareItem.appendChild(document.createTextNode(shop.shareInfo.itemName));
                 shareDetail.appendChild(shareItem);
 
                 const shareDesc = document.createElement("div");
-                shareDesc.innerHTML = `<strong>内容:</strong> ${shop.shareInfo.description}`;
+                const shareDescLabel = document.createElement("strong");
+                shareDescLabel.textContent = "内容: ";
+                shareDesc.appendChild(shareDescLabel);
+                shareDesc.appendChild(document.createTextNode(shop.shareInfo.description));
                 shareDetail.appendChild(shareDesc);
 
                 const shareTakeDown = document.createElement("div");
-                shareTakeDown.innerHTML = `<strong>取り下げ時間:</strong> ${shop.shareInfo.takeDownTime}`;
+                const shareTakeDownLabel = document.createElement("strong");
+                shareTakeDownLabel.textContent = "取り下げ時間: ";
+                shareTakeDown.appendChild(shareTakeDownLabel);
+                shareTakeDown.appendChild(document.createTextNode(shop.shareInfo.takeDownTime));
                 shareDetail.appendChild(shareTakeDown);
 
                 content.appendChild(shareDetail);
