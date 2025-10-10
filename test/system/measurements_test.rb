@@ -54,12 +54,15 @@ class MeasurementsTest < ApplicationSystemTestCase
 
     visit measurements_path(store_id: @store_one.id)
 
-    # エコマーク通知が表示されることを確認
-    assert_selector ".measures__eco-notice", text: /エコマーク付与中/
+    # 店舗名にエコマークが表示されることを確認（ドロップダウンリスト内）
+    assert_selector "select#store_id option[selected]", text: /🌱/
   end
 
   test "company user can mark measurement as responded" do
     sign_in_as(@company_user, password: "passwordbob")
+
+    # エコマークをクリア
+    @store_one.update!(is_eco: false, eco_granted_at: nil, eco_expires_at: nil)
 
     # BOD値が高い測定を作成
     measurement = Measurement.create!(
@@ -73,19 +76,27 @@ class MeasurementsTest < ApplicationSystemTestCase
 
     visit measurements_path(store_id: @store_one.id)
 
-    # 対応チェックボックスが表示されることを確認
-    within("[data-measurement-id='#{measurement.id}']") do
-      assert_selector "input[type='checkbox']#respond_#{measurement.id}"
+    # デバッグ: ページ内容を確認
+    puts "=== Page HTML ==="
+    puts page.html
+    puts "=== End HTML ==="
 
-      # チェックボックスをクリック
-      check "respond_#{measurement.id}"
+    # 対応するボタンが表示されることを確認
+    within("[data-measurement-id='#{measurement.id}']") do
+      assert_selector ".measures__respond-btn", text: "対応する"
+
+      # ボタンをクリック
+      click_button "対応する"
     end
+
+    # Ajaxリクエストの完了を待つ
+    sleep 1
 
     # ページがリロードされて対応済みバッジが表示される
     visit measurements_path(store_id: @store_one.id)
 
     within("[data-measurement-id='#{measurement.id}']") do
-      assert_selector ".measures__responded-badge", text: "対応済み"
+      assert_selector ".measures__responded-badge", text: "✓"
     end
   end
 
@@ -104,9 +115,9 @@ class MeasurementsTest < ApplicationSystemTestCase
 
     visit measurements_path(store_id: @store_two.id)
 
-    # 自動エコマークバッジが表示されることを確認
+    # エコマークバッジが表示されることを確認
     within("[data-measurement-id='#{measurement.id}']") do
-      assert_selector ".measures__auto-eco", text: "自動エコマーク付与済み"
+      assert_selector ".measures__eco-badge", text: "🌱"
     end
   end
 
@@ -121,13 +132,11 @@ class MeasurementsTest < ApplicationSystemTestCase
       submitter: @regular_user
     )
 
+    # 一般ユーザーは/measurementsにアクセスできないため、リダイレクトされることを確認
     visit measurements_path
 
-    # 店舗セレクターがないことを確認
-    assert_no_selector "select#measurement_store_id"
-
-    # 対応チェックボックスがないことを確認
-    assert_no_selector ".measures__respond-form"
+    # ルートパスにリダイレクトされていることを確認
+    assert_current_path root_path
   end
 
   test "company user cannot measure during eco mark period" do
@@ -138,7 +147,7 @@ class MeasurementsTest < ApplicationSystemTestCase
     visit measurements_path(store_id: @store_one.id)
 
     # 測定ボタンが無効化されていることを確認
-    assert_selector "button[disabled]", text: "水質測定不可"
+    assert_selector "button.measure__start-btn--disabled[disabled]", text: "水質測定開始"
   end
 
   test "measurement displays store name for company user" do
