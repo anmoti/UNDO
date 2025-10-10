@@ -1,0 +1,50 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold">運営中の店舗</h1>
+    <%= link_to "店舗を追加する", select_admin_stores_path, class: "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" %>
+  </div>
+
+  <% if @operated_stores.any? %>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% @operated_stores.each do |store| %>
+        <div class="border rounded-lg p-6 shadow-lg bg-white">
+          <div class="flex justify-between items-start mb-4">
+            <div>
+              <h3 class="text-xl font-semibold mb-1"><%= store.name %></h3>
+              <p class="text-gray-600 text-sm"><%= store.address %></p>
+            </div>
+          </div>
+
+          <% if store.is_share %>
+            <% if active_share = store.active_udon_share %>
+              <div class="bg-green-100 border border-green-400 rounded p-3 mb-4">
+                <p class="text-sm font-semibold text-green-800 mb-1">
+                  🎁 シェア中: <%= active_share.item_name %>
+                </p>
+                <p class="text-xs text-green-700 mb-1"><%= active_share.description %></p>
+                <p class="text-xs text-green-600">取り下げ: <%= active_share.take_down_time.strftime('%m/%d %H:%M') %></p>
+                <div class="mt-2">
+                  <%= button_to "シェア削除", admin_udon_share_path(active_share), method: :delete, data: { confirm: "削除しますか？" }, class: "bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded text-xs" %>
+                </div>
+              </div>
+            <% end %>
+          <% else %>
+            <div class="bg-gray-100 border border-gray-300 rounded p-3 mb-4">
+              <p class="text-sm text-gray-600">現在シェアはありません</p>
+            </div>
+          <% end %>
+
+          <div class="flex gap-2 mt-4">
+            <%= link_to "シェアを追加", new_admin_store_udon_share_path(store), class: "flex-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-sm text-center" %>
+            <%= button_to "運営解除", remove_operator_admin_store_path(store), method: :delete, data: { confirm: "本当に運営を解除しますか？" }, class: "bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded text-sm" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="bg-yellow-100 border border-yellow-400 rounded p-6 text-center">
+      <p class="text-lg mb-4">まだ運営している店舗がありません</p>
+      <%= link_to "店舗を追加する", select_admin_stores_path, class: "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-6 rounded inline-block" %>
+    </div>
+  <% end %>
+</div>

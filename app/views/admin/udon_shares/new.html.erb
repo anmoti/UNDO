@@ -1,0 +1,47 @@
+<div class="container mx-auto px-4 py-8 max-w-2xl">
+  <h1 class="text-3xl font-bold mb-6">うどんシェアを設定</h1>
+
+  <div class="bg-blue-100 border border-blue-400 rounded p-4 mb-6">
+    <p class="font-semibold">店舗: <%= @store.name %></p>
+    <p class="text-sm text-gray-700"><%= @store.address %></p>
+  </div>
+
+  <%= form_with model: @udon_share, url: admin_store_udon_shares_path(@store), class: "space-y-4" do |f| %>
+    <% if @udon_share.errors.any? %>
+      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+        <h2 class="font-bold mb-2"><%= pluralize(@udon_share.errors.count, "個のエラー") %>があります:</h2>
+        <ul class="list-disc list-inside">
+          <% @udon_share.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div>
+      <%= f.label :item_name, "シェアするもの", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.text_field :item_name, class: "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500", placeholder: "例: かけうどん" %>
+    </div>
+
+    <div>
+      <%= f.label :description, "具体的な内容物", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.text_area :description, rows: 4, class: "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500", placeholder: "例: かけうどん(大)、天ぷら2個、おにぎり1個" %>
+    </div>
+
+    <div>
+      <%= f.label :take_down_time, "取り下げ時間", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.datetime_local_field :take_down_time, class: "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" %>
+    </div>
+
+    <div>
+      <%= f.label :photo_url, "写真URL", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.text_field :photo_url, class: "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500", placeholder: "https://example.com/photo.jpg" %>
+      <p class="text-xs text-gray-500 mt-1">※今回は画像URLを直接入力してください</p>
+    </div>
+
+    <div class="flex gap-4">
+      <%= f.submit "設定する", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer" %>
+      <%= link_to "キャンセル", admin_stores_path, class: "bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded" %>
+    </div>
+  <% end %>
+</div>
