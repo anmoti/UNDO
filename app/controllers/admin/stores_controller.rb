@@ -5,7 +5,7 @@ class Admin::StoresController < ApplicationController
 
   def index
     # 運営中の店舗のみを表示
-    @operated_stores = Current.session.user.operated_stores.includes(:udon_shares)
+    @operated_stores = Current.session.user.operated_stores.includes(:udon_shares, :measurements)
   end
 
   def select

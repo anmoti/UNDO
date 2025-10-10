@@ -12,17 +12,12 @@ class MeasurementsControllerTest < ActionDispatch::IntegrationTest
   end
 
   # 一般ユーザーのテスト
-  test "regular user index returns only their measurements" do
+  test "regular user index redirects to root with alert" do
     sign_in_as(@user)
-    m1 = Measurement.create!(turbidity: 10, submitter: @user, predicted_bod: 1.0, predicted_cod: 1.0, status: :predicted)
-    Measurement.create!(turbidity: 20, submitter: @other, predicted_bod: 2.0, predicted_cod: 2.0, status: :predicted)
 
     get measurements_url
-    assert_response :success
-    assert_select ".measures__record" do
-      # 少なくとも自分の測定日のみが表示されていることを確認
-      assert_select "div.measures__date", /#{Regexp.escape(m1.created_at.strftime("%Y/%m/%d %H:%M"))}/
-    end
+    assert_redirected_to root_path
+    assert_equal I18n.t("flash.measurements.company_only"), flash[:alert]
   end
 
   test "regular user show returns measurement JSON for own record" do
@@ -197,7 +192,7 @@ class MeasurementsControllerTest < ActionDispatch::IntegrationTest
     post respond_measurement_url(m), as: :json
     assert_response :unprocessable_entity
     json = JSON.parse(response.body)
-    assert_includes json["error"], "既に対応済み"
+    assert_includes json["error"], I18n.t("flash.measurements.already_responded")
   end
 
   test "regular user cannot mark measurement as responded without store" do

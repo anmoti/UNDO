@@ -72,26 +72,26 @@ class MeasurementsController < ApplicationController
 
     unless @measurement
       respond_to do |format|
-        format.html { redirect_to measurements_path, alert: "測定データが見つかりません" }
-        format.json { render json: { error: "測定データが見つかりません" }, status: :not_found }
+        format.html { redirect_to measurements_path, alert: t("flash.measurements.not_found") }
+        format.json { render json: { error: t("flash.measurements.not_found") }, status: :not_found }
       end
       return
     end
 
     if @measurement.responded?
       respond_to do |format|
-        format.html { redirect_to measurements_path, alert: "既に対応済みです" }
-        format.json { render json: { error: "既に対応済みです" }, status: :unprocessable_entity }
+        format.html { redirect_to measurements_path, alert: t("flash.measurements.already_responded") }
+        format.json { render json: { error: t("flash.measurements.already_responded") }, status: :unprocessable_entity }
       end
       return
     end
 
     if @measurement.mark_as_responded!
       respond_to do |format|
-        format.html { redirect_to measurements_path, notice: "対応完了しました。エコマークが付与されました。" }
+        format.html { redirect_to measurements_path, notice: t("flash.measurements.responded_success") }
         format.json {
           render json: {
-            message: "対応完了しました。エコマークが付与されました。",
+            message: t("flash.measurements.responded_success"),
             measurement: @measurement,
             store: @measurement.store
           }, status: :ok
@@ -99,8 +99,8 @@ class MeasurementsController < ApplicationController
       end
     else
       respond_to do |format|
-        format.html { redirect_to measurements_path, alert: "対応処理に失敗しました" }
-        format.json { render json: { error: "対応処理に失敗しました" }, status: :unprocessable_entity }
+        format.html { redirect_to measurements_path, alert: t("flash.measurements.respond_failed") }
+        format.json { render json: { error: t("flash.measurements.respond_failed") }, status: :unprocessable_entity }
       end
     end
   end
@@ -109,7 +109,7 @@ class MeasurementsController < ApplicationController
 
   def require_company_account
     unless Current.user&.is_company
-      redirect_to root_path, alert: "このページは企業アカウント専用です"
+      redirect_to root_path, alert: t("flash.measurements.company_only")
     end
   end
 
