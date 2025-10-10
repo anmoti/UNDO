@@ -91,4 +91,47 @@ class Admin::StoresControllerTest < ActionDispatch::IntegrationTest
     get admin_stores_url
     assert_redirected_to signin_path
   end
+
+  test "should display measurement count for each store" do
+    store = stores(:one)
+
+    # 測定データを作成
+    3.times do |i|
+      Measurement.create!(
+        turbidity: 10.0 + i,
+        predicted_bod: 100.0 + i,
+        predicted_cod: 50.0 + i,
+        status: :predicted,
+        submitter: @user,
+        store: store
+      )
+    end
+
+    get admin_stores_url
+    assert_response :success
+
+    # 測定回数が表示されていることを確認
+    assert_select ".admin__stat-value", text: store.measurements.count.to_s
+  end
+
+  test "should display link to measurement history" do
+    store = stores(:one)
+
+    get admin_stores_url
+    assert_response :success
+
+    # 測定履歴へのリンクが存在することを確認
+    assert_select "a[href=?]", measurements_path(store_id: store.id), text: /測定履歴を見る/
+  end
+
+  test "should display eco mark status when active" do
+    store = stores(:one)
+    store.grant_eco_mark!
+
+    get admin_stores_url
+    assert_response :success
+
+    # エコマークバッジが表示されることを確認
+    assert_select ".admin__eco-badge", text: /エコマーク付与中/
+  end
 end

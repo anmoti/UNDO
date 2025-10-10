@@ -281,6 +281,58 @@ $radius-lg: 12px;
         }
     }
 
+    &__eco-badge {
+        display: inline-block;
+        margin-top: 0.5rem;
+        padding: 0.4rem 0.8rem;
+        background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+        color: #065f46;
+        border: 1px solid #6ee7b7;
+        border-radius: $radius-sm;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    &__store-stats {
+        @include flexbox($justify: space-between, $align: center, $gap: 1rem);
+        margin-bottom: 1rem;
+        padding: 1rem;
+        background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+        border: 1px solid #bae6fd;
+        border-radius: $radius-md;
+    }
+
+    &__stat-item {
+        @include flexbox($direction: column, $align: center, $gap: 0.25rem);
+        flex: 1;
+    }
+
+    &__stat-label {
+        font-size: 0.75rem;
+        color: map.get($palette, "gray");
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 600;
+    }
+
+    &__stat-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: map.get($palette, "info");
+    }
+
+    &__btn--link {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+        background: linear-gradient(135deg, map.get($palette, "info"), #2563eb);
+        color: map.get($palette, "light");
+        text-decoration: none;
+
+        &:hover {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        }
+    }
+
     &__store-badge {
         display: inline-block;
         padding: 0.3rem 0.8rem;

@@ -44,10 +44,12 @@ $z-layers: (
     "tooltip": 40,
 );
 
-@mixin flexbox($justify: flex-start,
+@mixin flexbox(
+    $justify: flex-start,
     $align: stretch,
     $direction: row,
-    $gap: 0) {
+    $gap: 0
+) {
     display: flex;
     justify-content: $justify;
     align-items: $align;
@@ -395,8 +397,10 @@ main {
         animation: markerAppear 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 
         &:hover {
-            background-color: color.scale(map.get($palette, "accent"),
-                    $lightness: -10%);
+            background-color: color.scale(
+                map.get($palette, "accent"),
+                $lightness: -10%
+            );
             transform: scale(1.15);
             transition: all 0.2s ease;
         }
@@ -650,7 +654,7 @@ main {
         }
     }
 
-    &__tab-radio:checked+&__tab-label {
+    &__tab-radio:checked + &__tab-label {
         background-color: map.get($palette, "light");
         color: map.get($palette, "dark");
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -675,17 +679,17 @@ main {
             }
 
             // チェックされている星とそれ以前(~)の星をハイライト色にする
-            &:not(:hover) .star-radio:checked~.star-label svg {
+            &:not(:hover) .star-radio:checked ~ .star-label svg {
                 fill: map.get($palette, "highlight");
             }
 
             // ホバーしている星とそれ以前(~)の星をハイライト色にする
             .star-label:hover svg,
-            .star-label:hover~.star-label svg {
+            .star-label:hover ~ .star-label svg {
                 fill: map.get($palette, "highlight");
             }
 
-            .star-radio:focus-visible+.star-label svg {
+            .star-radio:focus-visible + .star-label svg {
                 stroke: map.get($palette, "accent");
             }
         }
@@ -726,16 +730,20 @@ main {
     }
 
     &-notice {
-        background: linear-gradient(180deg,
-                map.get($palette, "success"),
-                color.scale(map.get($palette, "success"), $lightness: 6%));
+        background: linear-gradient(
+            180deg,
+            map.get($palette, "success"),
+            color.scale(map.get($palette, "success"), $lightness: 6%)
+        );
         color: map.get($palette, "light");
     }
 
     &-alert {
-        background: linear-gradient(180deg,
-                map.get($palette, "danger"),
-                color.scale(map.get($palette, "danger"), $lightness: -6%));
+        background: linear-gradient(
+            180deg,
+            map.get($palette, "danger"),
+            color.scale(map.get($palette, "danger"), $lightness: -6%)
+        );
         color: map.get($palette, "light");
     }
 
@@ -746,8 +754,7 @@ main {
     }
 
     // default visible state transition
-    transition: opacity 300ms ease,
-    transform 300ms ease;
+    transition: opacity 300ms ease, transform 300ms ease;
 }
 
 .comments {
@@ -965,6 +972,111 @@ main {
         color: map.get($palette, "gray");
         font-size: 0.85rem;
     }
+
+    &__store {
+        display: flex;
+        gap: 8px;
+        align-items: baseline;
+        margin-bottom: 8px;
+        padding: 6px 10px;
+        background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+        border-radius: 4px;
+        border-left: 3px solid #3b82f6;
+    }
+
+    &__response {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        margin-top: 8px;
+        flex-wrap: wrap;
+    }
+
+    &__responded-badge,
+    &__auto-eco,
+    &__eco-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+    &__responded-badge {
+        background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+        color: #1e40af;
+        border: 1px solid #93c5fd;
+    }
+
+    &__auto-eco {
+        background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+        color: #065f46;
+        border: 1px solid #6ee7b7;
+    }
+
+    &__eco-badge {
+        background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+        color: #065f46;
+        border: 1px solid #6ee7b7;
+    }
+
+    &__respond-form {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        label {
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: map.get($palette, "dark");
+            user-select: none;
+        }
+    }
+
+    &__store-selector {
+        margin-top: 1rem;
+        padding: 1rem;
+        background: linear-gradient(135deg, #fef3c7, #fde68a);
+        border-radius: $radius-md;
+        border: 2px solid #fbbf24;
+
+        label {
+            font-weight: 600;
+            color: map.get($palette, "dark");
+            margin-right: 0.5rem;
+        }
+
+        select {
+            padding: 0.5rem 1rem;
+            border-radius: $radius-sm;
+            border: 2px solid #fbbf24;
+            font-size: 1rem;
+            background-color: map.get($palette, "light");
+            cursor: pointer;
+
+            &:focus {
+                outline: none;
+                border-color: map.get($palette, "primary");
+            }
+        }
+    }
+
+    &__eco-notice {
+        margin-top: 0.75rem;
+        padding: 0.75rem;
+        background: linear-gradient(135deg, #fee2e2, #fecaca);
+        border: 2px solid #ef4444;
+        border-radius: $radius-sm;
+        color: #991b1b;
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
 }
 
 .measure {
@@ -1010,7 +1122,7 @@ main {
         padding-left: 25px;
         text-align: left;
 
-        >li {
+        > li {
             padding-bottom: 10px;
         }
     }
@@ -1029,7 +1141,7 @@ main {
         margin-top: 20px;
         @include flexbox($justify: center, $gap: 20px);
 
-        >button {
+        > button {
             @extend %measure-button;
         }
     }
@@ -1053,7 +1165,11 @@ main {
 
     &__progress {
         height: 100%;
-        background: linear-gradient(90deg, map.get($palette, "highlight"), map.get($palette, "secondary"));
+        background: linear-gradient(
+            90deg,
+            map.get($palette, "highlight"),
+            map.get($palette, "secondary")
+        );
         width: 0%;
         transition: width 600ms cubic-bezier(0.2, 0.8, 0.2, 1);
         border-radius: 10px 0 0 10px;
