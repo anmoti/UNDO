@@ -561,6 +561,11 @@ function getCSRFToken() {
  * @returns {Promise<Measurement>}
  */
 async function createMeasurement(turbidity) {
+    if (typeof turbidity !== "number" || turbidity < 0) {
+        alert("無効な値です");
+        throw new Error("無効な値です");
+    }
+
     const data = await ky.post("/measurements", {
         credentials: "include",
         headers: { "X-CSRF-Token": getCSRFToken() },
