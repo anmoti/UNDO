@@ -1,0 +1,47 @@
+<div class="admin__container">
+  <div style="margin-bottom: 1.5rem;">
+    <%= link_to "← 運営中の店舗に戻る", admin_stores_path, class: "admin__btn admin__btn--secondary" %>
+  </div>
+
+  <h1 class="admin__title">運営する店舗を選択</h1>
+
+  <div class="admin__form-header" style="margin-top: 1.5rem;">
+    <p style="margin: 0;">
+      <strong>🏪 店舗一覧</strong><br>
+      <span style="font-size: 0.9rem; opacity: 0.9;">運営したい店舗を選択してください。全<%= @stores.count %>件の店舗があります。</span>
+    </p>
+  </div>
+
+  <% if @stores.any? %>
+    <div class="admin__store-list">
+      <% @stores.each do |store| %>
+        <div class="admin__store-item <%= 'admin__store-item--operated' if @operated_store_ids.include?(store.id) %>">
+          <div class="admin__store-item-info">
+            <h3 class="admin__store-item-name"><%= store.name %></h3>
+            <p class="admin__store-item-address">📍 <%= store.address %></p>
+            <% if store.open_time.present? %>
+              <p class="admin__store-item-address" style="margin-top: 0.2rem;">🕐 <%= store.open_time %></p>
+            <% end %>
+            <% if @operated_store_ids.include?(store.id) %>
+              <p class="admin__store-item-status">運営中</p>
+            <% end %>
+          </div>
+
+          <div>
+            <% unless @operated_store_ids.include?(store.id) %>
+              <%= button_to "運営する", add_operator_admin_store_path(store),
+                           method: :post,
+                           class: "admin__btn admin__btn--primary",
+                           form: { data: { turbo_confirm: t('confirms.admin.stores.add_operator', store_name: store.name) } } %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="admin__empty-state">
+      <div class="admin__empty-state-icon">🏪</div>
+      <p class="admin__empty-state-text">店舗がありません</p>
+    </div>
+  <% end %>
+</div>

@@ -29,6 +29,14 @@ const mapOptions = {
 };
 
 /**
+ * @typedef {Object} ShareInfo
+ * @property {string} itemName
+ * @property {string} description
+ * @property {string} takeDownTime
+ * @property {string} photoUrl
+ */
+
+/**
  * @typedef {Object} StoreFeature
  * @property {number} id
  * @property {string} name
@@ -38,6 +46,7 @@ const mapOptions = {
  * @property {string | null | undefined} [address]
  * @property {boolean | null | undefined} [eco]
  * @property {boolean | null | undefined} [foodshare]
+ * @property {ShareInfo | null | undefined} [shareInfo]
  */
 
 // Connects to data-controller="maps"
@@ -217,6 +226,34 @@ export default class MapsController extends Controller {
         const markerIcon = document.createElement("div");
         markerIcon.className = "maps__marker";
 
+        // シェア情報がある場合、リサイクルマークと残り時間を追加
+        if (store.foodshare && store.shareInfo) {
+            const shareIndicator = document.createElement("div");
+            shareIndicator.className = "maps__marker-share";
+
+            // リサイクルマーク
+            const recycleIcon = document.createElement("span");
+            recycleIcon.className = "maps__marker-share-icon";
+            recycleIcon.textContent = "♻️";
+            shareIndicator.appendChild(recycleIcon);
+
+            // 残り時間を計算
+            const takeDownTime = new Date(store.shareInfo.takeDownTime);
+            const now = new Date();
+            const diffMs = takeDownTime - now;
+            const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+            const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+
+            if (diffMs > 0) {
+                const timeText = document.createElement("span");
+                timeText.className = "maps__marker-share-time";
+                timeText.textContent = diffHours > 0 ? `${diffHours}h${diffMinutes}m` : `${diffMinutes}m`;
+                shareIndicator.appendChild(timeText);
+            }
+
+            markerIcon.appendChild(shareIndicator);
+        }
+
         // マーカーを作成
         const marker = new AdvancedMarkerElement({
             position,
@@ -319,6 +356,39 @@ export default class MapsController extends Controller {
             foodshareDesc.textContent = "フードシェア実施中";
             foodshareOptions.appendChild(foodshareDesc);
             content.appendChild(foodshareOptions);
+
+            // シェア詳細情報を追加
+            if (shop.shareInfo) {
+                const shareDetail = document.createElement("div");
+                shareDetail.className = "maps__info--share-detail";
+                shareDetail.style.marginTop = "8px";
+                shareDetail.style.padding = "8px";
+                shareDetail.style.backgroundColor = "#f0fdf4";
+                shareDetail.style.borderRadius = "4px";
+
+                const shareItem = document.createElement("div");
+                const shareItemLabel = document.createElement("strong");
+                shareItemLabel.textContent = "シェア中: ";
+                shareItem.appendChild(shareItemLabel);
+                shareItem.appendChild(document.createTextNode(shop.shareInfo.itemName));
+                shareDetail.appendChild(shareItem);
+
+                const shareDesc = document.createElement("div");
+                const shareDescLabel = document.createElement("strong");
+                shareDescLabel.textContent = "内容: ";
+                shareDesc.appendChild(shareDescLabel);
+                shareDesc.appendChild(document.createTextNode(shop.shareInfo.description));
+                shareDetail.appendChild(shareDesc);
+
+                const shareTakeDown = document.createElement("div");
+                const shareTakeDownLabel = document.createElement("strong");
+                shareTakeDownLabel.textContent = "取り下げ時間: ";
+                shareTakeDown.appendChild(shareTakeDownLabel);
+                shareTakeDown.appendChild(document.createTextNode(shop.shareInfo.takeDownTime));
+                shareDetail.appendChild(shareTakeDown);
+
+                content.appendChild(shareDetail);
+            }
         }
 
         const address = document.createElement("div");

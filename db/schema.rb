@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_09_084435) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_10_030050) do
   create_table "measurements", force: :cascade do |t|
     t.float "turbidity"
     t.float "predicted_bod"
@@ -47,6 +47,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_09_084435) do
     t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
+  create_table "store_operators", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "store_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["store_id"], name: "index_store_operators_on_store_id"
+    t.index ["user_id", "store_id"], name: "index_store_operators_on_user_id_and_store_id", unique: true
+    t.index ["user_id"], name: "index_store_operators_on_user_id"
+  end
+
   create_table "stores", force: :cascade do |t|
     t.string "name", null: false
     t.float "lat"
@@ -55,7 +65,20 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_09_084435) do
     t.string "address", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "is_eco", default: false, null: false
+    t.boolean "is_share", default: false, null: false
     t.index ["name", "address"], name: "index_stores_on_name_and_address", unique: true
+  end
+
+  create_table "udon_shares", force: :cascade do |t|
+    t.integer "store_id", null: false
+    t.string "item_name"
+    t.text "description"
+    t.datetime "take_down_time"
+    t.string "photo_url"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["store_id"], name: "index_udon_shares_on_store_id"
   end
 
   create_table "user_settings", force: :cascade do |t|
@@ -80,5 +103,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_09_084435) do
   add_foreign_key "reviews", "stores", column: "reviewee_id"
   add_foreign_key "reviews", "users", column: "reviewer_id"
   add_foreign_key "sessions", "users"
+  add_foreign_key "store_operators", "stores"
+  add_foreign_key "store_operators", "users"
+  add_foreign_key "udon_shares", "stores"
   add_foreign_key "user_settings", "users"
 end
