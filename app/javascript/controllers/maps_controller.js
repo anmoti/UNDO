@@ -67,6 +67,7 @@ export default class MapsController extends Controller {
         foodshareIconUrl: String,
         stores: Array,
         isCompany: Boolean,
+        companyRestrictionMessage: String,
     };
 
     /**
@@ -102,7 +103,7 @@ export default class MapsController extends Controller {
                     resolve(undefined);
                 });
             }),
-            new Promise((resolve) => setTimeout(resolve, 5000)) 
+            new Promise((resolve) => setTimeout(resolve, 5000))
         ]);
 
 
@@ -344,7 +345,12 @@ export default class MapsController extends Controller {
             // 企業アカウントの場合、ボタンを無効化
             reviewButton.classList.add("maps__info--button-disabled");
             reviewButton.disabled = true;
-            reviewButton.title = "企業アカウントはレビューを投稿できません";
+            // @ts-ignore Stimulus value accessors are defined at runtime
+            const message = this.hasCompanyRestrictionMessageValue
+                // @ts-ignore
+                ? this.companyRestrictionMessageValue
+                : "";
+            reviewButton.title = message;
         } else {
             // 個人アカウントの場合、通常通り動作
             reviewButton.onclick = () => {

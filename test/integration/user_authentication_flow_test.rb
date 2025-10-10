@@ -25,7 +25,7 @@ class UserAuthenticationFlowTest < ActionDispatch::IntegrationTest
     # エラーメッセージが表示されることを確認
     follow_redirect!
     assert_response :success
-    assert_equal "Try another email address or password.", flash[:alert]
+    assert_equal I18n.t("flash.sessions.invalid_credentials"), flash[:alert]
 
     # 正しい認証情報でサインイン
     sign_in_as(@user, password: "password")
@@ -38,8 +38,9 @@ class UserAuthenticationFlowTest < ActionDispatch::IntegrationTest
     # ホームページにリダイレクト後、認証済み状態を確認
     follow_redirect!
     assert_response :success
-    # main layoutには認証状態が表示される
-    assert_select "div", text: /ログイン中: #{@user.email}/
+    # main layoutにはユーザーメニューが表示される
+    assert_select "div.user-menu"
+    assert_select "span.user-menu__email", text: @user.email
 
     # サインアウト
     sign_out
@@ -66,7 +67,8 @@ class UserAuthenticationFlowTest < ActionDispatch::IntegrationTest
 
     follow_redirect!
     assert_response :success
-    assert_select "div", text: /ログイン中: #{consumer_user.email}/
+    assert_select "div.user-menu"
+    assert_select "span.user-menu__email", text: consumer_user.email
   end
 
   test "signin with producer user" do
@@ -81,7 +83,8 @@ class UserAuthenticationFlowTest < ActionDispatch::IntegrationTest
 
     follow_redirect!
     assert_response :success
-    assert_select "div", text: /ログイン中: #{producer_user.email}/
+    assert_select "div.user-menu"
+    assert_select "span.user-menu__email", text: producer_user.email
   end
 
   test "multiple signin signout cycles" do
@@ -117,5 +120,43 @@ class UserAuthenticationFlowTest < ActionDispatch::IntegrationTest
 
     # サブミットボタンが存在することを確認
     assert_select "input[type='submit']"
+  end
+
+  test "authenticated user cannot access signup page" do
+    # ログインする
+    sign_in_as(@user, password: "password")
+    assert_redirected_to root_url
+
+    # 新規登録ページにアクセスを試みる
+    get new_user_path
+
+    # rootにリダイレクトされることを確認
+    assert_redirected_to root_path
+
+    # フラッシュメッセージを確認
+    follow_redirect!
+    assert_equal I18n.t("flash.users.already_logged_in"), flash[:alert]
+  end
+
+  test "authenticated user cannot create new user" do
+    # ログインする
+    sign_in_as(@user, password: "password")
+    assert_redirected_to root_url
+
+    # 新しいユーザーを作成しようとする
+    assert_no_difference "User.count" do
+      post users_path, params: {
+        user: {
+          name: "New User",
+          email: "newuser@example.com",
+          password: "password",
+          password_confirmation: "password",
+          is_company: false
+        }
+      }
+    end
+
+    # rootにリダイレクトされることを確認
+    assert_redirected_to root_path
   end
 end

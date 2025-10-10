@@ -1,0 +1,43 @@
+ja:
+    flash:
+        users:
+            created: "アカウントが正常に作成されました。"
+            updated: "ユーザー情報を更新しました。"
+            destroyed: "ユーザーを削除しました。"
+            already_logged_in: "既にログインしています。"
+        reviews:
+            created: "レビューを投稿しました。"
+            updated: "レビューを更新しました。"
+            destroyed: "レビューを削除しました。"
+            company_restriction: "企業アカウントはレビューを投稿できません。"
+        sessions:
+            signed_in: "ログインしました。"
+            signed_out: "ログアウトしました。"
+            invalid_credentials: "メールアドレスまたはパスワードが正しくありません。"
+        errors:
+            generic: "エラーが発生しました。"
+            not_found: "指定されたリソースが見つかりません。"
+            unauthorized: "この操作を実行する権限がありません。"
+
+    activerecord:
+        models:
+            user: "ユーザー"
+            review: "レビュー"
+            store: "店舗"
+            session: "セッション"
+        attributes:
+            user:
+                name: "名前"
+                email: "メールアドレス"
+                password: "パスワード"
+                password_confirmation: "パスワード（確認）"
+                is_company: "企業アカウント"
+            review:
+                rating: "評価"
+                comment: "コメント"
+                reviewer: "レビュアー"
+                reviewee: "対象店舗"
+            store:
+                name: "店舗名"
+                latitude: "緯度"
+                longitude: "経度"

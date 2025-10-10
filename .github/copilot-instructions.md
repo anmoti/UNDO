@@ -1,3 +1,6 @@
-When performing a code review, respond in Japanese.
+コードレビューの際は、日本語で対応すること。
 
-マイグレーションファイルを作成する場合は、`rails generate migration` コマンドを使用してください。
+rails のファイルを作成する際には、必ず rails のコマンドを通して作成してください。
+
+-   例: `rails generate model User name:string email:string`
+-   例: `rails generate controller Users index show`

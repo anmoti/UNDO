@@ -28,4 +28,46 @@
 #       enabled: "ON"
 
 en:
-  hello: "Hello world"
+    hello: "Hello world"
+
+    flash:
+        users:
+            created: "Your account has been successfully created."
+            updated: "User information has been updated."
+            destroyed: "User has been deleted."
+        reviews:
+            created: "Review has been posted."
+            updated: "Review has been updated."
+            destroyed: "Review has been deleted."
+            company_restriction: "Corporate accounts cannot post reviews."
+        sessions:
+            signed_in: "Signed in successfully."
+            signed_out: "Signed out successfully."
+            invalid_credentials: "Email or password is incorrect."
+        errors:
+            generic: "An error has occurred."
+            not_found: "The specified resource could not be found."
+            unauthorized: "You do not have permission to perform this action."
+
+    activerecord:
+        models:
+            user: "User"
+            review: "Review"
+            store: "Store"
+            session: "Session"
+        attributes:
+            user:
+                name: "Name"
+                email: "Email"
+                password: "Password"
+                password_confirmation: "Password confirmation"
+                is_company: "Corporate account"
+            review:
+                rating: "Rating"
+                comment: "Comment"
+                reviewer: "Reviewer"
+                reviewee: "Reviewee store"
+            store:
+                name: "Store name"
+                latitude: "Latitude"
+                longitude: "Longitude"

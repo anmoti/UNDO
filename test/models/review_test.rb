@@ -28,6 +28,6 @@ class ReviewTest < ActiveSupport::TestCase
       rating: 5.0
     )
     assert_not review.valid?
-    assert_includes review.errors[:reviewer], "企業アカウントはレビューを投稿できません"
+    assert_includes review.errors[:reviewer], I18n.t("errors.reviews.company_restriction")
   end
 end

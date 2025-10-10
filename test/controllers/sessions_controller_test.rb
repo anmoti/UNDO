@@ -40,7 +40,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
     # エラーが出るか
     follow_redirect!
-    assert_equal "Try another email address or password.", flash[:alert]
+    assert_equal I18n.t("flash.sessions.invalid_credentials"), flash[:alert]
   end
 
   test "should not signin with invalid password" do
@@ -54,7 +54,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
     # エラーが出るか
     follow_redirect!
-    assert_equal "Try another email address or password.", flash[:alert]
+    assert_equal I18n.t("flash.sessions.invalid_credentials"), flash[:alert]
   end
 
   test "should not signin with missing password" do
@@ -68,7 +68,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
     # エラーが出るか
     follow_redirect!
-    assert_equal "Try another email address or password.", flash[:alert]
+    assert_equal I18n.t("flash.sessions.invalid_credentials"), flash[:alert]
   end
 
   test "should signout" do

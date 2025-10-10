@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   allow_unauthenticated_access
   before_action :set_user, only: %i[ show edit update destroy ]
+  before_action :redirect_if_authenticated, only: %i[ new create ]
   layout "main", only: [ :new ]
 
   # GET /users or /users.json
@@ -27,7 +28,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
-        format.html { redirect_to signin_path, notice: "アカウントが正常に作成されました。" }
+        format.html { redirect_to signin_path, notice: t("flash.users.created") }
         format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -40,7 +41,7 @@ class UsersController < ApplicationController
   def update
     respond_to do |format|
       if @user.update(user_params)
-        format.html { redirect_to @user, notice: "User was successfully updated." }
+        format.html { redirect_to @user, notice: t("flash.users.updated") }
         format.json { render :show, status: :ok, location: @user }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -54,12 +55,19 @@ class UsersController < ApplicationController
     @user.destroy!
 
     respond_to do |format|
-      format.html { redirect_to users_path, status: :see_other, notice: "User was successfully destroyed." }
+      format.html { redirect_to users_path, status: :see_other, notice: t("flash.users.destroyed") }
       format.json { head :no_content }
     end
   end
 
   private
+    # ログイン済みユーザーを新規登録ページから排除
+    def redirect_if_authenticated
+      if authenticated?
+        redirect_to root_path, alert: t("flash.users.already_logged_in")
+      end
+    end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_user
       @user = User.find(params.expect(:id))
