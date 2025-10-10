@@ -1,7 +1,9 @@
+import ky from "ky";
+import * as v from "valibot"
 import { Controller } from "@hotwired/stimulus";
 import { Loader } from "@googlemaps/js-api-loader";
 import { triggerShowComments, triggerHideComments } from "controllers/comments_controller";
-import ky from "ky";
+
 
 /** @import { Context } from "@hotwired/stimulus"  */
 
@@ -29,17 +31,23 @@ const mapOptions = {
     disableDefaultUI: true,
 };
 
+const StoreSchema = v.object({
+    id: v.number(),
+    name: v.string(),
+    lat: v.number(),
+    lon: v.number(),
+    open_time: v.array(v.object({
+        title: v.string(),
+        texts: v.array(v.string()),
+    })),
+    address: v.string(),
+    eco: v.boolean(),
+    foodshare: v.boolean(),
+    tel: v.optional(v.string()),
+})
+
 /**
- * @typedef {Object} StoreFeature
- * @property {number} id
- * @property {string} name
- * @property {number} lat
- * @property {number} lon
- * @property {string | null | undefined} [openTime]
- * @property {string | null | undefined} [address]
- * @property {boolean | null | undefined} [eco]
- * @property {boolean | null | undefined} [foodshare]
- * @property {string | null | undefined} [tel]
+ * @typedef {v.InferOutput<typeof StoreSchema>} Store
  */
 
 // Connects to data-controller="maps"
@@ -134,7 +142,9 @@ export default class MapsController extends Controller {
      * 表示領域内の店舗のみマーカーを表示
      */
     async updateVisibleMarkers() {
-        const stores = await ky.get('/stores').json();
+        const json = await ky.get('/stores').json();
+
+        const stores = v.parse(v.array(StoreSchema), json);
 
         if (!stores.length) {
             console.info("No store data provided for map markers.");
@@ -155,14 +165,7 @@ export default class MapsController extends Controller {
         const visibleStoreIds = new Set();
 
         for (const store of stores) {
-            const lat = Number(store.lat);
-            const lon = Number(store.lon);
-
-            if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
-                continue;
-            }
-
-            const position = { lat, lng: lon };
+            const position = { lat: store.lat, lng: store.lon };
 
             // 店舗が表示領域内にあるかチェック
             if (bounds.contains(position)) {
@@ -204,7 +207,7 @@ export default class MapsController extends Controller {
 
     /**
      * 個別のマーカーを作成
-     * @param {StoreFeature} store
+     * @param {Store} store
      * @param {{lat: number, lng: number}} position
      */
     async createMarker(store, position) {
@@ -261,7 +264,7 @@ export default class MapsController extends Controller {
     }
 
     /**
-     * @param {StoreFeature} shop
+     * @param {Store} shop
      * @param {google.maps.marker.AdvancedMarkerElement} marker
      */
     async showShopInfo(shop, marker) {
@@ -322,19 +325,38 @@ export default class MapsController extends Controller {
         }
 
         const address = document.createElement("div");
-        const addressText = shop.address || "住所情報が登録されていません";
-        address.textContent = `住所: ${addressText}`;
+        address.textContent = `住所: ${shop.address}`;
         content.appendChild(address);
         
-        // 電話番号の表示
         const phone = document.createElement("div");
         const phoneText = shop.tel || "電話番号情報が登録されていません";
         phone.textContent = `電話: ${phoneText}`;
         content.appendChild(phone);
 
         const openTime = document.createElement("div");
-        const openTimeText = shop.openTime || "営業時間情報が登録されていません";
-        openTime.textContent = `営業時間: ${openTimeText}`;
+        if (shop.open_time && shop.open_time.length > 0) {
+            const openTimeTitle = document.createElement("div");
+            openTimeTitle.textContent = "営業時間:";
+            openTime.appendChild(openTimeTitle);
+
+            const ul = document.createElement("ul");
+            for (const timeInfo of shop.open_time) {
+                const li = document.createElement("li");
+                const title = document.createElement("strong");
+                title.textContent = timeInfo.title;
+                li.appendChild(title);
+
+                for (const text of timeInfo.texts) {
+                    const textDiv = document.createElement("div");
+                    textDiv.textContent = text;
+                    li.appendChild(textDiv);
+                }
+                ul.appendChild(li);
+            }
+            openTime.appendChild(ul);
+        } else {
+            openTime.textContent = "営業時間情報が登録されていません";
+        }
         content.appendChild(openTime);
 
         const buttons = document.createElement("div");
