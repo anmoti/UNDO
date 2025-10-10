@@ -6,10 +6,12 @@ class MeasurementsController < ApplicationController
       # 企業アカウントの場合は店舗でフィルタリング可能
       if params[:store_id].present?
         @store = Current.user.operated_stores.find_by(id: params[:store_id])
-        @measurements = @store ? @store.measurements : []
+        @measurements = @store ? @store.measurements : Measurement.none
       else
-        # 全店舗の測定データを取得
-        @measurements = Measurement.joins(:store).where(stores: { id: Current.user.operated_stores.pluck(:id) })
+         # 全店舗の測定データを取得
+         @measurements = Measurement
+          .where(store_id: Current.user.operated_stores.select(:id))
+          .includes(:store)
       end
     else
       @measurements = Measurement.where(submitter_id: Current.user.id)
