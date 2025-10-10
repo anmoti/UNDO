@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_10_163305) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_10_173301) do
   create_table "measurements", force: :cascade do |t|
     t.float "turbidity"
     t.float "predicted_bod"
@@ -25,6 +25,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_10_163305) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "store_id"
+    t.boolean "responded", default: false, null: false
     t.index ["store_id"], name: "index_measurements_on_store_id"
     t.index ["submitter_id"], name: "index_measurements_on_submitter_id"
   end
@@ -69,6 +70,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_10_163305) do
     t.datetime "updated_at", null: false
     t.boolean "is_eco", default: false, null: false
     t.boolean "is_share", default: false, null: false
+    t.datetime "eco_expires_at"
+    t.datetime "eco_granted_at"
     t.index ["name", "address"], name: "index_stores_on_name_and_address", unique: true
   end
 
