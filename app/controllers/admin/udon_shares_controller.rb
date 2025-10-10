@@ -2,6 +2,7 @@ class Admin::UdonSharesController < ApplicationController
   before_action :require_login
   before_action :set_store, only: [ :new, :create ]
   before_action :verify_operator, only: [ :new, :create ]
+  before_action :check_active_share, only: [ :new, :create ]
 
   def new
     @udon_share = @store.udon_shares.build
@@ -54,6 +55,12 @@ class Admin::UdonSharesController < ApplicationController
   def verify_operator
     unless @store.operators.include?(Current.session.user)
       redirect_to admin_stores_path, alert: "この店舗の運営者ではありません。"
+    end
+  end
+
+  def check_active_share
+    if @store.active_udon_share
+      redirect_to admin_stores_path, alert: "この店舗には既にアクティブなシェアが存在します。"
     end
   end
 
