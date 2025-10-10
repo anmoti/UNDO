@@ -95,11 +95,18 @@ class Admin::StoresControllerTest < ActionDispatch::IntegrationTest
   test "should display measurement count for each store" do
     store = stores(:one)
 
-    # 測定データを作成
+    # 既存のfixtureで1件、新しく3件作成する
+    # fixtureで既にエコマークが付与されている可能性があるので、一度リセット
+    store.update!(is_eco: false, eco_granted_at: nil, eco_expires_at: nil)
+
+    # 既存の測定データをクリア
+    store.measurements.destroy_all
+
+    # 測定データを作成（BOD値を高めにしてエコマーク付与を防ぐ）
     3.times do |i|
       Measurement.create!(
         turbidity: 10.0 + i,
-        predicted_bod: 100.0 + i,
+        predicted_bod: 6000.0 + i, # 基準値より高い
         predicted_cod: 50.0 + i,
         status: :predicted,
         submitter: @user,
@@ -111,7 +118,7 @@ class Admin::StoresControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     # 測定回数が表示されていることを確認
-    assert_select ".admin__stat-value", text: store.measurements.count.to_s
+    assert_select ".admin__stat-value", text: "3"
   end
 
   test "should display link to measurement history" do
