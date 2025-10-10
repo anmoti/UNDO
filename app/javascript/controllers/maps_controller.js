@@ -226,6 +226,34 @@ export default class MapsController extends Controller {
         const markerIcon = document.createElement("div");
         markerIcon.className = "maps__marker";
 
+        // シェア情報がある場合、リサイクルマークと残り時間を追加
+        if (store.foodshare && store.shareInfo) {
+            const shareIndicator = document.createElement("div");
+            shareIndicator.className = "maps__marker-share";
+
+            // リサイクルマーク
+            const recycleIcon = document.createElement("span");
+            recycleIcon.className = "maps__marker-share-icon";
+            recycleIcon.textContent = "♻️";
+            shareIndicator.appendChild(recycleIcon);
+
+            // 残り時間を計算
+            const takeDownTime = new Date(store.shareInfo.takeDownTime);
+            const now = new Date();
+            const diffMs = takeDownTime - now;
+            const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+            const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+
+            if (diffMs > 0) {
+                const timeText = document.createElement("span");
+                timeText.className = "maps__marker-share-time";
+                timeText.textContent = diffHours > 0 ? `${diffHours}h${diffMinutes}m` : `${diffMinutes}m`;
+                shareIndicator.appendChild(timeText);
+            }
+
+            markerIcon.appendChild(shareIndicator);
+        }
+
         // マーカーを作成
         const marker = new AdvancedMarkerElement({
             position,
