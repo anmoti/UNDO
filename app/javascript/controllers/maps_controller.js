@@ -63,11 +63,21 @@ const StoreSchema = v.object({
 // Connects to data-controller="maps"
 /** @extends {Controller<HTMLDivElement>} */
 export default class MapsController extends Controller {
+    static values = {
+        ecoIconUrl: String,
+        foodshareIconUrl: String,
+        isCompany: Boolean,
+        companyRestrictionMessage: String,
+    };
+
     /** @type {Loader} */
     loader;
 
     /** @type {Promise<google.maps.Map>} */
     map;
+
+    /** @type {Store[]} */
+    stores = [];
 
     /** @type {?google.maps.InfoWindow} */
     infoWindow = null;
@@ -80,14 +90,6 @@ export default class MapsController extends Controller {
 
     /** @type {Map<number, number>} */
     pendingMarkerTimeouts = new Map();
-
-    static targets = ["icon"];
-    static values = {
-        ecoIconUrl: String,
-        foodshareIconUrl: String,
-        isCompany: Boolean,
-        companyRestrictionMessage: String,
-    };
 
     /**
      * @param  {Context} context
@@ -111,7 +113,7 @@ export default class MapsController extends Controller {
     }
 
     async connect() {
-        console.log("Maps controller connected");
+        const storesPromise = getStores();
 
         const map = await this.map;
 
@@ -124,6 +126,8 @@ export default class MapsController extends Controller {
             }),
             new Promise((resolve) => setTimeout(resolve, 5000)),
         ]);
+
+        this.stores = await storesPromise;
 
         // 地図の表示領域が変更されたときにマーカーを更新
         map.addListener("bounds_changed", () => {
@@ -151,9 +155,7 @@ export default class MapsController extends Controller {
      * 表示領域内の店舗のみマーカーを表示
      */
     async updateVisibleMarkers() {
-        const stores = await getStores();
-
-        if (!stores.length) {
+        if (!this.stores.length) {
             console.info("No store data provided for map markers.");
             return;
         }
@@ -171,7 +173,7 @@ export default class MapsController extends Controller {
         // 表示領域内の店舗を特定
         const visibleStoreIds = new Set();
 
-        for (const store of stores) {
+        for (const store of this.stores) {
             const position = { lat: store.lat, lng: store.lon };
 
             // 店舗が表示領域内にあるかチェック
@@ -210,7 +212,7 @@ export default class MapsController extends Controller {
         }
 
         console.log(
-            `Visible markers: ${this.markers.size} / ${stores.length} stores`
+            `Visible markers: ${this.markers.size} / ${this.stores.length} stores`
         );
     }
 
