@@ -1,4 +1,21 @@
 Rails.application.routes.draw do
+  namespace :admin do
+    resources :stores, only: [ :index ] do
+      collection do
+        get :select
+      end
+
+      member do
+        post :add_operator
+        delete :remove_operator
+      end
+
+      resources :udon_shares, only: [ :new, :create ]
+    end
+
+    resources :udon_shares, only: [ :destroy ]
+  end
+
   resources :passwords, param: :token
   resources :measurements do
     get :status, on: :member
