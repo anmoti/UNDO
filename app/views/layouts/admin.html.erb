@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title><%= content_for(:title) || "管理画面 - UNDO" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= yield :head %>
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+    <%= stylesheet_link_tag "main", "data-turbo-track": "reload" %>
+    <% if Rails.env.production? %>
+      <%= stylesheet_link_tag "admin", "data-turbo-track": "reload" %>
+    <% else %>
+      <link rel="stylesheet" href="/assets/builds/admin.css" data-turbo-track="reload">
+    <% end %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body data-controller="user-menu" data-action="click@window->user-menu#close">
+    <%= render "shared/header" %>
+    <main>
+      <%= render "shared/flash" %>
+      <%= yield %>
+    </main>
+    <%= render "shared/footer" %>
+  </body>
+</html>

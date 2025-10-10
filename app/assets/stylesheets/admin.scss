@@ -1,0 +1,575 @@
+// Admin Panel Styles
+
+@use "sass:color";
+@use "sass:map";
+
+// main.scssからパレットをインポート
+$palette: (
+    "primary": #f28705,
+    "secondary": #f29f05,
+    "accent": #f23030,
+    "highlight": #f2cb05,
+    "dark": #301b01,
+    "light": #ffffff,
+    "success": #00cc00,
+    "danger": #ff0000,
+    "info": #3b82f6,
+    "warning": #f59e0b,
+    "gray": #666666,
+    "gray-light": #f3f4f6,
+    "gray-medium": #9ca3af,
+    "gray-dark": #4b5563,
+);
+
+$radius-sm: 4px;
+$radius-md: 8px;
+$radius-lg: 12px;
+
+@mixin flexbox(
+    $justify: flex-start,
+    $align: stretch,
+    $direction: row,
+    $gap: 0
+) {
+    display: flex;
+    justify-content: $justify;
+    align-items: $align;
+    flex-direction: $direction;
+    gap: $gap;
+}
+
+//================================================
+// 管理画面コンテナ
+//================================================
+
+.admin {
+    &__container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+    }
+
+    &__header {
+        @include flexbox($justify: space-between, $align: center);
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 3px solid map.get($palette, "primary");
+    }
+
+    &__title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: map.get($palette, "dark");
+        margin: 0;
+
+        &::before {
+            content: "🏪 ";
+            margin-right: 0.5rem;
+        }
+    }
+
+    &__subtitle {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: map.get($palette, "dark");
+        margin: 1.5rem 0 1rem;
+    }
+
+    //================================================
+    // ボタンスタイル
+    //================================================
+
+    &__btn {
+        display: inline-block;
+        padding: 0.75rem 1.5rem;
+        border-radius: $radius-md;
+        font-weight: 600;
+        font-size: 1rem;
+        text-decoration: none;
+        text-align: center;
+        cursor: pointer;
+        border: none;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+        &:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        &:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        &--primary {
+            background: linear-gradient(
+                135deg,
+                map.get($palette, "primary"),
+                color.scale(map.get($palette, "primary"), $lightness: -10%)
+            );
+            color: map.get($palette, "light");
+
+            &:hover {
+                background: linear-gradient(
+                    135deg,
+                    color.scale(map.get($palette, "primary"), $lightness: -10%),
+                    color.scale(map.get($palette, "primary"), $lightness: -20%)
+                );
+            }
+        }
+
+        &--success {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: map.get($palette, "light");
+
+            &:hover {
+                background: linear-gradient(135deg, #059669, #047857);
+            }
+        }
+
+        &--info {
+            background: linear-gradient(
+                135deg,
+                map.get($palette, "info"),
+                #2563eb
+            );
+            color: map.get($palette, "light");
+
+            &:hover {
+                background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            }
+        }
+
+        &--danger {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: map.get($palette, "light");
+
+            &:hover {
+                background: linear-gradient(135deg, #dc2626, #b91c1c);
+            }
+        }
+
+        &--secondary {
+            background: linear-gradient(
+                135deg,
+                map.get($palette, "gray-medium"),
+                map.get($palette, "gray-dark")
+            );
+            color: map.get($palette, "light");
+
+            &:hover {
+                background: linear-gradient(
+                    135deg,
+                    map.get($palette, "gray-dark"),
+                    #374151
+                );
+            }
+        }
+
+        &--disabled {
+            background: map.get($palette, "gray-light") !important;
+            color: map.get($palette, "gray-medium") !important;
+            cursor: not-allowed !important;
+            box-shadow: none !important;
+
+            &:hover {
+                transform: none !important;
+                box-shadow: none !important;
+            }
+        }
+
+        &--small {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.875rem;
+        }
+    }
+
+    //================================================
+    // カードグリッド
+    //================================================
+
+    &__grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+
+        @media (max-width: 768px) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    &__empty-state {
+        background: linear-gradient(135deg, #fef3c7, #fde68a);
+        border: 2px solid map.get($palette, "warning");
+        border-radius: $radius-lg;
+        padding: 3rem 2rem;
+        text-align: center;
+
+        &-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        &-text {
+            font-size: 1.25rem;
+            color: map.get($palette, "dark");
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+    }
+
+    //================================================
+    // 店舗カード
+    //================================================
+
+    &__store-card {
+        background: map.get($palette, "light");
+        border: 2px solid map.get($palette, "gray-light");
+        border-radius: $radius-lg;
+        padding: 1.5rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+
+        &:hover {
+            border-color: map.get($palette, "primary");
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            transform: translateY(-2px);
+        }
+    }
+
+    &__store-header {
+        @include flexbox($justify: space-between, $align: flex-start);
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid map.get($palette, "gray-light");
+    }
+
+    &__store-info {
+        flex: 1;
+    }
+
+    &__store-name {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: map.get($palette, "dark");
+        margin: 0 0 0.5rem 0;
+        line-height: 1.3;
+    }
+
+    &__store-address {
+        font-size: 0.9rem;
+        color: map.get($palette, "gray");
+        margin: 0;
+        line-height: 1.4;
+
+        &::before {
+            content: "📍 ";
+        }
+    }
+
+    &__store-badge {
+        display: inline-block;
+        padding: 0.3rem 0.8rem;
+        border-radius: $radius-sm;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+
+        &--eco {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            color: #065f46;
+            border: 1px solid #6ee7b7;
+        }
+
+        &--share {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            color: #92400e;
+            border: 1px solid #fbbf24;
+        }
+    }
+
+    //================================================
+    // シェア情報ボックス
+    //================================================
+
+    &__share-box {
+        background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+        border: 2px solid #6ee7b7;
+        border-radius: $radius-md;
+        padding: 1rem;
+        margin-bottom: 1rem;
+
+        &--empty {
+            background: map.get($palette, "gray-light");
+            border-color: #d1d5db;
+        }
+    }
+
+    &__share-title {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #065f46;
+        margin: 0 0 0.5rem 0;
+
+        &::before {
+            content: "🎁 ";
+        }
+    }
+
+    &__share-description {
+        font-size: 0.85rem;
+        color: #047857;
+        margin: 0 0 0.5rem 0;
+        line-height: 1.4;
+    }
+
+    &__share-time {
+        font-size: 0.8rem;
+        color: #059669;
+        margin: 0;
+
+        &::before {
+            content: "⏰ ";
+        }
+    }
+
+    &__share-empty {
+        font-size: 0.9rem;
+        color: map.get($palette, "gray");
+        margin: 0;
+        text-align: center;
+    }
+
+    //================================================
+    // ボタングループ
+    //================================================
+
+    &__button-group {
+        @include flexbox($gap: 0.5rem);
+        margin-top: 1rem;
+
+        &--vertical {
+            flex-direction: column;
+        }
+    }
+
+    &__button-flex {
+        flex: 1;
+    }
+
+    //================================================
+    // 店舗選択リスト
+    //================================================
+
+    &__store-list {
+        display: grid;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    &__store-item {
+        @include flexbox($justify: space-between, $align: center);
+        padding: 1.25rem;
+        background: map.get($palette, "light");
+        border: 2px solid map.get($palette, "gray-light");
+        border-radius: $radius-md;
+        transition: all 0.2s ease;
+
+        &:hover {
+            border-color: map.get($palette, "secondary");
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        &--operated {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border-color: map.get($palette, "warning");
+        }
+    }
+
+    &__store-item-info {
+        flex: 1;
+    }
+
+    &__store-item-name {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: map.get($palette, "dark");
+        margin: 0 0 0.3rem 0;
+    }
+
+    &__store-item-address {
+        font-size: 0.85rem;
+        color: map.get($palette, "gray");
+        margin: 0;
+    }
+
+    &__store-item-status {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: map.get($palette, "warning");
+        margin-top: 0.3rem;
+
+        &::before {
+            content: "✓ ";
+        }
+    }
+
+    //================================================
+    // フォームスタイル
+    //================================================
+
+    &__form {
+        max-width: 600px;
+        margin: 2rem auto;
+        background: map.get($palette, "light");
+        padding: 2rem;
+        border-radius: $radius-lg;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    &__form-header {
+        background: linear-gradient(135deg, map.get($palette, "info"), #2563eb);
+        color: map.get($palette, "light");
+        padding: 1.25rem;
+        border-radius: $radius-md;
+        margin-bottom: 1.5rem;
+    }
+
+    &__form-store-name {
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin: 0 0 0.3rem 0;
+    }
+
+    &__form-store-address {
+        font-size: 0.9rem;
+        opacity: 0.9;
+        margin: 0;
+    }
+
+    &__form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    &__form-label {
+        display: block;
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: map.get($palette, "dark");
+        margin-bottom: 0.5rem;
+
+        &--required::after {
+            content: " *";
+            color: map.get($palette, "danger");
+        }
+
+        &--optional::after {
+            content: " (任意)";
+            font-size: 0.85rem;
+            color: map.get($palette, "gray");
+            font-weight: 400;
+        }
+    }
+
+    &__form-input,
+    &__form-textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border: 2px solid map.get($palette, "gray-light");
+        border-radius: $radius-sm;
+        font-size: 1rem;
+        font-family: inherit;
+        transition: all 0.2s ease;
+
+        &:focus {
+            outline: none;
+            border-color: map.get($palette, "primary");
+            box-shadow: 0 0 0 3px rgba(map.get($palette, "primary"), 0.1);
+        }
+
+        &::placeholder {
+            color: map.get($palette, "gray-medium");
+        }
+    }
+
+    &__form-textarea {
+        resize: vertical;
+        min-height: 100px;
+    }
+
+    &__form-help {
+        font-size: 0.85rem;
+        color: map.get($palette, "gray");
+        margin-top: 0.3rem;
+        display: block;
+    }
+
+    &__form-actions {
+        @include flexbox($gap: 1rem);
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 2px solid map.get($palette, "gray-light");
+    }
+
+    //================================================
+    // エラーメッセージ
+    //================================================
+
+    &__errors {
+        background: linear-gradient(135deg, #fee2e2, #fecaca);
+        border: 2px solid #ef4444;
+        border-radius: $radius-md;
+        padding: 1.25rem;
+        margin-bottom: 1.5rem;
+    }
+
+    &__errors-title {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #991b1b;
+        margin: 0 0 0.75rem 0;
+
+        &::before {
+            content: "⚠️ ";
+        }
+    }
+
+    &__errors-list {
+        list-style-type: disc;
+        padding-left: 1.5rem;
+        margin: 0;
+    }
+
+    &__errors-item {
+        color: #b91c1c;
+        font-size: 0.9rem;
+        margin-bottom: 0.3rem;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    //================================================
+    // アニメーション
+    //================================================
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    &__store-card,
+    &__store-item {
+        animation: slideIn 0.3s ease-out;
+    }
+}

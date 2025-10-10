@@ -1,39 +1,37 @@
-<div class="container mx-auto px-4 py-8 max-w-6xl">
-  <div class="mb-6">
-    <%= link_to "← 運営中の店舗に戻る", admin_stores_path, class: "text-blue-500 hover:text-blue-700" %>
+<div class="admin__container">
+  <div style="margin-bottom: 1.5rem;">
+    <%= link_to "← 運営中の店舗に戻る", admin_stores_path, class: "admin__btn admin__btn--secondary" %>
   </div>
 
-  <h1 class="text-3xl font-bold mb-6">運営する店舗を選択</h1>
+  <h1 class="admin__title">運営する店舗を選択</h1>
 
-  <div class="bg-blue-100 border border-blue-400 rounded p-4 mb-6">
-    <p class="text-sm">
+  <div class="admin__form-header" style="margin-top: 1.5rem;">
+    <p style="margin: 0;">
       <strong>🏪 店舗一覧</strong><br>
-      運営したい店舗を選択してください。全<%= @stores.count %>件の店舗があります。
+      <span style="font-size: 0.9rem; opacity: 0.9;">運営したい店舗を選択してください。全<%= @stores.count %>件の店舗があります。</span>
     </p>
   </div>
 
-  <!-- 店舗一覧 -->
   <% if @stores.any? %>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div class="admin__store-list">
       <% @stores.each do |store| %>
-        <div class="border rounded-lg p-4 shadow <%= @operated_store_ids.include?(store.id) ? 'bg-green-50 border-green-300' : 'bg-white' %>">
-          <div class="mb-3">
-            <h3 class="text-lg font-semibold mb-1"><%= store.name %></h3>
-            <p class="text-sm text-gray-600 mb-2"><%= store.address %></p>
+        <div class="admin__store-item <%= 'admin__store-item--operated' if @operated_store_ids.include?(store.id) %>">
+          <div class="admin__store-item-info">
+            <h3 class="admin__store-item-name"><%= store.name %></h3>
+            <p class="admin__store-item-address">📍 <%= store.address %></p>
             <% if store.open_time.present? %>
-              <p class="text-xs text-gray-500">🕐 <%= store.open_time %></p>
+              <p class="admin__store-item-address" style="margin-top: 0.2rem;">🕐 <%= store.open_time %></p>
+            <% end %>
+            <% if @operated_store_ids.include?(store.id) %>
+              <p class="admin__store-item-status">運営中</p>
             <% end %>
           </div>
 
           <div>
-            <% if @operated_store_ids.include?(store.id) %>
-              <span class="inline-block bg-green-500 text-white text-xs px-3 py-1 rounded w-full text-center">
-                ✓ 運営中
-              </span>
-            <% else %>
+            <% unless @operated_store_ids.include?(store.id) %>
               <%= button_to "運営する", add_operator_admin_store_path(store),
                            method: :post,
-                           class: "w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-sm",
+                           class: "admin__btn admin__btn--primary",
                            data: { confirm: "#{store.name}の運営者になりますか？" } %>
             <% end %>
           </div>
@@ -41,8 +39,9 @@
       <% end %>
     </div>
   <% else %>
-    <div class="bg-gray-100 border border-gray-300 rounded p-6 text-center">
-      <p class="text-gray-600">店舗がありません</p>
+    <div class="admin__empty-state">
+      <div class="admin__empty-state-icon">🏪</div>
+      <p class="admin__empty-state-text">店舗がありません</p>
     </div>
   <% end %>
 </div>

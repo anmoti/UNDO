@@ -1,4 +1,5 @@
 class Admin::UdonSharesController < ApplicationController
+  layout "admin"
   before_action :require_login
   before_action :set_store, only: [ :new, :create ]
   before_action :verify_operator, only: [ :new, :create ]
