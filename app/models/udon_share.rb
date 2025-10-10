@@ -3,6 +3,7 @@ class UdonShare < ApplicationRecord
 
   validates :item_name, presence: true
   validates :description, presence: true
+  validates :take_down_time, presence: true
 
   # 有効期限が切れていないシェアのみを取得
   scope :active, -> { where("take_down_time > ?", Time.current) }
