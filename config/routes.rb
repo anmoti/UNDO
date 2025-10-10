@@ -4,6 +4,8 @@ Rails.application.routes.draw do
     get :status, on: :member
   end
 
+  resources :stores
+
   if Rails.env.production?
     resources :users, only: [ :new, :create ]
     resources :reviews, only: [ :index, :new, :create ]
