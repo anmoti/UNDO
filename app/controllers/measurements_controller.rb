@@ -21,10 +21,10 @@ class MeasurementsController < ApplicationController
   def show
     if Current.user.is_company
       # 企業アカウントは自社店舗の測定データのみアクセス可能
-      @measurement = Measurement.joins(:store).find_by(
-        id: params[:id],
-        stores: { id: Current.user.operated_stores.pluck(:id) }
-      )
+      @measurement = Measurement
+        .where(id: params[:id], store_id: Current.user.operated_stores.select(:id))
+        .includes(:store)
+        .first
     else
       @measurement = Measurement.find_by(id: params[:id], submitter_id: Current.user.id)
     end
