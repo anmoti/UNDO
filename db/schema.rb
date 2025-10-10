@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_10_030050) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_10_163305) do
   create_table "measurements", force: :cascade do |t|
     t.float "turbidity"
     t.float "predicted_bod"
@@ -24,6 +24,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_10_030050) do
     t.integer "submitter_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "store_id"
+    t.index ["store_id"], name: "index_measurements_on_store_id"
     t.index ["submitter_id"], name: "index_measurements_on_submitter_id"
   end
 
@@ -99,6 +101,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_10_030050) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "measurements", "stores"
   add_foreign_key "measurements", "users", column: "submitter_id"
   add_foreign_key "reviews", "stores", column: "reviewee_id"
   add_foreign_key "reviews", "users", column: "reviewer_id"
