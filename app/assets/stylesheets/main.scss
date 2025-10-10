@@ -887,6 +887,18 @@ main {
         color: map.get($palette, "dark");
         padding: 10px 20px;
         border-radius: 5px;
+        transition: all 0.2s ease;
+
+        &:hover {
+            background-color: map.get($palette, "secondary");
+            color: map.get($palette, "light");
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        &:active {
+            transform: translateY(0);
+        }
     }
 
     &__list {
@@ -1154,8 +1166,13 @@ main {
         margin-top: 20px;
         @include flexbox($justify: center, $gap: 20px);
 
-        > button {
+        > button,
+        > div > button {
             @extend %measure-button;
+        }
+
+        > div {
+            @include flexbox($justify: center, $gap: 20px);
         }
     }
 
