@@ -18,7 +18,10 @@ Rails.application.routes.draw do
 
   resources :passwords, param: :token
   resources :measurements do
-    get :status, on: :member
+    member do
+      get :status
+      post :respond
+    end
   end
 
   if Rails.env.production?
