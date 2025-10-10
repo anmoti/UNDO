@@ -26,6 +26,7 @@ $palette: (
     // 危険・注意を促す色
     "gray": #666666,
     // グレー
+    "black": #000000,
 );
 
 $header-height: 60px;
@@ -43,12 +44,10 @@ $z-layers: (
     "tooltip": 40,
 );
 
-@mixin flexbox(
-    $justify: flex-start,
+@mixin flexbox($justify: flex-start,
     $align: stretch,
     $direction: row,
-    $gap: 0
-) {
+    $gap: 0) {
     display: flex;
     justify-content: $justify;
     align-items: $align;
@@ -395,10 +394,8 @@ main {
         animation: markerAppear 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 
         &:hover {
-            background-color: color.scale(
-                map.get($palette, "accent"),
-                $lightness: -10%
-            );
+            background-color: color.scale(map.get($palette, "accent"),
+                    $lightness: -10%);
             transform: scale(1.15);
             transition: all 0.2s ease;
         }
@@ -625,7 +622,7 @@ main {
         }
     }
 
-    &__tab-radio:checked + &__tab-label {
+    &__tab-radio:checked+&__tab-label {
         background-color: map.get($palette, "light");
         color: map.get($palette, "dark");
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -650,17 +647,17 @@ main {
             }
 
             // チェックされている星とそれ以前(~)の星をハイライト色にする
-            &:not(:hover) .star-radio:checked ~ .star-label svg {
+            &:not(:hover) .star-radio:checked~.star-label svg {
                 fill: map.get($palette, "highlight");
             }
 
             // ホバーしている星とそれ以前(~)の星をハイライト色にする
             .star-label:hover svg,
-            .star-label:hover ~ .star-label svg {
+            .star-label:hover~.star-label svg {
                 fill: map.get($palette, "highlight");
             }
 
-            .star-radio:focus-visible + .star-label svg {
+            .star-radio:focus-visible+.star-label svg {
                 stroke: map.get($palette, "accent");
             }
         }
@@ -701,20 +698,16 @@ main {
     }
 
     &-notice {
-        background: linear-gradient(
-            180deg,
-            map.get($palette, "success"),
-            color.scale(map.get($palette, "success"), $lightness: 6%)
-        );
+        background: linear-gradient(180deg,
+                map.get($palette, "success"),
+                color.scale(map.get($palette, "success"), $lightness: 6%));
         color: map.get($palette, "light");
     }
 
     &-alert {
-        background: linear-gradient(
-            180deg,
-            map.get($palette, "danger"),
-            color.scale(map.get($palette, "danger"), $lightness: -6%)
-        );
+        background: linear-gradient(180deg,
+                map.get($palette, "danger"),
+                color.scale(map.get($palette, "danger"), $lightness: -6%));
         color: map.get($palette, "light");
     }
 
@@ -725,7 +718,8 @@ main {
     }
 
     // default visible state transition
-    transition: opacity 300ms ease, transform 300ms ease;
+    transition: opacity 300ms ease,
+    transform 300ms ease;
 }
 
 .comments {
@@ -846,8 +840,9 @@ main {
 .measures {
     flex: 1;
     position: relative;
-    @include flexbox($direction: column, $align: center);
+    @include flexbox($direction: column, $align: center, $gap: 1rem);
     background-color: map.get($palette, "secondary");
+    padding: 1rem;
 
     // .measures__measure内のボタンと共通化
     %measure-button {
@@ -863,6 +858,84 @@ main {
         button {
             @extend %measure-button;
         }
+    }
+
+    &__header {
+        width: 100%;
+        max-width: 900px;
+        margin-bottom: 0.75rem;
+        text-align: left;
+    }
+
+    &__heading {
+        color: map.get($palette, "dark");
+        font-size: 1.25rem;
+        margin-bottom: 0.25rem;
+    }
+
+    &__sub {
+        color: map.get($palette, "gray");
+        font-size: 0.9rem;
+    }
+
+    &__list {
+        width: 100%;
+        max-width: 900px;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    &__empty {
+        background-color: map.get($palette, "light");
+        padding: 1rem;
+        border-radius: $radius-md;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+        color: map.get($palette, "dark");
+    }
+
+    &__record {
+        background-color: map.get($palette, "light");
+        border-radius: $radius-md;
+        padding: 12px 16px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &__date {
+        color: map.get($palette, "gray");
+        font-size: 0.9rem;
+        min-width: 160px;
+    }
+
+    &__values {
+        display: flex;
+        gap: 18px;
+        align-items: baseline;
+    }
+
+    &__value-row {
+        display: flex;
+        gap: 8px;
+        align-items: baseline;
+    }
+
+    &__label {
+        color: map.get($palette, "gray");
+        font-size: 0.9rem;
+    }
+
+    &__value {
+        font-weight: 700;
+        color: map.get($palette, "dark");
+        font-size: 1.1rem;
+    }
+
+    &__unit {
+        color: map.get($palette, "gray");
+        font-size: 0.85rem;
     }
 }
 
@@ -909,7 +982,7 @@ main {
         padding-left: 25px;
         text-align: left;
 
-        > li {
+        >li {
             padding-bottom: 10px;
         }
     }
@@ -928,9 +1001,39 @@ main {
         margin-top: 20px;
         @include flexbox($justify: center, $gap: 20px);
 
-        > button {
+        >button {
             @extend %measure-button;
         }
+    }
+
+    &__progress-wrapper {
+        margin-top: 18px;
+        @include flexbox($justify: center, $align: center, $direction: column);
+        gap: 8px;
+        color: map.get($palette, "light");
+    }
+
+    &__progress-track {
+        width: 100%;
+        max-width: 420px;
+        height: 14px;
+        background: rgba(map.get($palette, "black"), 0.12);
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: inset 0 1px 3px rgba(map.get($palette, "black"), 0.04);
+    }
+
+    &__progress {
+        height: 100%;
+        background: linear-gradient(90deg, map.get($palette, "highlight"), map.get($palette, "secondary"));
+        width: 0%;
+        transition: width 600ms cubic-bezier(0.2, 0.8, 0.2, 1);
+        border-radius: 10px 0 0 10px;
+    }
+
+    &__progress-label {
+        font-size: 14px;
+        color: map.get($palette, "light");
     }
 }
 
