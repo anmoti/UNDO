@@ -14,6 +14,9 @@ class Store < ApplicationRecord
   has_many :udon_shares, dependent: :destroy
   has_one :active_udon_share, -> { active.order(created_at: :desc) }, class_name: "UdonShare"
 
+  # 測定データ
+  has_many :measurements, dependent: :destroy
+
   # 現在アクティブなシェアを取得
   def active_udon_share
     super
