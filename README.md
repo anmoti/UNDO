@@ -285,3 +285,10 @@ undo(dev)> ActiveRecord::Base.connection.tables
 ### Store（店舗）
 - `has_many :reviews` - 店舗に対するレビュー
 - うどん店の情報を管理
+
+
+## デバッグ用スクリプト
+
+```ruby
+$ RAILS_ENV=production bin/rails rake debug:purge_measurements_for_futaba
+```

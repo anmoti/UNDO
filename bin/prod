@@ -1,5 +1,8 @@
 #!/usr/bin/env sh
 
+set -e
+
+# Ensure foreman is available for Procfile start
 if ! gem list foreman -i --silent; then
   echo "Installing foreman..."
   gem install foreman
@@ -7,6 +10,42 @@ if ! gem list foreman -i --silent; then
     echo "Error: Failed to install foreman. Please install it manually or check permissions." >&2
     exit 1
   fi
+fi
+
+# Seed debug data (optional)
+SEED_FLAG=${SEED_DEBUG_USERS:-ask} # values: yes|no|ask
+
+should_seed() {
+  case "$SEED_FLAG" in
+    yes|YES|y|Y)
+      return 0 ;;
+    no|NO|n|N)
+      return 1 ;;
+    *)
+      # ask: only if attached to a TTY
+      if [ -t 0 ]; then
+        printf "Seed default debug users/operators now? [y/N]: "
+        read ans
+        case "$ans" in
+          y|Y|yes|YES) return 0 ;;
+          *) return 1 ;;
+        esac
+      else
+        # non-interactive default: do not seed unless AUTO_CONFIRM_SEED=yes
+        if [ "${AUTO_CONFIRM_SEED}" = "yes" ] || [ "${AUTO_CONFIRM_SEED}" = "true" ]; then
+          return 0
+        fi
+        return 1
+      fi
+      ;;
+  esac
+}
+
+if should_seed; then
+  echo "Bootstrapping debug data (RAILS_ENV=${RAILS_ENV:-production})..."
+  RAILS_ENV="${RAILS_ENV:-production}" bin/rails runner script/debug_bootstrap.rb || echo "[warn] Debug bootstrap failed (non-fatal)"
+else
+  echo "Skipping debug data bootstrap. (Set SEED_DEBUG_USERS=yes to force)"
 fi
 
 exec foreman start -f Procfile.production "$@"
