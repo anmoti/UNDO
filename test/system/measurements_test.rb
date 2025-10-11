@@ -83,10 +83,11 @@ class MeasurementsTest < ApplicationSystemTestCase
 
     # 対応するボタンが表示されることを確認
     within("[data-measurement-id='#{measurement.id}']") do
-      assert_selector ".measures__respond-btn", text: "対応する"
+      # submit generates an input[type=submit] with the label in the value attribute,
+      # so match the input's value and click it directly
+      assert_selector "input.measures__respond-btn[value='対応する']"
 
-      # ボタンをクリック
-      click_button "対応する"
+      find("input.measures__respond-btn[value='対応する']").click
     end
 
     # Ajaxリクエストの完了を待つ
