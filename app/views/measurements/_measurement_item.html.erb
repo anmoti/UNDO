@@ -30,8 +30,27 @@
         <span class="measures__eco-badge" title="エコバッジ">🌱</span>
       <% end %>
       <% if !measurement.responded? && !measurement.bod_below_limit? %>
-        <%= form_with(url: respond_measurement_path(measurement), method: :post, class: "measures__respond-form", local: false) do |f| %>
-          <%= f.submit "対応する", class: "measures__respond-btn" %>
+        <%# ツールチップ: .tooltip の仕様に合わせたマークアップ %>
+        <% if measurement.predicted_bod.present? && measurement.submitter.present? %>
+          <% limit = measurement.submitter.bod_upper_limit || UserSetting::DEFAULT_SETTINGS[:bod_upper_limit] %>
+          <% if limit.to_f > 0 %>
+            <% ratio = (measurement.predicted_bod.to_f / limit.to_f) %>
+            <% ratio_str = (ratio * 10).round / 10.0 %>
+            <div class="tooltip__container">
+              <%= form_with(url: respond_measurement_path(measurement), method: :post, class: "measures__respond-form", local: false) do |f| %>
+                <%= f.submit "対応する", class: "measures__respond-btn measures__respond-btn--emphasis" %>
+              <% end %>
+              <div class="tooltip__text">※ <%= ratio_str %>倍に希釈してください</div>
+            </div>
+          <% else %>
+            <%= form_with(url: respond_measurement_path(measurement), method: :post, class: "measures__respond-form", local: false) do |f| %>
+              <%= f.submit "対応する", class: "measures__respond-btn measures__respond-btn--emphasis" %>
+            <% end %>
+          <% end %>
+        <% else %>
+          <%= form_with(url: respond_measurement_path(measurement), method: :post, class: "measures__respond-form", local: false) do |f| %>
+            <%= f.submit "対応する", class: "measures__respond-btn measures__respond-btn--emphasis" %>
+          <% end %>
         <% end %>
       <% end %>
     </div>
