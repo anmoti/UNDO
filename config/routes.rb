@@ -24,6 +24,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :stores
+
   if Rails.env.production?
     resources :users, only: [ :new, :create ]
     resources :reviews, only: [ :index, :new, :create ]

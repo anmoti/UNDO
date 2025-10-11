@@ -37,4 +37,9 @@
 /app/assets/builds/*
 !/app/assets/builds/.keep
 
+/db/seeds/stores/*
+!/db/seeds/stores/.keep
+
+
+# 間違えてアップロードしないようにするために残しておく
 udon_list.json

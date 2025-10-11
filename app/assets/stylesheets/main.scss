@@ -163,11 +163,9 @@ main {
     &[data-user-type="company"] {
         .user-menu__trigger {
             border: 2px solid map.get($palette, "secondary");
-            background: linear-gradient(
-                to bottom,
-                map.get($palette, "light"),
-                color.scale(map.get($palette, "secondary"), $lightness: 90%)
-            );
+            background: linear-gradient(to bottom,
+                    map.get($palette, "light"),
+                    color.scale(map.get($palette, "secondary"), $lightness: 90%));
         }
 
         .user-menu__header {
@@ -187,10 +185,8 @@ main {
         transition: background-color 0.2s;
 
         &:hover {
-            background-color: color.scale(
-                map.get($palette, "light"),
-                $lightness: -10%
-            );
+            background-color: color.scale(map.get($palette, "light"),
+                    $lightness: -10%);
         }
     }
 
@@ -219,8 +215,7 @@ main {
         &--company {
             background-color: map.get($palette, "secondary");
             color: map.get($palette, "dark");
-            border: 1px solid
-                color.scale(map.get($palette, "secondary"), $lightness: -20%);
+            border: 1px solid color.scale(map.get($palette, "secondary"), $lightness: -20%);
         }
     }
 
@@ -261,12 +256,9 @@ main {
     &__header {
         @include flexbox($align: center, $gap: 1rem);
         padding: 1rem;
-        border-bottom: 2px solid
-            color.scale(map.get($palette, "secondary"), $lightness: 70%);
-        background-color: color.scale(
-            map.get($palette, "secondary"),
-            $lightness: 95%
-        );
+        border-bottom: 2px solid color.scale(map.get($palette, "secondary"), $lightness: 70%);
+        background-color: color.scale(map.get($palette, "secondary"),
+                $lightness: 95%);
     }
 
     &__avatar {
@@ -274,11 +266,9 @@ main {
         width: 48px;
         height: 48px;
         border-radius: 50%;
-        background: linear-gradient(
-            135deg,
-            map.get($palette, "primary"),
-            map.get($palette, "secondary")
-        );
+        background: linear-gradient(135deg,
+                map.get($palette, "primary"),
+                map.get($palette, "secondary"));
         color: map.get($palette, "light");
         font-size: 1.5rem;
         font-weight: 700;
@@ -321,8 +311,7 @@ main {
     }
 
     &__item {
-        border-bottom: 1px solid
-            color.scale(map.get($palette, "secondary"), $lightness: 80%);
+        border-bottom: 1px solid color.scale(map.get($palette, "secondary"), $lightness: 80%);
 
         &:last-child {
             border-bottom: none;
@@ -342,10 +331,8 @@ main {
         text-align: left;
 
         &:hover {
-            background-color: color.scale(
-                map.get($palette, "secondary"),
-                $lightness: 85%
-            );
+            background-color: color.scale(map.get($palette, "secondary"),
+                    $lightness: 85%);
         }
 
         &--logout {
@@ -376,6 +363,28 @@ main {
         width: 60px;
     }
 }
+
+$searchbar-font-size: 1.2rem;
+
+#search-input {
+    @extend %button-reset;
+    width: 150px;
+    height: 50px;
+    background-image: url("search-bar-center.png");
+    background-repeat: repeat-x;
+    background-size: auto 100%;
+    font-size: $searchbar-font-size;
+    transition: width 0.2s ease-in-out;
+}
+
+.search-input-dummy {
+    @extend %button-reset;
+    position: absolute;
+    visibility: hidden;
+    font-size: $searchbar-font-size;
+    white-space: pre;
+}
+
 
 .maps {
     &__container {

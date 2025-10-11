@@ -1,7 +1,10 @@
 <footer class="footer__container">
-  <button type="button" class="footer__button">
-    <%= image_tag "search-btn.png", height: 50, alt: "検索" %>
-  </button>
+  <%= form_with url: stores_path, method: :get, local: true, class: "footer__button" do %>
+    <%= image_tag "search-bar-left.png", height: 50, alt: "" %>
+    <input type="text" placeholder="検索" id="search-input" data-controller-search-bar-target="input" data-action="input->search-bar#adjustWidth">
+    <span class="search-input-dummy" data-controller-search-bar-target="dummy"></span>
+    <%= image_tag "search-bar-right.png", height: 50, alt: "" %>
+  <% end %>
   <%# TODO: リンクを修正 %>
   <%= link_to "#", class: "footer__button" do %>
     <%= image_tag "estimate-btn.png", height: 50, alt: "水質推定" %>

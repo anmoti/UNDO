@@ -1,6 +1,11 @@
+import ky from "ky";
+import * as v from "valibot";
 import { Controller } from "@hotwired/stimulus";
 import { Loader } from "@googlemaps/js-api-loader";
-import { triggerShowComments, triggerHideComments } from "controllers/comments_controller";
+import {
+    triggerShowComments,
+    triggerHideComments,
+} from "controllers/comments_controller";
 
 /** @import { Context } from "@hotwired/stimulus"  */
 
@@ -28,35 +33,51 @@ const mapOptions = {
     disableDefaultUI: true,
 };
 
-/**
- * @typedef {Object} ShareInfo
- * @property {string} itemName
- * @property {string} description
- * @property {string} takeDownTime
- * @property {string} photoUrl
- */
+const StoreSchema = v.object({
+    id: v.number(),
+    name: v.string(),
+    lat: v.number(),
+    lon: v.number(),
+    open_time: v.nullable(
+        v.pipe(
+            v.string(),
+            v.parseJson(),
+            v.array(
+                v.object({
+                    title: v.string(),
+                    texts: v.array(v.string()),
+                })
+            )
+        )
+    ),
+    address: v.string(),
+    eco: v.boolean(),
+    foodshare: v.boolean(),
+    tel: v.nullable(v.string()),
+});
 
 /**
- * @typedef {Object} StoreFeature
- * @property {number} id
- * @property {string} name
- * @property {number} lat
- * @property {number} lon
- * @property {string | null | undefined} [openTime]
- * @property {string | null | undefined} [address]
- * @property {boolean | null | undefined} [eco]
- * @property {boolean | null | undefined} [foodshare]
- * @property {ShareInfo | null | undefined} [shareInfo]
+ * @typedef {v.InferOutput<typeof StoreSchema>} Store
  */
 
 // Connects to data-controller="maps"
 /** @extends {Controller<HTMLDivElement>} */
 export default class MapsController extends Controller {
+    static values = {
+        ecoIconUrl: String,
+        foodshareIconUrl: String,
+        isCompany: Boolean,
+        companyRestrictionMessage: String,
+    };
+
     /** @type {Loader} */
     loader;
 
     /** @type {Promise<google.maps.Map>} */
     map;
+
+    /** @type {Store[]} */
+    stores = [];
 
     /** @type {?google.maps.InfoWindow} */
     infoWindow = null;
@@ -69,15 +90,6 @@ export default class MapsController extends Controller {
 
     /** @type {Map<number, number>} */
     pendingMarkerTimeouts = new Map();
-
-    static targets = ["icon"];
-    static values = {
-        ecoIconUrl: String,
-        foodshareIconUrl: String,
-        stores: Array,
-        isCompany: Boolean,
-        companyRestrictionMessage: String,
-    };
 
     /**
      * @param  {Context} context
@@ -101,7 +113,7 @@ export default class MapsController extends Controller {
     }
 
     async connect() {
-        console.log("Maps controller connected");
+        const storesPromise = getStores();
 
         const map = await this.map;
 
@@ -112,9 +124,10 @@ export default class MapsController extends Controller {
                     resolve(undefined);
                 });
             }),
-            new Promise((resolve) => setTimeout(resolve, 5000))
+            new Promise((resolve) => setTimeout(resolve, 5000)),
         ]);
 
+        this.stores = await storesPromise;
 
         // 地図の表示領域が変更されたときにマーカーを更新
         map.addListener("bounds_changed", () => {
@@ -142,10 +155,7 @@ export default class MapsController extends Controller {
      * 表示領域内の店舗のみマーカーを表示
      */
     async updateVisibleMarkers() {
-        // @ts-ignore Stimulus value accessors are defined at runtime
-        const stores = this.hasStoresValue ? this.storesValue : [];
-
-        if (!stores.length) {
+        if (!this.stores.length) {
             console.info("No store data provided for map markers.");
             return;
         }
@@ -163,15 +173,8 @@ export default class MapsController extends Controller {
         // 表示領域内の店舗を特定
         const visibleStoreIds = new Set();
 
-        for (const store of stores) {
-            const lat = Number(store.lat);
-            const lon = Number(store.lon);
-
-            if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
-                continue;
-            }
-
-            const position = { lat, lng: lon };
+        for (const store of this.stores) {
+            const position = { lat: store.lat, lng: store.lon };
 
             // 店舗が表示領域内にあるかチェック
             if (bounds.contains(position)) {
@@ -208,17 +211,19 @@ export default class MapsController extends Controller {
             }
         }
 
-        console.log(`Visible markers: ${this.markers.size} / ${stores.length} stores`);
+        console.log(
+            `Visible markers: ${this.markers.size} / ${this.stores.length} stores`
+        );
     }
 
     /**
      * 個別のマーカーを作成
-     * @param {StoreFeature} store
+     * @param {Store} store
      * @param {{lat: number, lng: number}} position
      */
     async createMarker(store, position) {
         const { AdvancedMarkerElement } = await this.loader.importLibrary(
-            "marker",
+            "marker"
         );
         const map = await this.map;
 
@@ -272,7 +277,21 @@ export default class MapsController extends Controller {
     }
 
     /**
+     * マーカーを削除
+     *
+     * @param {number} storeId
+     * @param {google.maps.marker.AdvancedMarkerElement} marker
+     */
+    removeMarker(storeId, marker) {
+        marker.map = null;
+        if (this.markers.has(storeId)) {
+            this.markers.delete(storeId);
+        }
+    }
+
+    /**
      * マーカーをアニメーション付きで削除
+     *
      * @param {number} storeId
      * @param {google.maps.marker.AdvancedMarkerElement} marker
      */
@@ -285,20 +304,16 @@ export default class MapsController extends Controller {
 
             // アニメーション完了後にマーカーを削除
             setTimeout(() => {
-                marker.map = null;
-                if (this.markers.has(storeId)) {
-                    this.markers.delete(storeId);
-                }
+                this.removeMarker(storeId, marker);
             }, 300); // アニメーション時間と一致
         } else {
             // フォールバック: 即座に削除
-            marker.map = null;
-            this.markers.delete(storeId);
+            this.removeMarker(storeId, marker);
         }
     }
 
     /**
-     * @param {StoreFeature} shop
+     * @param {Store} shop
      * @param {google.maps.marker.AdvancedMarkerElement} marker
      */
     async showShopInfo(shop, marker) {
@@ -392,13 +407,34 @@ export default class MapsController extends Controller {
         }
 
         const address = document.createElement("div");
-        const addressText = shop.address || "住所情報が登録されていません";
-        address.textContent = `住所: ${addressText}`;
+        address.textContent = `住所: ${shop.address}`;
         content.appendChild(address);
 
+        const phone = document.createElement("div");
+        const phoneText = shop.tel || "電話番号情報が登録されていません";
+        phone.textContent = `電話: ${phoneText}`;
+        content.appendChild(phone);
+
         const openTime = document.createElement("div");
-        const openTimeText = shop.openTime || "営業時間情報が登録されていません";
-        openTime.textContent = `営業時間: ${openTimeText}`;
+        if (shop.open_time && shop.open_time.length > 0) {
+            const ul = document.createElement("ul");
+            for (const timeInfo of shop.open_time) {
+                const li = document.createElement("li");
+                const title = document.createElement("strong");
+                title.textContent = timeInfo.title;
+                li.appendChild(title);
+
+                for (const text of timeInfo.texts) {
+                    const textDiv = document.createElement("div");
+                    textDiv.textContent = text;
+                    li.appendChild(textDiv);
+                }
+                ul.appendChild(li);
+            }
+            openTime.appendChild(ul);
+        } else {
+            openTime.textContent = "営業時間情報が登録されていません";
+        }
         content.appendChild(openTime);
 
         const buttons = document.createElement("div");
@@ -417,8 +453,8 @@ export default class MapsController extends Controller {
             reviewButton.disabled = true;
             // @ts-ignore Stimulus value accessors are defined at runtime
             const message = this.hasCompanyRestrictionMessageValue
-                // @ts-ignore
-                ? this.companyRestrictionMessageValue
+                ? // @ts-ignore
+                  this.companyRestrictionMessageValue
                 : "";
             reviewButton.title = message;
         } else {
@@ -451,7 +487,6 @@ export default class MapsController extends Controller {
         }
         this.pendingMarkerTimeouts.clear();
 
-        // すべてのマーカーをアニメーション付きで削除
         for (const [storeId, marker] of this.markers.entries()) {
             this.removeMarkerWithAnimation(storeId, marker);
         }
@@ -460,5 +495,15 @@ export default class MapsController extends Controller {
         if (this.updateMarkersTimeout) {
             clearTimeout(this.updateMarkersTimeout);
         }
+    }
+}
+
+async function getStores() {
+    try {
+        const json = await ky.get("/stores").json();
+        return v.parse(v.array(StoreSchema), json);
+    } catch (error) {
+        console.error("Failed to fetch stores:", error);
+        return [];
     }
 }
