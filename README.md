@@ -238,11 +238,13 @@ $ rake npm:help
 
 ## import udon data
 
-1. `udon_list.json`をルートに配置してね
+1. うどん店舗情報のファイルたちを `db/seeds/stores/**/*` に配置してね
 2. そのあとこれを叩いてね
 
+> 更新時もこれでOK
+
 ```bash
-$ bin/rails import:stores
+$ rails db:seed
 ```
 
 ## テスト環境のセットアップ

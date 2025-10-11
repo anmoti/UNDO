@@ -68,6 +68,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_10_173301) do
     t.string "address", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "tel"
     t.boolean "is_eco", default: false, null: false
     t.boolean "is_share", default: false, null: false
     t.datetime "eco_expires_at"

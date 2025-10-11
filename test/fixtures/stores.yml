@@ -1,13 +1,21 @@
 one:
-    name: "Bob's Store"
-    address: "123 Example St"
-    is_eco: false
-    eco_granted_at:
-    eco_expires_at:
+  name: "Bob's Store"
+  lat: 40.7128
+  lon: -74.0060
+  open_time: "08:00 - 20:00"
+  address: "123 Example St"
+  tel: "555-1234"
+  is_eco: false
+  eco_granted_at:
+  eco_expires_at:
 
 two:
-    name: "Carol's Market"
-    address: "456 Another Ave"
-    is_eco: false
-    eco_granted_at:
-    eco_expires_at:
+  name: "Carol's Market"
+  lat: 40.7138
+  lon: -74.0070
+  open_time: '{"月・火・木・金・土": "08:00 - 20:00", "水・日": "定休日"}'
+  address: "456 Another Ave"
+  tel: "555-5678"
+  is_eco: false
+  eco_granted_at:
+  eco_expires_at:
