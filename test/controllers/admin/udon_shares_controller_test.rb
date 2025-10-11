@@ -16,7 +16,7 @@ class Admin::UdonSharesControllerTest < ActionDispatch::IntegrationTest
 
     get new_admin_store_udon_share_url(@store)
     assert_response :success
-    assert_select "h1", "うどんシェアを設定"
+  assert_select "h1", I18n.t("admin.udon_shares.new.title")
   end
 
   test "should not get new when active share exists" do

@@ -47,12 +47,48 @@ ja:
                 unauthorized: "権限がありません。"
                 already_exists: "この店舗には既にアクティブなシェアが存在します。"
                 not_found: "指定されたデータが見つかりませんでした。"
+                # UI / form labels and placeholders
+                new:
+                    title: "うどんシェアを設定"
+                errors:
+                    header: "%{count}個のエラーがあります"
+                form:
+                    item_name: "シェアするもの"
+                    item_name_placeholder: "うどん麺"
+                    description: "内容"
+                    description_placeholder: "30円/玉 合計100玉 先着順"
+                    take_down_time: "締め切り日時"
+                    photo_url: "写真URL"
+                    photo_placeholder: "https://example.com/photo.jpg"
+                    photo_help: "※任意項目です。画像URLを直接入力してください"
+                actions:
+                    submit: "設定する"
+                    cancel: "キャンセル"
             common:
                 login_required: "ログインが必要です。"
         errors:
             generic: "エラーが発生しました。"
             not_found: "指定されたリソースが見つかりません。"
             unauthorized: "この操作を実行する権限がありません。"
+
+    admin:
+        udon_shares:
+            new:
+                title: "うどんシェアを設定"
+            errors:
+                header: "%{count}個のエラーがあります"
+            form:
+                item_name: "シェアするもの"
+                item_name_placeholder: "シェアするもの：うどん麺"
+                description: "内容"
+                description_placeholder: "具体的な内容物：30円/玉　合計100玉　先着順"
+                take_down_time: "取り下げ時間"
+                photo_url: "写真URL"
+                photo_placeholder: "https://example.com/photo.jpg"
+                photo_help: "※任意項目です。画像URLを直接入力してください"
+            actions:
+                submit: "設定する"
+                cancel: "キャンセル"
 
     confirms:
         admin:

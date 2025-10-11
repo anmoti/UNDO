@@ -63,6 +63,23 @@ en:
                 unauthorized: "You do not have permission."
                 already_exists: "An active share already exists for this store."
                 not_found: "The specified data could not be found."
+                # UI / form labels and placeholders
+                new:
+                    title: "Set Udon Share"
+                errors:
+                    header: "%{count} errors found"
+                form:
+                    item_name: "Item"
+                    item_name_placeholder: "Item: udon noodles"
+                    description: "Details"
+                    description_placeholder: "30 JPY/pcs Total 100 pcs First-come, first-served"
+                    take_down_time: "Take down time"
+                    photo_url: "Photo URL"
+                    photo_placeholder: "https://example.com/photo.jpg"
+                    photo_help: "Optional. Enter an image URL"
+                actions:
+                    submit: "Save"
+                    cancel: "Cancel"
             common:
                 login_required: "Login is required."
         errors:
