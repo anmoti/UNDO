@@ -226,6 +226,11 @@ export default class MapsController extends Controller {
         const markerIcon = document.createElement("div");
         markerIcon.className = "maps__marker";
 
+        // エコ店舗はマーカー色を緑にする
+        if (store.eco) {
+            markerIcon.classList.add("maps__marker--eco");
+        }
+
         // シェア情報がある場合、リサイクルマークと残り時間を追加
         if (store.foodshare && store.shareInfo) {
             const shareIndicator = document.createElement("div");
@@ -240,7 +245,7 @@ export default class MapsController extends Controller {
             // 残り時間を計算
             const takeDownTime = new Date(store.shareInfo.takeDownTime);
             const now = new Date();
-            const diffMs = takeDownTime - now;
+            const diffMs = takeDownTime.getTime() - now.getTime();
             const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
             const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
 
