@@ -76,17 +76,12 @@ class MeasurementsTest < ApplicationSystemTestCase
 
     visit measurements_path(store_id: @store_one.id)
 
-    # デバッグ: ページ内容を確認
-    puts "=== Page HTML ==="
-    puts page.html
-    puts "=== End HTML ==="
-
     # 対応するボタンが表示されることを確認
     within("[data-measurement-id='#{measurement.id}']") do
-      assert_selector ".measures__respond-btn", text: "対応する"
+      assert_selector "input.measures__respond-btn[value='対応する']"
 
       # ボタンをクリック
-      click_button "対応する"
+      find("input.measures__respond-btn[value='対応する']").click
     end
 
     # Ajaxリクエストの完了を待つ

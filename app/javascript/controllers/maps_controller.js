@@ -325,10 +325,17 @@ export default class MapsController extends Controller {
         const content = document.createElement("div");
         content.className = "maps__info";
 
+        // ヘッダー: タイトル + バッジ群
+        const header = document.createElement("div");
+        header.className = "maps__info--header";
         const title = document.createElement("h3");
         title.className = "maps__info--title";
         title.textContent = shop.name;
-        content.appendChild(title);
+        header.appendChild(title);
+        const headerRight = document.createElement("div");
+        headerRight.className = "maps__info--header-right";
+        const badges = document.createElement("div");
+        badges.className = "maps__info--badges";
 
         if (shop.eco) {
             const EcoOptions = document.createElement("div");
@@ -339,13 +346,14 @@ export default class MapsController extends Controller {
                 ecoImg.src = this.ecoIconUrlValue;
             }
             EcoOptions.appendChild(ecoImg);
-
             const ecoDesc = document.createElement("span");
-            ecoDesc.className = "maps__info--eco";
-            ecoDesc.textContent = "環境に優しいうどん店";
+            ecoDesc.textContent = "環境配慮";
             EcoOptions.appendChild(ecoDesc);
-            content.appendChild(EcoOptions);
+            EcoOptions.className = "maps__info--eco";
+            badges.appendChild(EcoOptions);
         }
+        /** @type {HTMLDivElement | null} */
+        let shareDetailEl = null;
         if (shop.foodshare) {
             const foodshareOptions = document.createElement("div");
             const foodshareImg = new Image(16, 16);
@@ -355,12 +363,11 @@ export default class MapsController extends Controller {
                 foodshareImg.src = this.foodshareIconUrlValue;
             }
             foodshareOptions.appendChild(foodshareImg);
-
             const foodshareDesc = document.createElement("span");
-            foodshareDesc.className = "maps__info--foodshare";
-            foodshareDesc.textContent = "フードシェア実施中";
+            foodshareDesc.textContent = "フードシェア";
             foodshareOptions.appendChild(foodshareDesc);
-            content.appendChild(foodshareOptions);
+            foodshareOptions.className = "maps__info--foodshare";
+            badges.appendChild(foodshareOptions);
 
             // シェア詳細情報を追加
             if (shop.shareInfo) {
@@ -369,7 +376,9 @@ export default class MapsController extends Controller {
                 shareDetail.style.marginTop = "8px";
                 shareDetail.style.padding = "8px";
                 shareDetail.style.backgroundColor = "#f0fdf4";
-                shareDetail.style.borderRadius = "4px";
+                shareDetail.style.borderRadius = "6px";
+                shareDetail.style.wordBreak = "break-word";
+                shareDetail.style.overflowWrap = "anywhere";
 
                 const shareItem = document.createElement("div");
                 const shareItemLabel = document.createElement("strong");
@@ -392,23 +401,138 @@ export default class MapsController extends Controller {
                 shareTakeDown.appendChild(document.createTextNode(shop.shareInfo.takeDownTime));
                 shareDetail.appendChild(shareTakeDown);
 
-                content.appendChild(shareDetail);
+                shareDetailEl = shareDetail;
             }
         }
 
-        const address = document.createElement("div");
+        // 独自クローズボタン
+        const closeBtn = document.createElement("button");
+        closeBtn.className = "maps__info--close";
+        closeBtn.setAttribute("aria-label", "閉じる");
+        closeBtn.title = "閉じる";
+        closeBtn.textContent = "×";
+        closeBtn.onclick = () => {
+            try {
+                if (this.infoWindow) this.infoWindow.close();
+            } finally {
+                triggerHideComments();
+            }
+        };
+
+        headerRight.appendChild(badges);
+        headerRight.appendChild(closeBtn);
+        header.appendChild(headerRight);
+        content.appendChild(header);
+        if (shareDetailEl) content.appendChild(shareDetailEl);
+
+        // フードシェアがある場合は content にフラグ用クラスを付与
+        if (shop.foodshare) {
+            content.classList.add("maps__info--has-foodshare");
+        }
+
+        // 住所エリア: アイコン + テキスト（短縮表示） + トグル
+        const addressWrapper = document.createElement("div");
+        addressWrapper.className = "maps__info--address-wrapper";
+
+        const addrIcon = document.createElement("span");
+        addrIcon.className = "maps__info--address-icon";
+        addrIcon.textContent = "📍";
+        addressWrapper.appendChild(addrIcon);
+
+        const addressBtn = document.createElement("button");
+        addressBtn.type = "button";
+        addressBtn.className = "maps__info--address";
         const addressText = shop.address || "住所情報が登録されていません";
-        address.textContent = `住所: ${addressText}`;
-        content.appendChild(address);
+        addressBtn.textContent = `住所: ${addressText}`;
+        // 住所テキストクリックで経路を開く
+        addressBtn.onclick = () => {
+            const lat = Number(shop.lat);
+            const lng = Number(shop.lon);
+            const hasCoords = Number.isFinite(lat) && Number.isFinite(lng);
+            const q = encodeURIComponent(shop.name + (shop.address ? ' ' + shop.address : ''));
+            const url = hasCoords
+                ? `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=walking`
+                : `https://www.google.com/maps/search/?api=1&query=${q}`;
+            window.open(url, "_blank");
+        };
+        addressWrapper.appendChild(addressBtn);
 
-        const openTime = document.createElement("div");
-        const openTimeText = shop.openTime || "営業時間情報が登録されていません";
-        openTime.textContent = `営業時間: ${openTimeText}`;
-        content.appendChild(openTime);
+        const toggleBtn = document.createElement("button");
+        toggleBtn.type = "button";
+        toggleBtn.className = "maps__info--address-toggle";
+        toggleBtn.setAttribute("aria-expanded", "false");
+        toggleBtn.title = "住所を展開";
+        toggleBtn.textContent = "…";
+        toggleBtn.onclick = () => {
+            const expanded = toggleBtn.getAttribute("aria-expanded") === "true";
+            if (expanded) {
+                // 折りたたみ
+                addressBtn.classList.remove("maps__info--address-expanded");
+                toggleBtn.setAttribute("aria-expanded", "false");
+                toggleBtn.title = "住所を展開";
+                toggleBtn.textContent = "…";
+            } else {
+                // 展開
+                addressBtn.classList.add("maps__info--address-expanded");
+                toggleBtn.setAttribute("aria-expanded", "true");
+                toggleBtn.title = "住所を折りたたむ";
+                toggleBtn.textContent = "×";
+            }
+        };
+        addressWrapper.appendChild(toggleBtn);
 
+        content.appendChild(addressWrapper);
+
+        // 営業時間エリア: アイコン + テキスト（短縮表示） + トグル
+        const hoursWrapper = document.createElement("div");
+        hoursWrapper.className = "maps__info--hours-wrapper";
+
+        const hoursIcon = document.createElement("span");
+        hoursIcon.className = "maps__info--hours-icon";
+        hoursIcon.textContent = "🕒";
+        hoursWrapper.appendChild(hoursIcon);
+
+        const hoursBtn = document.createElement("button");
+        hoursBtn.type = "button";
+        hoursBtn.className = "maps__info--hours maps__info--hours-collapsed";
+        const hoursText = shop.openTime || "営業時間情報が登録されていません";
+        hoursBtn.textContent = `営業時間: ${hoursText}`;
+        hoursWrapper.appendChild(hoursBtn);
+
+        const hoursToggle = document.createElement("button");
+        hoursToggle.type = "button";
+        hoursToggle.className = "maps__info--hours-toggle";
+        hoursToggle.setAttribute("aria-expanded", "false");
+        hoursToggle.title = "営業時間を展開";
+        hoursToggle.textContent = "…";
+        hoursToggle.onclick = () => {
+            const expanded = hoursToggle.getAttribute("aria-expanded") === "true";
+            if (expanded) {
+                hoursBtn.classList.remove("maps__info--hours-expanded");
+                hoursBtn.classList.add("maps__info--hours-collapsed");
+                hoursToggle.setAttribute("aria-expanded", "false");
+                hoursToggle.title = "営業時間を展開";
+                hoursToggle.textContent = "…";
+            } else {
+                hoursBtn.classList.add("maps__info--hours-expanded");
+                hoursBtn.classList.remove("maps__info--hours-collapsed");
+                hoursToggle.setAttribute("aria-expanded", "true");
+                hoursToggle.title = "営業時間を折りたたむ";
+                hoursToggle.textContent = "×";
+            }
+        };
+        hoursWrapper.appendChild(hoursToggle);
+
+        content.appendChild(hoursWrapper);
+
+        // ボタン群は下部のstickyエリアに入れる
+        const actions = document.createElement("div");
+        actions.className = "maps__info__actions";
         const buttons = document.createElement("div");
         buttons.className = "maps__info--buttons";
-        content.appendChild(buttons);
+        actions.appendChild(buttons);
+        // actions は content の最後に追加（sticky が下端に張り付く）
+        content.appendChild(actions);
 
         const reviewButton = document.createElement("button");
         reviewButton.textContent = "レビューする";
@@ -434,6 +558,8 @@ export default class MapsController extends Controller {
         }
         buttons.appendChild(reviewButton);
 
+        // 住所クリックで経路を開くようにする（ヘッダー経路ボタンは廃止）
+
         const commentButton = document.createElement("button");
         commentButton.textContent = "コメントを見る";
         commentButton.onclick = () => {
@@ -444,6 +570,26 @@ export default class MapsController extends Controller {
         // 情報ウィンドウを開く
         this.infoWindow.setContent(content);
         this.infoWindow.open(await this.map, marker);
+
+        // Google Maps が生成する role="dialog" のラッパー要素に
+        // フードシェア時のみクラスを付与して親要素にスタイルを適用する。
+        // InfoWindow の DOM 挿入は非同期なので、軽く遅延させてから検索する。
+        if (shop.foodshare) {
+            setTimeout(() => {
+                try {
+                    const dialogs = document.querySelectorAll('[role="dialog"]');
+                    for (const dialog of dialogs) {
+                        if (dialog.contains(content)) {
+                            dialog.classList.add('maps__dialog--has-foodshare');
+                            break;
+                        }
+                    }
+                } catch (e) {
+                    // noop
+                    console.warn('could not add dialog class for foodshare', e);
+                }
+            }, 50);
+        }
     }
 
     /**

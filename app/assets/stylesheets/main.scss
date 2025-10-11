@@ -451,37 +451,96 @@ main {
 
     &__info {
         min-width: 200px;
-        padding: 10px;
+        padding: 8px 10px 10px; // 上部の余白をやや縮める
         max-width: 300px;
         font-size: 14px;
         color: map.get($palette, "gray");
+        background-color: map.get($palette, "light");
+        border-radius: $radius-sm;
+        // 高さをできるだけ確保し、内部はスクロール可能にする
+        max-height: min(85vh, 900px);
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        // 既存の overflow:hidden はコンテンツカットを招くため解除
+
+        // テキスト系は折り返し
+        p,
+        div,
+        span {
+            word-break: break-word;
+            overflow-wrap: anywhere;
+        }
+
+        &--header {
+            @include flexbox(
+                $justify: space-between,
+                $align: center,
+                $gap: 8px
+            );
+            margin-bottom: 6px;
+        }
+
+        &--header-right {
+            @include flexbox($align: center, $gap: 8px);
+            max-width: 60%;
+            overflow: hidden;
+            flex-wrap: nowrap;
+            justify-content: flex-end;
+        }
 
         &--title {
             color: map.get($palette, "dark");
             font-size: 16px;
             font-weight: 700;
-            margin-left: 10px;
+            margin: 0; // タイトルの上余白をゼロに
         }
 
         &--eco {
-            display: inline-block;
-            margin-left: 5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 2px 8px;
+            border-radius: 9999px; // ピル型バッジ
             font-size: 12px;
+            line-height: 1;
             background-color: map.get($palette, "success");
             color: map.get($palette, "light");
+            max-width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         &--foodshare {
-            display: inline-block;
-            margin-left: 5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 2px 8px;
+            border-radius: 9999px; // ピル型バッジ
             font-size: 12px;
+            line-height: 1;
             background-color: map.get($palette, "accent");
             color: map.get($palette, "light");
+            max-width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        &--badges {
+            @include flexbox($align: center, $gap: 6px);
+            flex-wrap: wrap; // バッジの多さで折り返し可能にして×と衝突しない
         }
 
         &--buttons {
             margin-top: 10px;
             @include flexbox($gap: 10px);
+            flex-wrap: wrap; // ボタンが見切れないように折返しを許可
+
+            button {
+                flex: 1 1 auto; // 幅を柔軟にして小画面でも収まるように
+                min-width: 84px;
+            }
 
             button {
                 @extend %button-reset;
@@ -497,6 +556,21 @@ main {
             }
         }
 
+        // 下部に常に固定するアクションエリア
+        &__actions {
+            position: sticky;
+            bottom: 0;
+            background: linear-gradient(transparent, rgba(255, 255, 255, 0.95));
+            padding-top: 8px;
+            margin-top: 8px;
+            display: block;
+        }
+
+        // ツールチップ内部のスクロール領域はボタン分の余白を確保
+        & {
+            padding-bottom: 7%; // ボタン群領域分の余裕
+        }
+
         &--button-disabled {
             background-color: map.get($palette, "gray") !important;
             cursor: not-allowed !important;
@@ -506,7 +580,233 @@ main {
                 background-color: map.get($palette, "gray") !important;
             }
         }
+
+        &--close {
+            @extend %button-reset;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            @include flexbox($justify: center, $align: center);
+            font-size: 18px;
+            line-height: 1;
+            color: map.get($palette, "dark");
+            background-color: color.scale(
+                map.get($palette, "secondary"),
+                $lightness: 85%
+            );
+            flex-shrink: 0;
+
+            &:hover {
+                background-color: color.scale(
+                    map.get($palette, "secondary"),
+                    $lightness: 75%
+                );
+            }
+
+            &:focus-visible {
+                outline: 2px solid map.get($palette, "accent");
+                outline-offset: 1px;
+            }
+        }
+
+        &--navigate {
+            @extend %button-reset;
+            padding: 6px 10px;
+            border-radius: 6px;
+            background-color: color.scale(
+                map.get($palette, "primary"),
+                $lightness: 95%
+            );
+            color: map.get($palette, "dark");
+            font-size: 13px;
+            margin-right: 6px;
+            flex-shrink: 0;
+
+            &:hover {
+                background-color: color.scale(
+                    map.get($palette, "primary"),
+                    $lightness: 90%
+                );
+            }
+        }
+
+        &--address {
+            @extend %button-reset;
+            display: block;
+            text-align: left;
+            padding: 6px 4px;
+            margin-top: 6px;
+            color: map.get($palette, "dark");
+            background: transparent;
+            font-size: 13px;
+            text-decoration: underline;
+            white-space: normal;
+            word-break: break-word;
+
+            &:hover {
+                text-decoration: none;
+                background-color: color.scale(
+                    map.get($palette, "light"),
+                    $lightness: -2%
+                );
+            }
+
+            &:focus-visible {
+                outline: 2px solid map.get($palette, "accent");
+                outline-offset: 2px;
+            }
+        }
+
+        &--address-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 6px;
+        }
+
+        &--address-icon {
+            font-size: 16px;
+            line-height: 1;
+            flex: 0 0 auto;
+        }
+
+        &--address-toggle {
+            @extend %button-reset;
+            width: 28px;
+            height: 28px;
+            border-radius: 4px;
+            background: transparent;
+            color: map.get($palette, "dark");
+            font-size: 16px;
+            flex: 0 0 auto;
+
+            &:hover {
+                background-color: color.scale(
+                    map.get($palette, "light"),
+                    $lightness: -4%
+                );
+            }
+        }
+
+        // 折りたたみ時は一行で省略、展開クラスが付けば全文表示
+        &--address {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: calc(100% - 80px);
+        }
+
+        &--address-expanded {
+            white-space: normal;
+            overflow: visible;
+            text-overflow: unset;
+            max-width: 100%;
+        }
+
+        // 営業時間（address と同様の折りたたみ・省略ルール）
+        &--hours {
+            @extend %button-reset;
+            display: block;
+            text-align: left;
+            padding: 6px 4px;
+            margin-top: 6px;
+            color: map.get($palette, "dark");
+            background: transparent;
+            font-size: 13px;
+            text-decoration: none;
+            white-space: normal;
+            word-break: break-word;
+
+            &:hover {
+                text-decoration: none;
+                background-color: color.scale(
+                    map.get($palette, "light"),
+                    $lightness: -2%
+                );
+            }
+
+            &:focus-visible {
+                outline: 2px solid map.get($palette, "accent");
+                outline-offset: 2px;
+            }
+        }
+
+        &--hours-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 6px;
+        }
+
+        &--hours-icon {
+            font-size: 16px;
+            line-height: 1;
+            flex: 0 0 auto;
+        }
+
+        &--hours-toggle {
+            @extend %button-reset;
+            width: 28px;
+            height: 28px;
+            border-radius: 4px;
+            background: transparent;
+            color: map.get($palette, "dark");
+            font-size: 16px;
+            flex: 0 0 auto;
+
+            &:hover {
+                background-color: color.scale(
+                    map.get($palette, "light"),
+                    $lightness: -4%
+                );
+            }
+        }
+
+        // 折りたたみ時は一行で省略、展開クラスが付けば全文表示（address と同じ振る舞い）
+        &--hours-collapsed {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: calc(100% - 80px);
+        }
+
+        &--hours-expanded {
+            white-space: normal;
+            overflow: visible;
+            text-overflow: unset;
+            max-width: 100%;
+        }
     }
+}
+
+// Google Maps InfoWindow のデフォルト余白・位置調整（上部の不自然な空きを解消）
+.gm-style .gm-style-iw-c {
+    padding: 0 !important; // 外枠のパディングを除去
+    border-radius: $radius-sm !important;
+}
+.gm-style .gm-style-iw-d {
+    overflow: visible !important; // コンテンツを詰める
+}
+// ネイティブのクローズボタンは非表示（独自ボタンを使う）
+.gm-style .gm-ui-hover-effect {
+    display: none !important;
+}
+
+/* InfoWindow のラッパー高さ制限を緩める。ビュー全体に広げて内部スクロールを許可 */
+.gm-style .gm-style-iw-d {
+    max-height: 95vh !important;
+}
+
+/* フードシェアがあるときは InfoWindow を高くしてアクション領域が見切れないようにする */
+.maps__info.maps__info--has-foodshare {
+    max-height: 400px !important;
+}
+
+/* role="dialog" を持つ Google Maps のラッパーに直接効かせるルール
+   - 高さを制限し内部スクロールを許可（ボタンが見切れないように） */
+[role="dialog"].maps__dialog--has-foodshare {
+    max-height: 400px !important;
+    overflow: auto !important;
 }
 
 @keyframes markerAppear {
