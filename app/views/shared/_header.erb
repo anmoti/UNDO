@@ -1,5 +1,5 @@
 <header class="header__container">
-  <%= image_tag "logo.png", class: "header__logo", alt: "UNDO Logo" %>
+  <%= link_to image_tag("logo.png", alt: "UNDO Logo"), root_path, class: "header__logo" %>
   <div class="header__right">
     <% if authenticated? %>
       <div class="user-menu" data-user-type="<%= Current.session.user.is_company? ? 'company' : 'personal' %>">
@@ -35,6 +35,14 @@
             </div>
           </div>
           <ul class="user-menu__list">
+            <% if Current.session.user.is_company? %>
+              <li class="user-menu__item">
+                <%= link_to admin_stores_path, class: "user-menu__link" do %>
+                  <span class="user-menu__icon">🏪</span>
+                  <span>店舗管理</span>
+                <% end %>
+              </li>
+            <% end %>
             <li class="user-menu__item">
               <%= link_to "#", class: "user-menu__link" do %>
                 <span class="user-menu__icon">📝</span>

@@ -122,7 +122,8 @@ main {
         z-index: map.get($z-layers, "header");
     }
 
-    &__logo {
+    &__logo,
+    &__logo img {
         height: 100%;
     }
 
@@ -411,6 +412,33 @@ $searchbar-font-size: 1.2rem;
 
         &--disappear {
             animation: markerDisappear 0.3s ease-in forwards;
+        }
+
+        &-share {
+            position: absolute;
+            top: -24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: map.get($palette, "success");
+            color: map.get($palette, "light");
+            padding: 2px 6px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            white-space: nowrap;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            @include flexbox($align: center, $gap: 3px);
+
+            &-icon {
+                font-size: 12px;
+                line-height: 1;
+            }
+
+            &-time {
+                font-size: 9px;
+                font-weight: 700;
+                letter-spacing: 0.5px;
+            }
         }
     }
 

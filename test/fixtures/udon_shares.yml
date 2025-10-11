@@ -1,0 +1,22 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+    store: one
+    item_name: かけうどん
+    description: かけうどん大盛り、天ぷら2個
+    take_down_time: <%= 1.hour.from_now %>
+    photo_url: https://example.com/photo1.jpg
+
+two:
+    store: two
+    item_name: ぶっかけうどん
+    description: ぶっかけうどん、おにぎり1個
+    take_down_time: <%= 1.hour.ago %>
+    photo_url: https://example.com/photo2.jpg
+
+without_photo:
+    store: one
+    item_name: カレーうどん
+    description: カレーうどん、サラダ付き
+    take_down_time: <%= 1.hour.from_now %>
+    photo_url: null

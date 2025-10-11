@@ -1,0 +1,69 @@
+<div class="admin__container">
+  <div class="admin__header">
+    <h1 class="admin__title">運営中の店舗</h1>
+    <%= link_to "追加", select_admin_stores_path, class: "admin__btn admin__btn--success" %>
+  </div>
+
+  <% if @operated_stores.any? %>
+    <div class="admin__grid">
+      <% @operated_stores.each do |store| %>
+        <div class="admin__store-card">
+          <div class="admin__store-header">
+            <div class="admin__store-info">
+              <h3 class="admin__store-name"><%= store.name %></h3>
+              <p class="admin__store-address"><%= store.address %></p>
+            </div>
+          </div>
+
+          <% if store.is_share %>
+            <% active_share = store.active_udon_share %>
+            <% if active_share %>
+              <div class="admin__share-box">
+                <p class="admin__share-title">シェア中: <%= active_share.item_name %></p>
+                <p class="admin__share-description"><%= active_share.description %></p>
+                <p class="admin__share-time">取り下げ: <%= active_share.take_down_time&.strftime('%m/%d %H:%M') || '未設定' %></p>
+                <div class="admin__button-group" style="margin-top: 0.75rem;">
+                  <%= button_to "シェア削除", admin_udon_share_path(active_share),
+                               method: :delete,
+                               form: { data: { turbo_confirm: t('confirms.admin.udon_shares.destroy', item_name: active_share.item_name) } },
+                               class: "admin__btn admin__btn--danger admin__btn--small" %>
+                </div>
+              </div>
+            <% end %>
+          <% else %>
+            <div class="admin__share-box admin__share-box--empty">
+              <p class="admin__share-empty">現在シェアはありません</p>
+            </div>
+          <% end %>
+
+          <div class="admin__button-group">
+            <% if store.active_udon_share %>
+              <button disabled class="admin__btn admin__btn--disabled admin__button-flex" title="既にアクティブなシェアがあります">
+                シェアを追加
+              </button>
+            <% else %>
+              <%= link_to "シェアを追加", new_admin_store_udon_share_path(store), class: "admin__btn admin__btn--info admin__button-flex" %>
+            <% end %>
+
+            <% if store.active_udon_share %>
+              <button disabled class="admin__btn admin__btn--disabled" title="アクティブなシェアがあるため運営解除できません">
+                運営解除
+              </button>
+            <% else %>
+              <%= button_to "運営解除", remove_operator_admin_store_path(store),
+                           method: :delete,
+                           form: { data: { turbo_confirm: t('confirms.admin.stores.remove_operator', store_name: store.name) } },
+                           class: "admin__btn admin__btn--secondary" %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="admin__empty-state">
+      <div class="admin__empty-state-icon">🏪</div>
+      <p class="admin__empty-state-text">まだ運営している店舗がありません</p>
+      <%= link_to "店舗を追加する", select_admin_stores_path, class: "admin__btn admin__btn--success" %>
+    </div>
+  <% end %>
+</div>

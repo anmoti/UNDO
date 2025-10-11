@@ -4,6 +4,13 @@ class User < ApplicationRecord
   has_many :sessions, dependent: :destroy
   has_one :user_setting, dependent: :destroy
 
+  # 運営者として管理する店舗
+  has_many :store_operators, dependent: :destroy
+  has_many :operated_stores, through: :store_operators, source: :store
+
+  # 提出した測定データ
+  has_many :submitted_measurements, class_name: "Measurement", foreign_key: "submitter_id", dependent: :destroy
+
   validates :name, presence: true
   normalizes :email, with: ->(email) { email.strip.downcase }
   validates :email, presence: true, uniqueness: true

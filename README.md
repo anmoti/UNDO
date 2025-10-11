@@ -179,12 +179,12 @@ setting.get(:average_estimated_value)   # nil または設定値
 
 ### ⚠️ 注意事項
 
-1. **自動作成**: ユーザー作成時に設定は自動的に作成されます
+1. **自動作成**: ユーザー作成時に設定は自動的に作成されます（規定値が読み込まれるのはユーザー初回ログイン時です）
 2. **nil安全**: `current_user_setting`は未ログイン時に`nil`を返します
 3. **永続化**: 個別のセッターメソッド（`bod_upper_limit=`など）は自動的に保存されます
    ```ruby
    setting.bod_upper_limit = 6000  # 自動的に保存される
-   # または一括更新  
+   # または一括更新
    setting.update_settings(bod_upper_limit: 6000)  # 複数の設定を一度に更新
    ```
 

@@ -14,10 +14,39 @@ ja:
             signed_in: "ログインしました。"
             signed_out: "ログアウトしました。"
             invalid_credentials: "メールアドレスまたはパスワードが正しくありません。"
+        admin:
+            stores:
+                operator_added: "%{store_name}の運営者になりました。"
+                operator_add_failed: "運営者の追加に失敗しました。"
+                already_operator: "既にこの店舗の運営者です。"
+                operator_removed: "%{store_name}の運営者から外れました。"
+                operator_remove_failed: "運営者の削除に失敗しました。"
+                not_operator: "この店舗の運営者ではありません。"
+                has_active_share: "アクティブなシェアがあるため、運営者から外れることができません。"
+                not_found: "店舗が見つかりませんでした。"
+            udon_shares:
+                created: "うどんシェアを設定しました。"
+                create_failed: "うどんシェアの設定に失敗しました。"
+                destroyed: "うどんシェアを削除しました。"
+                destroy_failed: "うどんシェアの削除に失敗しました。"
+                not_operator: "この店舗の運営者ではありません。"
+                unauthorized: "権限がありません。"
+                already_exists: "この店舗には既にアクティブなシェアが存在します。"
+                not_found: "指定されたデータが見つかりませんでした。"
+            common:
+                login_required: "ログインが必要です。"
         errors:
             generic: "エラーが発生しました。"
             not_found: "指定されたリソースが見つかりません。"
             unauthorized: "この操作を実行する権限がありません。"
+
+    confirms:
+        admin:
+            stores:
+                add_operator: "「%{store_name}」の運営者として登録します。よろしいですか？"
+                remove_operator: "「%{store_name}」の運営を解除します。本当によろしいですか？"
+            udon_shares:
+                destroy: "「%{item_name}」のシェアを削除しますか？"
 
     activerecord:
         models:

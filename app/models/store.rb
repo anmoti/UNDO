@@ -5,4 +5,20 @@ class Store < ApplicationRecord
   validates :lon, numericality: true, allow_nil: true
 
   has_many :received_reviews, class_name: "Review", foreign_key: "reviewee_id", dependent: :destroy
+
+  # 運営者
+  has_many :store_operators, dependent: :destroy
+  has_many :operators, through: :store_operators, source: :user
+
+  # うどんシェア
+  has_many :udon_shares, dependent: :destroy
+  has_one :active_udon_share, -> { active.order(created_at: :desc) }, class_name: "UdonShare"
+
+  # 測定データ
+  has_many :measurements, dependent: :destroy
+
+  # 現在アクティブなシェアを取得
+  def active_udon_share
+    super
+  end
 end
