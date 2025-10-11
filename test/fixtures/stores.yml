@@ -5,6 +5,9 @@ one:
   open_time: "08:00 - 20:00"
   address: "123 Example St"
   tel: "555-1234"
+  is_eco: false
+  eco_granted_at:
+  eco_expires_at:
 
 two:
   name: "Carol's Market"
@@ -13,3 +16,6 @@ two:
   open_time: '{"月・火・木・金・土": "08:00 - 20:00", "水・日": "定休日"}'
   address: "456 Another Ave"
   tel: "555-5678"
+  is_eco: false
+  eco_granted_at:
+  eco_expires_at:

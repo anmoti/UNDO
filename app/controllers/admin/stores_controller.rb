@@ -5,12 +5,12 @@ class Admin::StoresController < ApplicationController
 
   def index
     # 運営中の店舗のみを表示
-    @operated_stores = Current.session.user.operated_stores.includes(:udon_shares)
+    @operated_stores = Current.session.user.operated_stores.includes(:udon_shares, :measurements)
   end
 
   def select
-    # 店舗を選択できるページ
-    @stores = Store.all.order(:name)
+    # 店舗を選択できるページ（ページネーション付き）
+    @stores = Store.all.order(:name).page(params[:page]).per(20)
     @operated_store_ids = Current.session.user.operated_stores.pluck(:id)
   end
 

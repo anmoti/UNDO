@@ -91,4 +91,102 @@ class Admin::StoresControllerTest < ActionDispatch::IntegrationTest
     get admin_stores_url
     assert_redirected_to signin_path
   end
+
+  test "should display measurement count for each store" do
+    store = stores(:one)
+
+    # 既存のfixtureで1件、新しく3件作成する
+    # fixtureで既にエコマークが付与されている可能性があるので、一度リセット
+    store.update!(is_eco: false, eco_granted_at: nil, eco_expires_at: nil)
+
+    # 既存の測定データをクリア
+    store.measurements.destroy_all
+
+    # 測定データを作成（BOD値を高めにしてエコマーク付与を防ぐ）
+    3.times do |i|
+      Measurement.create!(
+        turbidity: 10.0 + i,
+        predicted_bod: 6000.0 + i, # 基準値より高い
+        predicted_cod: 50.0 + i,
+        status: :predicted,
+        submitter: @user,
+        store: store
+      )
+    end
+
+    get admin_stores_url
+    assert_response :success
+
+    # 測定回数が表示されていることを確認
+    assert_select ".admin__stat-value", text: "3"
+  end
+
+  test "should display link to measurement history" do
+    store = stores(:one)
+
+    get admin_stores_url
+    assert_response :success
+
+    # 測定履歴へのリンクが存在することを確認
+    assert_select "a[href=?]", measurements_path(store_id: store.id), text: /測定履歴を見る/
+  end
+
+  test "should display eco mark status when active" do
+    store = stores(:one)
+    store.grant_eco_mark!
+
+    get admin_stores_url
+    assert_response :success
+
+    # エコマークバッジが表示されることを確認
+    assert_select ".admin__eco-badge", text: /エコマーク付与中/
+  end
+
+  test "should paginate stores on select page" do
+    # 25店舗作成してページネーションをテスト
+    25.times do |i|
+      Store.create!(
+        name: "Test Store #{i}",
+        address: "Test Address #{i}"
+      )
+    end
+
+    # 1ページ目をリクエスト
+    get select_admin_stores_url
+    assert_response :success
+
+    # 20件表示されることを確認
+    assert_select ".admin__store-item", count: 20
+
+    # ページネーションが表示されることを確認
+    assert_select ".admin__pagination"
+    assert_select ".pagination"
+  end
+
+  test "should navigate to second page" do
+    # 25店舗作成してページネーションをテスト
+    25.times do |i|
+      Store.create!(
+        name: "Test Store #{i}",
+        address: "Test Address #{i}"
+      )
+    end
+
+    # 2ページ目をリクエスト
+    get select_admin_stores_url(page: 2)
+    assert_response :success
+
+    # 2ページ目には残りの店舗が表示される
+    # total = 既存のfixture + 25件
+    # 2ページ目は残りの件数
+  end
+
+  test "should display total count on select page" do
+    get select_admin_stores_url
+    assert_response :success
+
+    # 全店舗数が表示されることを確認
+    total_count = Store.count
+    assert_select "span", text: /全#{total_count}件の店舗があります/
+  end
 end

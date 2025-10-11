@@ -1,4 +1,12 @@
 ja:
+    views:
+        pagination:
+            first: "&laquo; 最初"
+            last: "最後 &raquo;"
+            previous: "&lsaquo; 前"
+            next: "次 &rsaquo;"
+            truncate: "&hellip;"
+
     flash:
         users:
             created: "アカウントが正常に作成されました。"
@@ -14,6 +22,12 @@ ja:
             signed_in: "ログインしました。"
             signed_out: "ログアウトしました。"
             invalid_credentials: "メールアドレスまたはパスワードが正しくありません。"
+        measurements:
+            company_only: "このページは企業アカウント専用です"
+            not_found: "測定データが見つかりません"
+            already_responded: "既に対応済みです"
+            responded_success: "対応完了しました。エコマークが付与されました。"
+            respond_failed: "対応処理に失敗しました"
         admin:
             stores:
                 operator_added: "%{store_name}の運営者になりました。"

@@ -12,17 +12,12 @@ class MeasurementsControllerTest < ActionDispatch::IntegrationTest
   end
 
   # 一般ユーザーのテスト
-  test "regular user index returns only their measurements" do
+  test "regular user index redirects to root with alert" do
     sign_in_as(@user)
-    m1 = Measurement.create!(turbidity: 10, submitter: @user, predicted_bod: 1.0, predicted_cod: 1.0, status: :predicted)
-    Measurement.create!(turbidity: 20, submitter: @other, predicted_bod: 2.0, predicted_cod: 2.0, status: :predicted)
 
     get measurements_url
-    assert_response :success
-    assert_select ".measures__record" do
-      # 少なくとも自分の測定日のみが表示されていることを確認
-      assert_select "div.measures__date", /#{Regexp.escape(m1.created_at.strftime("%Y/%m/%d %H:%M"))}/
-    end
+    assert_redirected_to root_path
+    assert_equal I18n.t("flash.measurements.company_only"), flash[:alert]
   end
 
   test "regular user show returns measurement JSON for own record" do
@@ -140,6 +135,78 @@ class MeasurementsControllerTest < ActionDispatch::IntegrationTest
     other_store = Store.create!(name: "Other Store", address: "789 Other St")
 
     post measurements_url, params: { measurement: { turbidity: 50, store_id: other_store.id } }, as: :json
+    assert_response :unprocessable_entity
+  end
+
+  test "company user cannot create measurement when store has active eco mark" do
+    sign_in_as(@company_user, password: "passwordbob")
+    @store_one.grant_eco_mark!
+
+    post measurements_url, params: { measurement: { turbidity: 50, store_id: @store_one.id } }, as: :json
+    assert_response :unprocessable_entity
+    json = JSON.parse(response.body)
+    assert_includes json["errors"].join, "エコマーク期間中"
+  end
+
+  test "company user can mark measurement as responded" do
+    sign_in_as(@company_user, password: "passwordbob")
+
+    # BOD値が高い測定を作成（エコマークは自動付与されない）
+    m = Measurement.create!(
+      turbidity: 50,
+      predicted_bod: 6000.0,
+      predicted_cod: 50.0,
+      submitter: @company_user,
+      store: @store_one,
+      status: :predicted
+    )
+
+    assert_not m.responded?
+    assert_not @store_one.reload.eco_active?
+
+    post respond_measurement_url(m), as: :json
+    assert_response :success
+
+    m.reload
+    @store_one.reload
+    assert m.responded?
+    assert @store_one.eco_active?
+  end
+
+  test "company user cannot mark measurement as responded twice" do
+    sign_in_as(@company_user, password: "passwordbob")
+
+    m = Measurement.create!(
+      turbidity: 50,
+      predicted_bod: 6000.0,
+      predicted_cod: 50.0,
+      submitter: @company_user,
+      store: @store_one,
+      status: :predicted
+    )
+
+    post respond_measurement_url(m), as: :json
+    assert_response :success
+
+    # 2回目は失敗
+    post respond_measurement_url(m), as: :json
+    assert_response :unprocessable_entity
+    json = JSON.parse(response.body)
+    assert_includes json["error"], I18n.t("flash.measurements.already_responded")
+  end
+
+  test "regular user cannot mark measurement as responded without store" do
+    sign_in_as(@user)
+
+    m = Measurement.create!(
+      turbidity: 50,
+      predicted_bod: 100.0,
+      predicted_cod: 50.0,
+      submitter: @user,
+      status: :predicted
+    )
+
+    post respond_measurement_url(m), as: :json
     assert_response :unprocessable_entity
   end
 end

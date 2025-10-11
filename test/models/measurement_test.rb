@@ -81,4 +81,110 @@ class MeasurementTest < ActiveSupport::TestCase
 
     assert measurement.valid?
   end
+
+  test "measurement automatically grants eco mark when BOD is below limit" do
+    company_user = users(:bob)
+    store = stores(:one)
+
+    # エコマークがないことを確認
+    assert_not store.eco_active?
+
+    # BOD値が基準値以下の測定を作成
+    Measurement.create!(
+      turbidity: 10.0,
+      predicted_bod: 100.0, # 基準値5000より低い
+      predicted_cod: 5.0,
+      status: :predicted,
+      submitter: company_user,
+      store: store
+    )
+
+    store.reload
+    assert store.is_eco
+    assert store.eco_active?
+    assert_not_nil store.eco_expires_at
+  end
+
+  test "measurement does not grant eco mark when BOD is above limit" do
+    company_user = users(:bob)
+    store = stores(:two)
+
+    # エコマークがないことを確認
+    assert_not store.eco_active?
+
+    # BOD値が基準値を超える測定を作成
+    Measurement.create!(
+      turbidity: 10.0,
+      predicted_bod: 6000.0, # 基準値5000より高い
+      predicted_cod: 5.0,
+      status: :predicted,
+      submitter: company_user,
+      store: store
+    )
+
+    store.reload
+    assert_not store.is_eco
+    assert_not store.eco_active?
+  end
+
+  test "cannot create measurement when store has active eco mark" do
+    company_user = users(:bob)
+    store = stores(:one)
+    store.grant_eco_mark!
+
+    measurement = Measurement.new(
+      turbidity: 10.0,
+      predicted_bod: 100.0,
+      predicted_cod: 5.0,
+      status: :predicted,
+      submitter: company_user,
+      store: store
+    )
+
+    assert_not measurement.valid?
+    assert measurement.errors[:base].any? { |msg| msg.include?("エコマーク期間中") }
+  end
+
+  test "mark_as_responded grants eco mark" do
+    company_user = users(:bob)
+    store = stores(:two)
+
+    measurement = Measurement.create!(
+      turbidity: 10.0,
+      predicted_bod: 6000.0, # 基準値より高い
+      predicted_cod: 5.0,
+      status: :predicted,
+      submitter: company_user,
+      store: store
+    )
+
+    # 最初はエコマークなし
+    store.reload
+    assert_not store.eco_active?
+
+    # 対応済みにする
+    assert measurement.mark_as_responded!
+
+    measurement.reload
+    store.reload
+    assert measurement.responded?
+    assert store.eco_active?
+  end
+
+  test "cannot mark as responded twice" do
+    company_user = users(:bob)
+    store = stores(:two)
+
+    measurement = Measurement.create!(
+      turbidity: 10.0,
+      predicted_bod: 6000.0,
+      predicted_cod: 5.0,
+      status: :predicted,
+      submitter: company_user,
+      store: store
+    )
+
+    assert measurement.mark_as_responded!
+    assert_not measurement.mark_as_responded! # 2回目は失敗
+  end
 end

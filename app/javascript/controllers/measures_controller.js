@@ -91,10 +91,12 @@ export default class extends Controller {
         serviceUuid: String,
         charUuid: String,
         bodUpperLimit: String,
+        storeId: String,
     };
 
     static targets = [
         "modal",
+        "instructions",
         "in-process",
         "waiting",
         "completed",
@@ -103,6 +105,9 @@ export default class extends Controller {
         "cod",
         "progress",
         "progressLabel",
+        "beforeButtons",
+        "duringButtons",
+        "afterButtons",
     ];
 
     /**
@@ -168,12 +173,22 @@ export default class extends Controller {
     changeState(newState) {
         this.state = newState;
 
+        // モーダルの表示/非表示
         if (this.state === STATES.CLOSED) {
             this.getTarget("modal").classList.add("hidden");
         } else {
             this.getTarget("modal").classList.remove("hidden");
         }
 
+        // 各ステートの表示/非表示を制御
+        // 説明文
+        if (this.state === STATES.OPEN) {
+            this.getTarget("instructions").classList.remove("hidden");
+        } else {
+            this.getTarget("instructions").classList.add("hidden");
+        }
+
+        // 測定中
         if (this.state === STATES.IN_PROCESS) {
             this.getTarget("in-process").classList.remove("hidden");
 
@@ -186,16 +201,40 @@ export default class extends Controller {
             this.getTarget("in-process").classList.add("hidden");
         }
 
+        // 待機中
         if (this.state === STATES.WAITING) {
             this.getTarget("waiting").classList.remove("hidden");
         } else {
             this.getTarget("waiting").classList.add("hidden");
         }
 
+        // 完了
         if (this.state === STATES.COMPLETED) {
             this.getTarget("completed").classList.remove("hidden");
         } else {
             this.getTarget("completed").classList.add("hidden");
+        }
+
+        // ボタンの表示切り替え
+        // 測定前のボタン
+        if (this.state === STATES.OPEN) {
+            this.getTarget("beforeButtons").classList.remove("hidden");
+        } else {
+            this.getTarget("beforeButtons").classList.add("hidden");
+        }
+
+        // 測定中のボタン
+        if (this.state === STATES.IN_PROCESS || this.state === STATES.WAITING) {
+            this.getTarget("duringButtons").classList.remove("hidden");
+        } else {
+            this.getTarget("duringButtons").classList.add("hidden");
+        }
+
+        // 測定完了後のボタン
+        if (this.state === STATES.COMPLETED) {
+            this.getTarget("afterButtons").classList.remove("hidden");
+        } else {
+            this.getTarget("afterButtons").classList.add("hidden");
         }
     }
 
@@ -230,6 +269,17 @@ export default class extends Controller {
         await this.disconnectBLE();
 
         this.changeState(STATES.CLOSED);
+    }
+
+    /**
+     * 測定完了後に閉じるボタンが押された
+     */
+    closeAndReload() {
+        // モーダルを閉じる
+        this.changeState(STATES.CLOSED);
+
+        // ページをリロードして新しい測定結果を表示
+        window.location.reload();
     }
 
     /**
@@ -492,7 +542,8 @@ export default class extends Controller {
         await this.disconnectBLE();
 
         try {
-            await createMeasurement(avg).then((measurement) => {
+            // @ts-ignore
+            await createMeasurement(avg, this.storeIdValue).then((measurement) => {
                 this.measurementId = measurement.id;
             });
             this.changeState(STATES.WAITING);
@@ -558,18 +609,25 @@ function getCSRFToken() {
  * 測定結果を保存する
  *
  * @param {number} turbidity
+ * @param {string} [storeId]
  * @returns {Promise<Measurement>}
  */
-async function createMeasurement(turbidity) {
+async function createMeasurement(turbidity, storeId) {
     if (typeof turbidity !== "number" || turbidity < 0) {
         alert("無効な値です");
         throw new Error("無効な値です");
     }
 
+    const body = { measurement: { turbidity } };
+    if (storeId) {
+        // @ts-ignore
+        body.measurement.store_id = storeId;
+    }
+
     const data = await ky.post("/measurements", {
         credentials: "include",
         headers: { "X-CSRF-Token": getCSRFToken() },
-        json: { measurement: { turbidity } },
+        json: body,
     });
 
     const json = await data.json();
