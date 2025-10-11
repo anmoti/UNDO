@@ -12,6 +12,23 @@
             <div class="admin__store-info">
               <h3 class="admin__store-name"><%= store.name %></h3>
               <p class="admin__store-address"><%= store.address %></p>
+              <% if store.eco_active? %>
+                <div class="admin__eco-badge">
+                  🌱 エコマーク付与中（<%= store.eco_expires_at.strftime('%m/%d') %>まで）
+                </div>
+              <% end %>
+            </div>
+          </div>
+
+          <div class="admin__store-stats">
+            <div class="admin__stat-item">
+              <span class="admin__stat-label">測定回数</span>
+              <span class="admin__stat-value"><%= store.measurements.count %></span>
+            </div>
+            <div class="admin__stat-item">
+              <%= link_to measurements_path(store_id: store.id), class: "admin__btn admin__btn--link" do %>
+                📊 測定履歴を見る
+              <% end %>
             </div>
           </div>
 

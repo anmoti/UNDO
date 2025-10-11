@@ -1,7 +1,13 @@
 one:
-  name: "Bob's Store"
-  address: "123 Example St"
+    name: "Bob's Store"
+    address: "123 Example St"
+    is_eco: false
+    eco_granted_at:
+    eco_expires_at:
 
 two:
-  name: "Carol's Market"
-  address: "456 Another Ave"
+    name: "Carol's Market"
+    address: "456 Another Ave"
+    is_eco: false
+    eco_granted_at:
+    eco_expires_at:

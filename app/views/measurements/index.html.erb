@@ -10,6 +10,22 @@
   <header class="measures__header">
     <h2 class="measures__heading">測定履歴</h2>
     <p class="measures__sub">これまでに保存された水質推定の結果です</p>
+
+    <% if Current.user.is_company %>
+      <div class="measures__store-selector">
+        <%= form_with url: measurements_path, method: :get, local: true do |f| %>
+          <%= f.label :store_id, "店舗を選択:" %>
+          <%= f.select :store_id,
+                      [["全店舗", ""]] + Current.user.operated_stores.map { |s|
+                        name_with_eco = s.name
+                        name_with_eco += " 🌱 (~#{s.eco_expires_at.strftime('%m/%d')})" if s.eco_active?
+                        [name_with_eco, s.id]
+                      },
+                      { selected: params[:store_id] },
+                      { onchange: "var storeId = this.value; if (storeId === '') { window.location.href = '#{measurements_path}'; } else { window.location.href = '#{measurements_path}?store_id=' + storeId; }" } %>
+        <% end %>
+      </div>
+    <% end %>
   </header>
 
   <div class="measures__list">
@@ -19,7 +35,7 @@
       <% end %>
     <% else %>
       <div class="measures__empty">
-        <p>まだ測定結果がありません。右下の「水質測定開始」ボタンから測定を始めてください。</p>
+        <p>まだ測定結果がありません。「水質測定開始」ボタンから測定しましょう。</p>
       </div>
     <% end %>
   </div>

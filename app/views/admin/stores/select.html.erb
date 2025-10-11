@@ -8,7 +8,7 @@
   <div class="admin__form-header" style="margin-top: 1.5rem;">
     <p style="margin: 0;">
       <strong>🏪 店舗一覧</strong><br>
-      <span style="font-size: 0.9rem; opacity: 0.9;">運営したい店舗を選択してください。全<%= @stores.count %>件の店舗があります。</span>
+      <span style="font-size: 0.9rem; opacity: 0.9;">運営したい店舗を選択してください。全<%= @stores.total_count %>件の店舗があります。</span>
     </p>
   </div>
 
@@ -37,6 +37,10 @@
           </div>
         </div>
       <% end %>
+    </div>
+
+    <div class="admin__pagination">
+      <%= paginate @stores %>
     </div>
   <% else %>
     <div class="admin__empty-state">
