@@ -110,6 +110,14 @@ export default class extends Controller {
         "afterButtons",
     ];
 
+    /** @type {String} */
+    // @ts-ignore
+    storeIdValue = this.storeIdValue;
+
+    /** @type {String} */
+    // @ts-ignore
+    bodUpperLimitValue = this.bodUpperLimitValue
+
     /**
      * @type {Number[]}
      */
@@ -542,7 +550,25 @@ export default class extends Controller {
         await this.disconnectBLE();
 
         try {
-            // @ts-ignore
+            if (!this.storeIdValue) {
+                const measurement = await createMeasurement(avg);
+                this.measurementId = measurement.id;
+                if (measurement.status !== STATUS.PREDICTED) throw new Error("Unexpected status");
+                this.setBodValue(measurement.predicted_bod);
+                this.setCodValue(measurement.predicted_cod);
+
+                if (measurement.predicted_bod > Number(this.bodUpperLimitValue)) {
+                    this.setResultMessage("茹で汁の水質が基準値を超えました。");
+                    this.setResultCareful(true);
+                } else {
+                    this.setResultMessage("茹で汁の水質は綺麗です。");
+                    this.setResultCareful(false);
+                }
+
+                this.changeState(STATES.COMPLETED);
+                return;
+            }
+
             await createMeasurement(avg, this.storeIdValue).then((measurement) => {
                 this.measurementId = measurement.id;
             });
@@ -568,8 +594,7 @@ export default class extends Controller {
                 this.setBodValue(measurement.predicted_bod);
                 this.setCodValue(measurement.predicted_cod);
 
-                // @ts-ignore
-                if (measurement.predicted_bod > this.bodUpperLimitValue) {
+                if (measurement.predicted_bod > Number(this.bodUpperLimitValue)) {
                     this.setResultMessage("茹で汁の水質が基準値を超えました。");
                     this.setResultCareful(true);
                 } else {

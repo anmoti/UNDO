@@ -1,6 +1,6 @@
 class MeasurementsController < ApplicationController
   layout "main"
-  before_action :require_company_account, only: [ :index ]
+  # before_action :require_company_account, only: [ :index ]
 
   def index
     # 企業アカウントの場合は店舗でフィルタリング可能
@@ -42,27 +42,32 @@ class MeasurementsController < ApplicationController
   def create
     permitted_params = params.require(:measurement).permit(:turbidity, :actual_bod, :actual_cod, :store_id)
     @measurement = Measurement.new(permitted_params)
-    @measurement.submitter = Current.user
 
-    # 企業アカウントの場合はstore_idが必須
     if Current.user.is_company && !permitted_params[:store_id].present?
-      return render json: { error: "企業アカウントの場合、店舗IDが必要です" }, status: :unprocessable_entity
-    end
+      @measurement.submitter = Current.user
 
-    # 一般ユーザーの場合はstore_idを設定しない
-    if !Current.user.is_company
+      @measurement.predicted_bod = helpers.estimate_bod(@measurement.turbidity)
+      @measurement.predicted_cod = helpers.estimate_cod(@measurement.turbidity)
+      @measurement.status = :predicted
+
+      respond_to do |format|
+        if @measurement.save
+          format.json { render json: @measurement, status: :created }
+        else
+          format.json { render json: { errors: @measurement.errors.full_messages }, status: :unprocessable_entity }
+        end
+      end
+    else
       @measurement.store_id = nil
-    end
 
-    @measurement.predicted_bod = helpers.estimate_bod(@measurement.turbidity)
-    @measurement.predicted_cod = helpers.estimate_cod(@measurement.turbidity)
-    @measurement.status = :predicted
+      @measurement.submitter = Current.user
 
-    respond_to do |format|
-      if @measurement.save
+      @measurement.predicted_bod = helpers.estimate_bod(@measurement.turbidity)
+      @measurement.predicted_cod = helpers.estimate_cod(@measurement.turbidity)
+      @measurement.status = :predicted
+
+      respond_to do |format|
         format.json { render json: @measurement, status: :created }
-      else
-        format.json { render json: { errors: @measurement.errors.full_messages }, status: :unprocessable_entity }
       end
     end
   end
@@ -107,11 +112,11 @@ class MeasurementsController < ApplicationController
 
   private
 
-  def require_company_account
-    unless Current.user&.is_company
-      redirect_to root_path, alert: t("flash.measurements.company_only")
-    end
-  end
+  # def require_company_account
+  #   unless Current.user&.is_company
+  #     redirect_to root_path, alert: t("flash.measurements.company_only")
+  #   end
+  # end
 
   def find_measurement_for_current_user
     if Current.user.is_company
