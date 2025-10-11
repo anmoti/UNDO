@@ -4,3 +4,5 @@ rails のファイルを作成する際には、必ず rails のコマンドを�
 
 -   例: `rails generate model User name:string email:string`
 -   例: `rails generate controller Users index show`
+
+原則としてproduction環境で動作するコードを生成してください。

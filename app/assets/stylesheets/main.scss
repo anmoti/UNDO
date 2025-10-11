@@ -409,6 +409,18 @@ main {
             animation: markerDisappear 0.3s ease-in forwards;
         }
 
+        // エコ店舗用（緑）
+        &--eco {
+            background-color: map.get($palette, "success");
+
+            &:hover {
+                background-color: color.scale(
+                    map.get($palette, "success"),
+                    $lightness: -10%
+                );
+            }
+        }
+
         &-share {
             position: absolute;
             top: -24px;

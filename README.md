@@ -4,9 +4,9 @@ UNDO for 25's procon
 
 ## 目次
 
-- [デプロイ](#デプロイ)
-- [開発メモ](#開発メモ)
-- [テーブル一覧](#テーブル一覧)
+-   [デプロイ](#デプロイ)
+-   [開発メモ](#開発メモ)
+-   [テーブル一覧](#テーブル一覧)
 
 ## デプロイ
 
@@ -16,15 +16,16 @@ UNDO for 25's procon
 
 | ドキュメント                                                       | 説明                                 | 対象者                 |
 | ------------------------------------------------------------------ | ------------------------------------ | ---------------------- |
-| **[デプロイガイド](../../wiki/DEPLOY.md)**                         | Kamalを使用した詳細なデプロイ手順    | 初めてデプロイする人   |
+| **[デプロイガイド](../../wiki/DEPLOY.md)**                         | Kamal を使用した詳細なデプロイ手順   | 初めてデプロイする人   |
 | **[クイックリファレンス](../../wiki/DEPLOY_QUICK_REFERENCE.md)**   | よく使うコマンドと操作のリファレンス | 日常的にデプロイする人 |
 | **[デプロイチェックリスト](../../wiki/DEPLOY_CHECKLIST.md)**       | デプロイ前後の確認事項               | 全員                   |
 | **[トラブルシューティング](../../wiki/DEPLOY_TROUBLESHOOTING.md)** | 問題発生時の対処法                   | 問題が発生した時       |
-| **[設定例](./config/deploy.example.yml)**                          | deploy.ymlの詳細な設定例             | 設定を変更する人       |
+| **[設定例](./config/deploy.example.yml)**                          | deploy.yml の詳細な設定例            | 設定を変更する人       |
 
 ### 🚀 クイックスタート
 
 初回デプロイの場合：
+
 ```bash
 # 1. 依存関係のインストール
 bundle install
@@ -40,6 +41,7 @@ bin/kamal setup
 ```
 
 更新のデプロイの場合：
+
 ```bash
 bin/kamal deploy
 ```
@@ -52,7 +54,7 @@ bin/kamal deploy
 
 ### 📝 概要
 
-各ユーザーは個別の設定を持ち、BOD上限値、位置情報、Bluetooth UUIDなどを管理できます。
+各ユーザーは個別の設定を持ち、BOD 上限値、位置情報、Bluetooth UUID などを管理できます。
 
 ### 🔧 基本的な使い方
 
@@ -69,7 +71,7 @@ current_user_setting.bt_service_uuid          # Bluetooth Service UUID（読み�
 current_user_setting.bt_characteristic_uuid   # Bluetooth Characteristic UUID（読み取り専用）
 ```
 
-#### Userモデル経由で取得
+#### User モデル経由で取得
 
 ```ruby
 # 設定オブジェクトを取得
@@ -132,15 +134,15 @@ end
 
 | 設定項目                  | デフォルト値                             | 変更可能 |
 | ------------------------- | ---------------------------------------- | -------- |
-| `bod_upper_limit`         | `5000`                                   | ✅        |
-| `location`                | `nil`                                    | ✅        |
-| `average_estimated_value` | `nil`                                    | ✅        |
-| `bt_service_uuid`         | `"0696b0a8-b883-4d89-a87c-1f5d5e78d0e9"` | ❌        |
-| `bt_characteristic_uuid`  | `"3d8828a9-e983-4235-a25a-25b741e81893"` | ❌        |
+| `bod_upper_limit`         | `5000`                                   | ✅       |
+| `location`                | `nil`                                    | ✅       |
+| `average_estimated_value` | `nil`                                    | ✅       |
+| `bt_service_uuid`         | `"0696b0a8-b883-4d89-a87c-1f5d5e78d0e9"` | ❌       |
+| `bt_characteristic_uuid`  | `"3d8828a9-e983-4235-a25a-25b741e81893"` | ❌       |
 
 ### 🔒 読み取り専用設定
 
-Bluetooth UUIDは読み取り専用で、`update_settings`メソッドでも変更できません：
+Bluetooth UUID は読み取り専用で、`update_settings`メソッドでも変更できません：
 
 ```ruby
 # これらは常に読み取り専用
@@ -165,7 +167,7 @@ setting.update_settings(bt_service_uuid: "new-value")  # 無視される
 </div>
 ```
 
-### 🔍 getメソッドの使用
+### 🔍 get メソッドの使用
 
 シンボルまたは文字列で設定値を取得できます：
 
@@ -180,13 +182,13 @@ setting.get(:average_estimated_value)   # nil または設定値
 ### ⚠️ 注意事項
 
 1. **自動作成**: ユーザー作成時に設定は自動的に作成されます（規定値が読み込まれるのはユーザー初回ログイン時です）
-2. **nil安全**: `current_user_setting`は未ログイン時に`nil`を返します
+2. **nil 安全**: `current_user_setting`は未ログイン時に`nil`を返します
 3. **永続化**: 個別のセッターメソッド（`bod_upper_limit=`など）は自動的に保存されます
-   ```ruby
-   setting.bod_upper_limit = 6000  # 自動的に保存される
-   # または一括更新
-   setting.update_settings(bod_upper_limit: 6000)  # 複数の設定を一度に更新
-   ```
+    ```ruby
+    setting.bod_upper_limit = 6000  # 自動的に保存される
+    # または一括更新
+    setting.update_settings(bod_upper_limit: 6000)  # 複数の設定を一度に更新
+    ```
 
 ### 🧪 テスト
 
@@ -266,29 +268,54 @@ undo(dev)> ActiveRecord::Base.connection.tables
 ## 主要なモデルとリレーション
 
 ### User（ユーザー）
-- `has_many :sessions` - セッション管理
-- `has_one :user_setting` - ユーザー設定（1対1）
-- `has_many :written_reviews` - 書いたレビュー
+
+-   `has_many :sessions` - セッション管理
+-   `has_one :user_setting` - ユーザー設定（1 対 1）
+-   `has_many :written_reviews` - 書いたレビュー
 
 ### UserSetting（ユーザー設定）
-- `belongs_to :user` - 所属するユーザー
-- JSON形式で柔軟な設定を保存
-- デフォルト値を自動設定
+
+-   `belongs_to :user` - 所属するユーザー
+-   JSON 形式で柔軟な設定を保存
+-   デフォルト値を自動設定
 
 ### Review（レビュー）
-- `belongs_to :store` - レビュー対象の店舗
-- `belongs_to :reviewer` (User) - レビューを書いたユーザー
+
+-   `belongs_to :store` - レビュー対象の店舗
+-   `belongs_to :reviewer` (User) - レビューを書いたユーザー
 
 ### Measurement（測定データ）
-- ユーザーの測定記録を管理
+
+-   ユーザーの測定記録を管理
 
 ### Store（店舗）
-- `has_many :reviews` - 店舗に対するレビュー
-- うどん店の情報を管理
 
+-   `has_many :reviews` - 店舗に対するレビュー
+-   うどん店の情報を管理
 
 ## デバッグ用スクリプト
 
-```ruby
-$ RAILS_ENV=production bin/rails rake debug:purge_measurements_for_futaba
+測定データの投入・削除に使えるタスクを用意しています。
+
+-   任意の企業/店舗で BOD 上限超過データを 1 件作成:
+
+```zsh
+RAILS_ENV=production bin/rake debug:make_high_bod COMPANY_EMAIL=okemal@example.com STORE_NAME=ふたばうどん BOD=7000
+# または
+RAILS_ENV=development bin/rake debug:make_high_bod COMPANY_ID=2 STORE_ID=1
+```
+
+-   任意の企業/店舗の測定データを削除（または destroy）:
+
+```zsh
+RAILS_ENV=production bin/rake debug:purge_measurements COMPANY_EMAIL=okemal@example.com STORE_NAME=ふたばうどん
+# 物理削除
+RAILS_ENV=production bin/rake debug:purge_measurements COMPANY_ID=2 STORE_ID=1 FORCE_DESTROY=true
+```
+
+-   既存の特化タスク（ふたばうどん/桶丸水産向け）も内部で共通実装を呼び出します:
+
+```zsh
+RAILS_ENV=production bin/rake debug:make_futaba_high_bod [BOD=6000]
+RAILS_ENV=production bin/rake debug:purge_measurements_for_futaba [FORCE_DESTROY=true]
 ```
