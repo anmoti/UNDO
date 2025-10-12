@@ -49,7 +49,7 @@ const StatusSchema = v.enum(STATUS);
 
 const MeasurementSchema = v.intersect([
     v.object({
-        id: v.number(),
+        id: v.nullable(v.number()),
         turbidity: v.number(),
     }),
     v.union([
